@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  /* background: linear-gradient(to top, #21b989 0%, #117052 100%); */
+  background: linear-gradient(to top, #147053 0%, #094130 100%);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.stbkit-selectionstyle-outline.isFocused {
+  outline: 4px solid #d1cd00;
+}
+
+.stbkit-selectionstyle-fill-modern.isFocused {
+  background-color: #ffffff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.stbkit-selectionstyle-fill-modern.isFocused>svg {
+  color: #171717;
+}
+
+.stbkit-selectionstyle-scale {
+  transition: all 0.1s ease-in-out;
+  box-shadow: none;
+}
+
+.stbkit-selectionstyle-scale.isFocused {
+  transform: scale(1.2);
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+
+.stbkit-selectionstyle-fill.isFocused {
+  background-color: rgb(228, 225, 17) !important;
+  /* background: linear-gradient(to top, #c7c400 0%, #ece81a 100%) !important; */
+}
+
+.stbkit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stbkit-list-item {
+  padding: 5px 10px;
+}
+
+.stbkit-list-item:nth-child(odd) {
+  background-color: #137256;
+}
+
+.stbkit-list-item:nth-child(even) {
+  background-color: #1a8f6a;
+}
+
+.stbkit-list-item-text {
+  color: white;
+  font-size: 25px;
+}
+
+.stbkit-selectionstyle-fill.isFocused>.stbkit-list-item-text {
+  color: black;
+}
+
+.scroll-row {
+  overflow-x: auto;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
