@@ -22,6 +22,7 @@
 
 .stbkit-selectionstyle-fill-modern.isFocused {
   background-color: #ffffff;
+  color: #171717;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
@@ -76,4 +77,15 @@
   overflow-x: auto;
   padding-top: 15px;
   padding-bottom: 15px;
+}
+
+.usermenu-item.isFocused>.usermenu-item-image {
+  outline: 4px solid #ffffff;
+  background-color: #ffffff;
+  color: #171717;
+}
+
+.usermenu-item.isFocused>.usermenu-item-text {
+  background-color: #ffffff;
+  color: #171717;
 }
