@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
 import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
 import click from "./public/click.mp3";
-import { ArrowRightCircleIcon, HardDriveIcon, HdmiPortIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, UserIcon, XCircleIcon } from "lucide-react";
+import { ArrowRightCircleIcon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
 import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";
@@ -10,6 +10,7 @@ import { FocusNode } from "@please/lrud";
 import { getLiveTvApi } from "@jellyfin/sdk/lib/utils/api/live-tv-api.js";
 import { getImageApi } from "@jellyfin/sdk/lib/utils/api/image-api.js";
 import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-api";
+import { GlobalContext } from "./main";
 
 const serverUrl = "http://192.168.1.14:8097";
 
@@ -33,9 +34,7 @@ const serverUrl = "http://192.168.1.14:8097";
 // }
 
 export default function App() {
-    const [config, setConfig] = useState(JSON.parse(window.localStorage.getItem("config") ?? "null"));
-    const [jellyfinClient, setJellyfinClient] = useState<Api | null>(null);
-    const [currentUser, setCurrentUser] = useState<UserDto | null>(JSON.parse(window.localStorage.getItem("user") ?? "null"));
+    const { config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient } = useContext(GlobalContext);
     useEffect(() => {
         if (jellyfinClient) return;
         const jellyfin = new Jellyfin({
@@ -57,25 +56,6 @@ export default function App() {
         console.log(api);
         setJellyfinClient(api);
     }, [jellyfinClient, currentUser]);
-    useEffect(() => {
-        function PlayDirectionSound() {
-            // document.body.requestFullscreen();
-            const audio = new Audio(click);
-            audio.play();
-        }
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                PlayDirectionSound();
-            }
-        });
-        return () => {
-            window.removeEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                    PlayDirectionSound();
-                }
-            });
-        };
-    }, []);
     // if (!config) return <SetupUI />
     if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
     return (
@@ -93,35 +73,46 @@ export default function App() {
             <div className="mb-3 pl-10 flex flex-row items-center">
                 <div className="text-2xl">Apps and Sources</div>
             </div>
-            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
-                <AppItem>
-                    <img src="https://i.ibb.co/yB80JsQC/f7d5f5ff2646c63c5bd7d9ad9741bcda-fgraphic.png" className="w-[200px] h-[98px] object-cover" />
-                </AppItem>
-                <AppItem>
-                    <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
-                </AppItem>
-                <AppItem>
-                    <img src="https://i.ibb.co/wrpTd4QD/51i0m01-RSx-L.png" className="w-[200px] h-[98px] object-cover" />
-                </AppItem>
-                <AppItem>
-                    <Tv2Icon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">Live TV</div>
-                </AppItem>
-                <AppItem>
-                    <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">HDMI 2</div>
-                </AppItem>
-                <AppItem>
-                    <HardDriveIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">Recorded</div>
-                </AppItem>
-                <AppItem>
-                    <ScreenShareIcon size={35} strokeWidth={1.7} className="text-emerald-800" />
-                </AppItem>
-            </RowLayout>
+            <AppsRow />
             {jellyfinClient && <TVShowsOnNow api={jellyfinClient} />}
         </ModernRootLayout>
+    )
+}
+
+function AppsRow() {
+    const { view, setView } = useContext(GlobalContext);
+    return (
+        <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
+            <AppItem>
+                <img src="https://i.ibb.co/yB80JsQC/f7d5f5ff2646c63c5bd7d9ad9741bcda-fgraphic.png" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem>
+                <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
+            </AppItem>
+            <AppItem>
+                <img src="https://i.ibb.co/wrpTd4QD/51i0m01-RSx-L.png" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem onSelected={() => { setView("livetv") }}>
+                <Tv2Icon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                <div className="text-xl font-medium stbkit-color-text">Live TV</div>
+            </AppItem>
+            <AppItem>
+                <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                <div className="text-xl font-medium stbkit-color-text">HDMI 2</div>
+            </AppItem>
+            <AppItem>
+                <HardDriveIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                <div className="text-xl font-medium stbkit-color-text">Recorded</div>
+            </AppItem>
+            <AppItem>
+                <ScreenShareIcon size={35} strokeWidth={1.7} className="text-emerald-800" />
+            </AppItem>
+            <AppItem onSelected={() => { setView("keyboarddemo") }}>
+                <KeyboardIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                <div className="text-xl font-medium stbkit-color-text">Keyboard Demo</div>
+            </AppItem>
+        </RowLayout>
     )
 }
 
@@ -178,7 +169,10 @@ function ShowCard({ show, api, showInfoHeader }: { show: BaseItemDto, api: Api, 
                 setFocused(false);
             }} className="w-[125px] min-w-[125px] h-[180px]">
                 {/* <div>{show.Name}</div> */}
-                {image && <img src={image} className="w-full h-full object-cover" />}
+                {image && <img src={image} className="w-full h-full object-cover" onError={(e) => { setImage(null) }} />}
+                {!image && <div className="w-full h-full flex items-center justify-center">
+                    <VideoIcon size={50} strokeWidth={1.4} className="stbkit-color-text" />
+                </div>}
             </ModernItem>
             {showInfoHeader && focused && (
                 <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className="w-full h-[250px] bg-neutral-900 p-10 flex flex-row gap-2">
@@ -187,7 +181,7 @@ function ShowCard({ show, api, showInfoHeader }: { show: BaseItemDto, api: Api, 
                         <div className="text-xl py-4">{show.ChannelName} • {new Date(show.StartDate).toLocaleTimeString()} - {new Date(show.EndDate).toLocaleTimeString()}</div>
                         <div className="text-2xl">{show.Overview}</div>
                     </div>
-                    <img src={image} className="h-full w-auto object-cover" />
+                    <img src={image} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
                 </div>
             )}
         </>
@@ -215,12 +209,12 @@ function UserPicker({ api, setCurrentUser, currentUser }: { api: Api, setCurrent
     )
 }
 
-function AppItem({ children }: { children: React.ReactNode }) {
+function AppItem({ children, onSelected }: { children: React.ReactNode, onSelected?: () => void }) {
     const itemRef = useRef<HTMLDivElement>(null);
     return (
         <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3" ref={itemRef} onFocused={() => {
             itemRef.current?.scrollIntoView({ behavior: "smooth" });
-        }}>
+        }} onSelected={onSelected}>
             {children}
         </ModernItem>
     )

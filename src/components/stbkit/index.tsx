@@ -79,17 +79,17 @@ export function RootLayout({ children, className }: { children: React.ReactNode,
     )
 }
 
-export function RowLayout({ children, className }: { children: React.ReactNode, className?: string }) {
+export function RowLayout({ children, className, defaultFocusChild }: { children: React.ReactNode, className?: string, defaultFocusChild?: number }) {
     return (
-        <FocusNode orientation="horizontal" className={"flex flex-row " + (className ?? "")}>
+        <FocusNode orientation="horizontal" className={"flex flex-row " + (className ?? "")} defaultFocusChild={defaultFocusChild}>
             {children}
         </FocusNode>
     )
 }
 
-export function ColumnLayout({ children, className }: { children: React.ReactNode, className?: string }) {
+export function ColumnLayout({ children, className, defaultFocusChild }: { children: React.ReactNode, className?: string, defaultFocusChild?: number }) {
     return (
-        <FocusNode orientation="vertical" className={"flex flex-col " + (className ?? "")}>
+        <FocusNode orientation="vertical" className={"flex flex-col " + (className ?? "")} defaultFocusChild={defaultFocusChild}>
             {children}
         </FocusNode>
     )

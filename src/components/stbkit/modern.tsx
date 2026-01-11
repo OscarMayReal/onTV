@@ -1,5 +1,6 @@
 import { FocusNode, FocusRoot } from "@please/lrud";
 import type { JSX } from "react";
+import { ColumnLayout, GridLayout, RowLayout } from ".";
 
 export function ModernItem({ children, className, onSelected, onFocused, ref, onBlur }: { children: React.ReactNode, className?: string, onSelected?: () => void, onFocused?: () => void, ref?: React.RefObject<HTMLDivElement>, onBlur?: () => void }) {
     return (
@@ -57,5 +58,24 @@ export function ModernListButton({ Icon, Text, className, onSelected, onFocused,
             <Icon size={25} />
             <div className="text-2xl font-medium stbkit-color-text">{Text}</div>
         </ModernItemFill>
+    );
+}
+
+const keyboardKeys = [
+    [{ key: "q", value: "q" }, { key: "w", value: "w" }, { key: "e", value: "e" }, { key: "r", value: "r" }, { key: "t", value: "t" }, { key: "y", value: "y" }, { key: "u", value: "u" }, { key: "i", value: "i" }, { key: "o", value: "o" }, { key: "p", value: "p" }],
+    [{ key: "a", value: "a" }, { key: "s", value: "s" }, { key: "d", value: "d" }, { key: "f", value: "f" }, { key: "g", value: "g" }, { key: "h", value: "h" }, { key: "j", value: "j" }, { key: "k", value: "k" }, { key: "l", value: "l" }, { key: ";", value: ";" }],
+    [{ key: "z", value: "z" }, { key: "x", value: "x" }, { key: "c", value: "c" }, { key: "v", value: "v" }, { key: "b", value: "b" }, { key: "n", value: "n" }, { key: "m", value: "m" }, { key: ",", value: "," }, { key: ".", value: "." }, { key: "/", value: "/" }],
+    [{ key: " ", value: " " }]
+]
+
+export function Keyboard({ value, setValue }: { value: string, setValue: (value: string) => void }) {
+    return (
+        <GridLayout>
+            {keyboardKeys.map((row, index) => <RowLayout>
+                {row.map((key) => <ColumnLayout>
+                    <ModernItemFillScale onSelected={() => setValue(value + key.value)} className="w-[50px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-full">{key.key}</ModernItemFillScale>
+                </ColumnLayout>)}
+            </RowLayout>)}
+        </GridLayout>
     );
 }
