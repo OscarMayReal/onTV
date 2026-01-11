@@ -136,7 +136,11 @@ function TVShowsOnNow({ api }: { api: Api }) {
             liveTvApi.getRecommendedPrograms({
                 userId: user.data.Id,
                 limit: 30,
-                isAiring: true
+                isAiring: true,
+                fields: [
+                    "Overview",
+                    "ChannelInfo",
+                ]
             }).then((onNow) => {
                 console.log(onNow.data);
                 setOnNow(onNow.data);
@@ -150,27 +154,43 @@ function TVShowsOnNow({ api }: { api: Api }) {
             </div>
             <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8 show-row">
                 {onNow?.Items.map((item) => (
-                    <ShowCard key={item.Id} show={item} api={api} />
+                    <ShowCard key={item.Id} show={item} api={api} showInfoHeader={true} />
                 ))}
             </RowLayout>
         </>
     )
 }
 
-function ShowCard({ show, api }: { show: BaseItemDto, api: Api }) {
+function ShowCard({ show, api, showInfoHeader }: { show: BaseItemDto, api: Api, showInfoHeader?: boolean }) {
     const [image, setImage] = useState<string | null>(null);
     const itemRef = useRef<HTMLDivElement>(null);
+    const [focused, setFocused] = useState(false);
     useEffect(() => {
         const imageApi = getImageApi(api);
         setImage(imageApi.getItemImageUrl(show, "Primary"));
     }, [show]);
     return (
-        <ModernItem ref={itemRef} onFocused={() => {
-            itemRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }} className="w-[125px] min-w-[125px] h-[180px]">
-            {/* <div>{show.Name}</div> */}
-            {image && <img src={image} className="w-full h-full object-cover" />}
-        </ModernItem>
+        <>
+            <ModernItem ref={itemRef} onFocused={() => {
+                setFocused(true);
+                itemRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }} onBlur={() => {
+                setFocused(false);
+            }} className="w-[125px] min-w-[125px] h-[180px]">
+                {/* <div>{show.Name}</div> */}
+                {image && <img src={image} className="w-full h-full object-cover" />}
+            </ModernItem>
+            {showInfoHeader && focused && (
+                <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className="w-full h-[250px] bg-neutral-900 p-10 flex flex-row gap-2">
+                    <div className="flex-1">
+                        <div className="text-4xl">{show.Name}</div>
+                        <div className="text-xl py-4">{show.ChannelName} • {new Date(show.StartDate).toLocaleTimeString()} - {new Date(show.EndDate).toLocaleTimeString()}</div>
+                        <div className="text-2xl">{show.Overview}</div>
+                    </div>
+                    <img src={image} className="h-full w-auto object-cover" />
+                </div>
+            )}
+        </>
     )
 }
 
