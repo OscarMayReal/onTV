@@ -79,6 +79,10 @@
   padding-bottom: 15px;
 }
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 .usermenu-item.isFocused>.usermenu-item-image {
   outline: 4px solid #ffffff;
   background-color: #ffffff;
@@ -88,4 +92,17 @@
 .usermenu-item.isFocused>.usermenu-item-text {
   background-color: #ffffff;
   color: #171717;
+}
+
+.shadow-modern {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.show-row {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.scroll-row>* {
+  scroll-margin: 80px;
 }

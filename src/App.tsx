@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
-import { GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
-import { ModernIconButton, ModernItem, ModernItemFill, ModernRootLayout } from "./components/stbkit/modern";
+import { useEffect, useRef, useState } from "react";
+import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
+import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
 import click from "./public/click.mp3";
-import { HardDriveIcon, HdmiPortIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, UserIcon } from "lucide-react";
+import { ArrowRightCircleIcon, HardDriveIcon, HdmiPortIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, UserIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
-import type { UserDto } from "@jellyfin/sdk/lib/generated-client/models";
+import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";
 import { FocusNode } from "@please/lrud";
+import { getLiveTvApi } from "@jellyfin/sdk/lib/utils/api/live-tv-api.js";
+import { getImageApi } from "@jellyfin/sdk/lib/utils/api/image-api.js";
+import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-api";
 
 const serverUrl = "http://192.168.1.14:8097";
 
@@ -30,8 +33,9 @@ const serverUrl = "http://192.168.1.14:8097";
 // }
 
 export default function App() {
+    const [config, setConfig] = useState(JSON.parse(window.localStorage.getItem("config") ?? "null"));
     const [jellyfinClient, setJellyfinClient] = useState<Api | null>(null);
-    const [currentUser, setCurrentUser] = useState<UserDto | null>(null);
+    const [currentUser, setCurrentUser] = useState<UserDto | null>(JSON.parse(window.localStorage.getItem("user") ?? "null"));
     useEffect(() => {
         if (jellyfinClient) return;
         const jellyfin = new Jellyfin({
@@ -44,10 +48,15 @@ export default function App() {
                 id: '01'
             }
         });
-        const api = jellyfin.createApi(serverUrl);
+        var api = null as Api | null;
+        if (currentUser) {
+            api = jellyfin.createApi(serverUrl, currentUser.AccessToken);
+        } else {
+            api = jellyfin.createApi(serverUrl);
+        }
         console.log(api);
         setJellyfinClient(api);
-    }, [jellyfinClient]);
+    }, [jellyfinClient, currentUser]);
     useEffect(() => {
         function PlayDirectionSound() {
             // document.body.requestFullscreen();
@@ -67,6 +76,7 @@ export default function App() {
             });
         };
     }, []);
+    // if (!config) return <SetupUI />
     if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
     return (
         <ModernRootLayout>
@@ -75,39 +85,92 @@ export default function App() {
                 <div className="flex-1" />
                 <ModernIconButton Icon={SearchIcon} />
                 <ModernIconButton Icon={SettingsIcon} />
-                <ModernIconButton Icon={UserIcon} onSelected={() => setCurrentUser(null)} />
+                <ModernIconButton Icon={UserIcon} onSelected={() => {
+                    setCurrentUser(null);
+                    window.localStorage.removeItem("user");
+                }} />
             </RowLayout>
             <div className="mb-3 pl-10 flex flex-row items-center">
                 <div className="text-2xl">Apps and Sources</div>
             </div>
-            <RowLayout className="gap-2 pl-10 pr-10 scroll-row">
-                <ModernItem className="w-[200px] min-w-[200px] h-[98px]">
+            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
+                <AppItem>
                     <img src="https://i.ibb.co/yB80JsQC/f7d5f5ff2646c63c5bd7d9ad9741bcda-fgraphic.png" className="w-[200px] h-[98px] object-cover" />
-                </ModernItem>
-                <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3">
+                </AppItem>
+                <AppItem>
                     <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
                     <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
-                </ModernItem>
-                <ModernItem className="w-[200px] min-w-[200px]">
+                </AppItem>
+                <AppItem>
                     <img src="https://i.ibb.co/wrpTd4QD/51i0m01-RSx-L.png" className="w-[200px] h-[98px] object-cover" />
-                </ModernItem>
-                <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3">
+                </AppItem>
+                <AppItem>
                     <Tv2Icon size={35} strokeWidth={1.4} className="stbkit-color-text" />
                     <div className="text-xl font-medium stbkit-color-text">Live TV</div>
-                </ModernItem>
-                <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3">
+                </AppItem>
+                <AppItem>
                     <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
                     <div className="text-xl font-medium stbkit-color-text">HDMI 2</div>
-                </ModernItem>
-                <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3">
+                </AppItem>
+                <AppItem>
                     <HardDriveIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
                     <div className="text-xl font-medium stbkit-color-text">Recorded</div>
-                </ModernItem>
-                <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3">
+                </AppItem>
+                <AppItem>
                     <ScreenShareIcon size={35} strokeWidth={1.7} className="text-emerald-800" />
-                </ModernItem>
+                </AppItem>
             </RowLayout>
+            {jellyfinClient && <TVShowsOnNow api={jellyfinClient} />}
         </ModernRootLayout>
+    )
+}
+
+function TVShowsOnNow({ api }: { api: Api }) {
+    const [liveTvApi, setLiveTvApi] = useState<LiveTvApi | null>(null);
+    const [onNow, setOnNow] = useState<RecommendationDto | null>(null);
+    useEffect(() => {
+        const liveTvApi = getLiveTvApi(api);
+        setLiveTvApi(liveTvApi);
+        const userApi = getUserApi(api);
+        userApi.getCurrentUser().then((user) => {
+            liveTvApi.getRecommendedPrograms({
+                userId: user.data.Id,
+                limit: 30,
+                isAiring: true
+            }).then((onNow) => {
+                console.log(onNow.data);
+                setOnNow(onNow.data);
+            });
+        });
+    }, []);
+    return (
+        <>
+            <div className="mb-2 pl-10 flex flex-row items-center">
+                <div className="text-2xl">TV Shows On Now</div>
+            </div>
+            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8 show-row">
+                {onNow?.Items.map((item) => (
+                    <ShowCard key={item.Id} show={item} api={api} />
+                ))}
+            </RowLayout>
+        </>
+    )
+}
+
+function ShowCard({ show, api }: { show: BaseItemDto, api: Api }) {
+    const [image, setImage] = useState<string | null>(null);
+    const itemRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        const imageApi = getImageApi(api);
+        setImage(imageApi.getItemImageUrl(show, "Primary"));
+    }, [show]);
+    return (
+        <ModernItem ref={itemRef} onFocused={() => {
+            itemRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }} className="w-[125px] min-w-[125px] h-[180px]">
+            {/* <div>{show.Name}</div> */}
+            {image && <img src={image} className="w-full h-full object-cover" />}
+        </ModernItem>
     )
 }
 
@@ -132,6 +195,17 @@ function UserPicker({ api, setCurrentUser, currentUser }: { api: Api, setCurrent
     )
 }
 
+function AppItem({ children }: { children: React.ReactNode }) {
+    const itemRef = useRef<HTMLDivElement>(null);
+    return (
+        <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3" ref={itemRef} onFocused={() => {
+            itemRef.current?.scrollIntoView({ behavior: "smooth" });
+        }}>
+            {children}
+        </ModernItem>
+    )
+}
+
 function UserItem({ user, setCurrentUser, currentUser, api }: { user: UserDto, setCurrentUser: (user: UserDto) => void, currentUser: UserDto | null, api: Api }) {
     return (
         <FocusNode className="usermenu-item flex flex-col items-center gap-4" onSelected={async () => {
@@ -143,6 +217,7 @@ function UserItem({ user, setCurrentUser, currentUser, api }: { user: UserDto, s
                     }
                 });
                 if (result.data) {
+                    window.localStorage.setItem("user", JSON.stringify(result.data));
                     setCurrentUser(result.data);
                 }
             }
@@ -154,5 +229,20 @@ function UserItem({ user, setCurrentUser, currentUser, api }: { user: UserDto, s
                 {user.Name}{user.HasPassword ? " (Locked)" : ""}
             </div>
         </FocusNode>
+    )
+}
+
+function SetupUI() {
+    return (
+        <ModernRootLayout className="items-center space-between h-[100dvh] w-[100dvw] flex flex-row">
+            <div className="flex flex-col gap-4 w-[70%] p-10">
+                <div className="text-4xl font-medium stbkit-color-text">Welcome to OnTV</div>
+                <div className="text-2xl pt-2 pb-8 stbkit-color-text max-w-[500px]">This setup wizard will guide you through the process of setting up OnTV.</div>
+            </div>
+            <ColumnLayout className="flex flex-col gap-4 w-[30%] bg-neutral-800 h-full justify-center modern-shadow p-8">
+                <ModernListButton Icon={ArrowRightCircleIcon} Text="Next" />
+                <ModernListButton Icon={XCircleIcon} Text="Skip" />
+            </ColumnLayout>
+        </ModernRootLayout>
     )
 }
