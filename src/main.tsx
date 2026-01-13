@@ -7,6 +7,7 @@ import type { UserDto } from '@jellyfin/sdk/lib/generated-client/models'
 import LiveTV from './livetv.tsx'
 import click from "./public/click.mp3"
 import KeyboardDemo from './keyboarddemo.tsx'
+import { Settings } from './settings.tsx'
 
 export const GlobalContext = createContext({
   view: "home",
@@ -54,6 +55,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "home" && <App />}
       {view.split("?")[0].split("/")[0] === "livetv" && <LiveTV />}
       {view.split("?")[0].split("/")[0] === "keyboarddemo" && <KeyboardDemo />}
+      {view.split("?")[0].split("/")[0] === "settings" && <Settings />}
     </GlobalContext.Provider>
   )
 }

@@ -46,14 +46,16 @@ export default function LiveTV() {
             });
         });
     }, [channels, channelNumber, liveTvApi, jellyfinClient]);
+    const mediaPlayerRef = useRef<HTMLVideoElement>(null);
     return (
         <ModernRootLayout>
             <FocusNode onBack={() => {
+                mediaPlayerRef.current?.remove();
                 setView("home");
             }} onLeft={() => { if (channelNumber > 1) setChannelNumber(channelNumber - 1) }} onRight={() => { if (channelNumber < channels?.length!) setChannelNumber(channelNumber + 1) }}>
                 {currentChannel && mediaInfo && <>
                     {/* <ReactPlayer src={jellyfinClient?.basePath + mediaInfo.MediaSources?.[0].TranscodingUrl!} autoPlay controls /> */}
-                    <ReactPlayer style={{ width: "100vw", height: "100vh" }} src={mediaInfo.MediaSources?.[0].Path!} autoPlay />
+                    <ReactPlayer ref={mediaPlayerRef} style={{ width: "100vw", height: "100vh" }} src={mediaInfo.MediaSources?.[0].Path!} autoPlay />
                     <div style={{ position: "fixed" }} className="w-[100px] h-[50px] top-10 left-10 bg-black text-white flex items-center justify-center z-10">{currentChannel.Name}</div>
                 </>}
                 {!mediaInfo && currentChannel && <div>Loading...</div>}
@@ -86,7 +88,8 @@ function ChannelItem({ channel, setChannelNumber }: { channel: BaseItemDto, setC
         <ModernItem onSelected={() => {
             setChannelNumber(parseInt(channel.ChannelNumber!));
         }} ref={itemref} className="h-[175px] min-w-[175px] w-[175px] flex items-center justify-center" onFocused={() => {
-            itemref.current?.scrollIntoView({ behavior: "smooth" });
+            // itemref.current?.scrollIntoView({ behavior: "smooth" });
+            itemref.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemref.current?.offsetLeft! - 40 });
         }}>
             {image && <img src={image} className="h-[100px] w-[100px] object-contain" alt="" />}
         </ModernItem>

@@ -34,7 +34,7 @@ const serverUrl = "http://192.168.1.14:8097";
 // }
 
 export default function App() {
-    const { config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient } = useContext(GlobalContext);
+    const { config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient, setView } = useContext(GlobalContext);
     useEffect(() => {
         if (jellyfinClient) return;
         const jellyfin = new Jellyfin({
@@ -64,7 +64,9 @@ export default function App() {
                 <div className="text-4xl font-medium stbkit-color-text">OnTV</div>
                 <div className="flex-1" />
                 <ModernIconButton Icon={SearchIcon} />
-                <ModernIconButton Icon={SettingsIcon} />
+                <ModernIconButton Icon={SettingsIcon} onSelected={() => {
+                    setView("settings");
+                }} />
                 <ModernIconButton Icon={UserIcon} onSelected={() => {
                     setCurrentUser(null);
                     window.localStorage.removeItem("user");
@@ -164,7 +166,8 @@ function ShowCard({ show, api, showInfoHeader }: { show: BaseItemDto, api: Api, 
         <>
             <ModernItem ref={itemRef} onFocused={() => {
                 setFocused(true);
-                itemRef.current?.scrollIntoView({ behavior: 'smooth' });
+                // itemRef.current?.scrollIntoView({ behavior: 'smooth' });
+                itemRef.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemRef.current?.offsetLeft! - 40 });
             }} onBlur={() => {
                 setFocused(false);
             }} className="w-[125px] min-w-[125px] h-[180px]">
@@ -213,7 +216,8 @@ function AppItem({ children, onSelected }: { children: React.ReactNode, onSelect
     const itemRef = useRef<HTMLDivElement>(null);
     return (
         <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3" ref={itemRef} onFocused={() => {
-            itemRef.current?.scrollIntoView({ behavior: "smooth" });
+            // itemRef.current?.scrollIntoView({ behavior: "smooth" });
+            itemRef.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemRef.current?.offsetLeft! - 40 });
         }} onSelected={onSelected}>
             {children}
         </ModernItem>
@@ -222,7 +226,7 @@ function AppItem({ children, onSelected }: { children: React.ReactNode, onSelect
 
 function UserItem({ user, setCurrentUser, currentUser, api }: { user: UserDto, setCurrentUser: (user: UserDto) => void, currentUser: UserDto | null, api: Api }) {
     return (
-        <FocusNode className="usermenu-item flex flex-col items-center gap-4" onSelected={async () => {
+        <FocusNode className="usermenu-item flex flex-col items-center gap-6" onSelected={async () => {
             if (!user.HasPassword) {
                 const result = await getUserApi(api).authenticateUserByName({
                     authenticateUserByName: {

@@ -44,36 +44,42 @@ export function ModernIconButton({ Icon, className, onSelected, onFocused, onBlu
     );
 }
 
-export function ModernListButton({ Icon, Text, className, onSelected, onFocused, shouldScale, onBlur }: { Icon: JSX.ElementType, Text: string, className?: string, onSelected?: () => void, onFocused?: () => void, shouldScale?: boolean, onBlur?: () => void }) {
+export function ModernListButton({ Icon, Text, className, onSelected, onFocused, shouldScale, onBlur, description }: { Icon: JSX.ElementType, Text: string, className?: string, onSelected?: () => void, onFocused?: () => void, shouldScale?: boolean, onBlur?: () => void, description?: string }) {
     if (shouldScale) {
         return (
-            <ModernItemFillScale className={"rounded-lg p-6 flex flex-row items-center gap-4" + (className ?? "")} onSelected={onSelected} onFocused={onFocused} onBlurred={onBlur}>
+            <ModernItemFillScale className={"rounded-lg p-6 flex flex-row items-center gap-6" + (className ?? "")} onSelected={onSelected} onFocused={onFocused} onBlurred={onBlur}>
                 <Icon size={25} />
-                <div className="text-2xl font-medium stbkit-color-text">{Text}</div>
+                <div className="flex flex-col">
+                    <div className="text-2xl font-medium stbkit-color-text">{Text}</div>
+                    <div className="text-md stbkit-color-text">{description}</div>
+                </div>
             </ModernItemFillScale>
         )
     }
     return (
-        <ModernItemFill className={"rounded-lg p-6 flex flex-row items-center gap-4" + (className ?? "")} onSelected={onSelected} onFocused={onFocused}>
+        <ModernItemFill className={"rounded-lg p-6 flex flex-row items-center gap-6" + (className ?? "")} onSelected={onSelected} onFocused={onFocused}>
             <Icon size={25} />
-            <div className="text-2xl font-medium stbkit-color-text">{Text}</div>
+            <div className="flex flex-col">
+                <div className="text-2xl font-medium stbkit-color-text">{Text}</div>
+                <div className="text-lg stbkit-color-text">{description}</div>
+            </div>
         </ModernItemFill>
     );
 }
 
 const keyboardKeys = [
+    [{ key: "1", value: "1" }, { key: "2", value: "2" }, { key: "3", value: "3" }, { key: "4", value: "4" }, { key: "5", value: "5" }, { key: "6", value: "6" }, { key: "7", value: "7" }, { key: "8", value: "8" }, { key: "9", value: "9" }, { key: "0", value: "0" }],
     [{ key: "q", value: "q" }, { key: "w", value: "w" }, { key: "e", value: "e" }, { key: "r", value: "r" }, { key: "t", value: "t" }, { key: "y", value: "y" }, { key: "u", value: "u" }, { key: "i", value: "i" }, { key: "o", value: "o" }, { key: "p", value: "p" }],
     [{ key: "a", value: "a" }, { key: "s", value: "s" }, { key: "d", value: "d" }, { key: "f", value: "f" }, { key: "g", value: "g" }, { key: "h", value: "h" }, { key: "j", value: "j" }, { key: "k", value: "k" }, { key: "l", value: "l" }, { key: ";", value: ";" }],
     [{ key: "z", value: "z" }, { key: "x", value: "x" }, { key: "c", value: "c" }, { key: "v", value: "v" }, { key: "b", value: "b" }, { key: "n", value: "n" }, { key: "m", value: "m" }, { key: ",", value: "," }, { key: ".", value: "." }, { key: "/", value: "/" }],
-    [{ key: " ", value: " " }]
 ]
 
 export function Keyboard({ value, setValue }: { value: string, setValue: (value: string) => void }) {
     return (
-        <GridLayout>
-            {keyboardKeys.map((row, index) => <RowLayout>
-                {row.map((key) => <ColumnLayout>
-                    <ModernItemFillScale onSelected={() => setValue(value + key.value)} className="w-[50px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-full">{key.key}</ModernItemFillScale>
+        <GridLayout className="bg-neutral-800 w-fit p-4 gap-3 rounded-2xl">
+            {keyboardKeys.map((row, index) => <RowLayout className="gap-3" key={index}>
+                {row.map((key, index) => <ColumnLayout key={index}>
+                    <ModernItemFillScale onSelected={() => setValue(value + key.value)} className="w-[50px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-md bg-neutral-700">{key.key}</ModernItemFillScale>
                 </ColumnLayout>)}
             </RowLayout>)}
         </GridLayout>
