@@ -37,10 +37,20 @@
 .stbkit-selectionstyle-scale {
   transition: all 0.1s ease-in-out;
   box-shadow: none;
+  /* outline-width: 0px;
+  outline-color: white;
+  outline-style: solid;
+  outline-offset: 0px; */
+  border-width: 0px;
+  border-color: white;
+  border-style: solid;
 }
 
 .stbkit-selectionstyle-scale.isFocused {
   transform: scale(1.2);
+  /* outline-width: 2px;
+  outline-offset: 2px; */
+  /* border-width: 2px; */
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 

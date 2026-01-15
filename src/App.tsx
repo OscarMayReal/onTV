@@ -73,10 +73,14 @@ export default function App() {
                 }} />
             </RowLayout>
             <div className="mb-3 pl-10 flex flex-row items-center">
-                <div className="text-2xl">Apps and Sources</div>
+                <div className="text-2xl">Apps</div>
             </div>
             <AppsRow />
-            {jellyfinClient && <TVShowsOnNow api={jellyfinClient} />}
+            <TVShowsOnNow api={jellyfinClient!} />
+            <div className="mb-3 pl-10 flex flex-row items-center">
+                <div className="text-2xl">Sources</div>
+            </div>
+            <SourcesRow />
         </ModernRootLayout>
     )
 }
@@ -85,15 +89,67 @@ function AppsRow() {
     const { view, setView } = useContext(GlobalContext);
     return (
         <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
-            <AppItem>
+            <AppItem onSelected={() => {
+                window.open("https://www.youtube.com/tv", "_blank");
+            }}>
                 <img src="https://i.ibb.co/yB80JsQC/f7d5f5ff2646c63c5bd7d9ad9741bcda-fgraphic.png" className="w-[200px] h-[98px] object-cover" />
             </AppItem>
-            <AppItem>
-                <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
+            <AppItem onSelected={() => {
+                window.open("https://www.live.bbctvapps.co.uk/tap/iplayer", "_blank");
+            }}>
+                <img src="https://i.ibb.co/BHn4hT2c/BBC-i-Player-Rectangle.jpg" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem onSelected={() => {
+                window.open("https://www.live.bbctvapps.co.uk/tap/sounds", "_blank");
+            }}>
+                <img src="https://i.ibb.co/tTBBbYDn/BBC-Sounds-Rectangle.png" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem onSelected={() => {
+                window.open("https://app.plex.tv/tv-v5-generic", "_blank");
+            }}>
+                <img src="https://i.ibb.co/tTdc4WjT/plex.png" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem onSelected={() => {
+                window.open("https://celadon-arztjmkowcbjjgq11.tv.twitch.tv/", "_blank");
+            }}>
+                <img src="https://i.ibb.co/d08MsQmJ/image-2.png" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem onSelected={() => {
+                window.open("https://tv.dazn.com/app/sky/en-GB/home", "_blank");
+            }}>
+                <img src="https://i.ibb.co/MyLRtFgX/dazn.png" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem onSelected={() => {
+                window.open("https://app.10ft.itv.com/3.681.0/androidtv/", "_blank");
+            }}>
+                <img src="https://i.ibb.co/dwvj7vCP/itvx.png" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem onSelected={() => {
+                window.open("https://ott-androidtv.tubitv.com/", "_blank");
+            }}>
+                <img src="https://i.ibb.co/Q32Vttdg/tubi.png" className="w-[200px] h-[98px] object-cover" />
             </AppItem>
             <AppItem>
                 <img src="https://i.ibb.co/wrpTd4QD/51i0m01-RSx-L.png" className="w-[200px] h-[98px] object-cover" />
+            </AppItem>
+            <AppItem onSelected={() => { setView("keyboarddemo") }}>
+                <KeyboardIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                <div className="text-xl font-medium stbkit-color-text">Keyboard Demo</div>
+            </AppItem>
+            <AppItem>
+                <ScreenShareIcon size={35} strokeWidth={1.7} className="text-emerald-800" />
+            </AppItem>
+        </RowLayout>
+    )
+}
+
+function SourcesRow() {
+    const { view, setView } = useContext(GlobalContext);
+    return (
+        <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
+            <AppItem>
+                <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
             </AppItem>
             <AppItem onSelected={() => { setView("livetv") }}>
                 <Tv2Icon size={35} strokeWidth={1.4} className="stbkit-color-text" />
@@ -107,13 +163,6 @@ function AppsRow() {
                 <HardDriveIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
                 <div className="text-xl font-medium stbkit-color-text">Recorded</div>
             </AppItem>
-            <AppItem>
-                <ScreenShareIcon size={35} strokeWidth={1.7} className="text-emerald-800" />
-            </AppItem>
-            <AppItem onSelected={() => { setView("keyboarddemo") }}>
-                <KeyboardIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                <div className="text-xl font-medium stbkit-color-text">Keyboard Demo</div>
-            </AppItem>
         </RowLayout>
     )
 }
@@ -122,6 +171,7 @@ function TVShowsOnNow({ api }: { api: Api }) {
     const [liveTvApi, setLiveTvApi] = useState<LiveTvApi | null>(null);
     const [onNow, setOnNow] = useState<RecommendationDto | null>(null);
     useEffect(() => {
+        if (!api) return;
         const liveTvApi = getLiveTvApi(api);
         setLiveTvApi(liveTvApi);
         const userApi = getUserApi(api);
@@ -139,7 +189,7 @@ function TVShowsOnNow({ api }: { api: Api }) {
                 setOnNow(onNow.data);
             });
         });
-    }, []);
+    }, [api]);
     return (
         <>
             <div className="mb-2 pl-10 flex flex-row items-center">

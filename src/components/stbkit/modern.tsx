@@ -1,5 +1,5 @@
-import { FocusNode, FocusRoot } from "@please/lrud";
-import type { JSX } from "react";
+import { FocusNode, FocusRoot, useProcessKey } from "@please/lrud";
+import { useEffect, type JSX } from "react";
 import { ColumnLayout, GridLayout, RowLayout } from ".";
 
 export function ModernItem({ children, className, onSelected, onFocused, ref, onBlur }: { children: React.ReactNode, className?: string, onSelected?: () => void, onFocused?: () => void, ref?: React.RefObject<HTMLDivElement>, onBlur?: () => void }) {
@@ -29,11 +29,31 @@ export function ModernItemFillScale({ children, className, onSelected, onFocused
 export function ModernRootLayout({ children, className, ref }: { children: React.ReactNode, className?: string, ref?: React.RefObject<HTMLDivElement> }) {
     return (
         <div className="h-[100dvh] w-[100dvw] bg-neutral-900 fixed top-0 left-0 h-[100dvh] w-[100dvw]"><FocusRoot>
+            <DelKeyBack />
             <FocusNode orientation="vertical" className={"flex flex-col " + (className ?? "")} ref={ref}>
                 {children}
             </FocusNode>
         </FocusRoot></div>
     )
+}
+
+function DelKeyBack() {
+    const processKey = useProcessKey();
+    useEffect(() => {
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "backspace") {
+                processKey.back()
+            }
+        })
+        return () => {
+            window.removeEventListener("keydown", (e) => {
+                if (e.key === "backspace") {
+                    processKey.back()
+                }
+            })
+        }
+    }, [processKey])
+    return <></>
 }
 
 export function ModernIconButton({ Icon, className, onSelected, onFocused, onBlur }: { Icon: JSX.ElementType, className?: string, onSelected?: () => void, onFocused?: () => void, onBlur?: () => void }) {
