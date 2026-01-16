@@ -12,6 +12,7 @@ import { getImageApi } from "@jellyfin/sdk/lib/utils/api/image-api.js";
 import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-api";
 import { GlobalContext } from "./main";
 import { returnAppsList } from "./apps";
+import { OnTVConfig } from "./info";
 
 const serverUrl = "http://192.168.1.14:8097";
 
@@ -40,11 +41,11 @@ export default function App() {
         if (jellyfinClient) return;
         const jellyfin = new Jellyfin({
             clientInfo: {
-                name: 'OnTV',
+                name: OnTVConfig.serviceInfo.name,
                 version: '1.0.0'
             },
             deviceInfo: {
-                name: 'OnTV STB',
+                name: OnTVConfig.deviceInfo.name,
                 id: '01'
             }
         });
@@ -62,7 +63,7 @@ export default function App() {
     return (
         <ModernRootLayout>
             <RowLayout className="p-10 pb-0 flex flex-row items-center gap-3 sticky top-0 z-50 bg-neutral-900 z-60">
-                <div className="text-4xl font-medium stbkit-color-text">OnTV Play</div>
+                <div className="text-4xl font-medium stbkit-color-text">{OnTVConfig.serviceInfo.name}</div>
                 <div className="flex-1" />
                 <ModernIconButton Icon={SearchIcon} />
                 <ModernIconButton Icon={SettingsIcon} onSelected={() => {
@@ -76,8 +77,8 @@ export default function App() {
             <div className="h-10" />
             <div className="h-[204px] p-10 pt-0 flex flex-col justify-center gap-2">
                 <Tv2Icon className="pb-2" size={50} />
-                <div className="text-4xl font-medium stbkit-color-text">Welcome to OnTV Play</div>
-                <div className="text-2xl stbkit-color-text">Stream your favorite movies, TV shows, and more.</div>
+                <div className="text-4xl font-medium stbkit-color-text">Welcome to {OnTVConfig.serviceInfo.name}</div>
+                <div className="text-2xl stbkit-color-text">Stream your favorite movies, TV shows, and more using your {OnTVConfig.deviceInfo.name}</div>
             </div>
             <AppsRow />
             <SourcesRow />
@@ -235,7 +236,7 @@ function UserPicker({ api, setCurrentUser, currentUser }: { api: Api, setCurrent
     }, [api]);
     return (
         <ModernRootLayout className="items-center justify-center h-[100dvh] w-[100dvw]">
-            <div className="text-4xl font-medium stbkit-color-text">Welcome to OnTV</div>
+            <div className="text-4xl font-medium stbkit-color-text">Welcome to {OnTVConfig.serviceInfo.name}</div>
             <div className="text-2xl pt-2 pb-8 stbkit-color-text">Select a user</div>
             <RowLayout className="gap-2 pl-10 pr-10 scroll-row gap-8">
                 {users.map((user) => (

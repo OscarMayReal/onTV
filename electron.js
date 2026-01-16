@@ -13,7 +13,7 @@ server.on('message', (message) => {
     }
 });
 
-function launchApp(json) {
+function launchApp() {
     appwindow = new BrowserWindow({
         fullscreen: true,
         webPreferences: {
@@ -37,13 +37,25 @@ function launchApp(json) {
 
 function createWindow() {
     var mainWindow = new BrowserWindow({
-        fullscreen: true,
+        // fullscreen: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
             enableRemoteModule: true,
         }
     });
+    mainWindow.setMenuBarVisibility(false);
+    mainWindow.webContents.setWindowOpenHandler((details) => {
+        mainWindow.hide();
+        return { action: 'allow', overrideBrowserWindowOptions: {} };
+    });
+    mainWindow.webContents.on('did-create-window', (window) => {
+        window.maximize();
+        window.on('close', () => {
+            mainWindow.show();
+        });
+    })
+    mainWindow.maximize();
     let primaryDisplay = screen.getPrimaryDisplay()
     console.log(primaryDisplay);
     let screenDimention = primaryDisplay.workAreaSize
@@ -54,11 +66,28 @@ function createWindow() {
     // mainWindow.webContents.zoomFactor = scaleFactor;
     mainWindow.webContents.setZoomLevel(scaleFactor);
     mainWindow.loadURL('http://localhost:5173/');
+    // mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.executeJavaScript('localStorage.clear()');
 }
 
 app.whenReady().then(() => {
-    globalShortcut.register('CommandOrControl+esc', () => {
-        appwindow.close();
+    // globalShortcut.register('CommandOrControl+esc', () => {
+    //     appwindow.close();
+    // });
+    globalShortcut.register('CommandOrControl+Backspace', () => {
+        const overlayMenu = new BrowserWindow({
+            // fullscreen: true,
+            transparent: true,
+            frame: false,
+            alwaysOnTop: true,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false,
+                enableRemoteModule: true,
+            }
+        });
+        overlayMenu.maximize();
+        overlayMenu.loadURL('http://localhost:5173/overlaymenu.html');
     });
     setTimeout(() => {
         createWindow();

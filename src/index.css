@@ -8,7 +8,7 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   /* background: linear-gradient(to top, #21b989 0%, #117052 100%); */
-  background: linear-gradient(to top, #147053 0%, #094130 100%);
+  /* background: linear-gradient(to top, #147053 0%, #094130 100%); */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -157,4 +157,17 @@
 
 .home-row {
   scroll-margin-top: 333px;
+}
+
+#root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  /* --stbkit-color-text: #666666; */
+}
+
+.stbkit-color-text {
+  color: var(--stbkit-color-text) !important;
 }
