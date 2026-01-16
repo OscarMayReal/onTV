@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
 import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
 import click from "./public/click.mp3";
-import { ArrowRightCircleIcon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
+import { ArrowRightCircleIcon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
 import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";
@@ -11,6 +11,7 @@ import { getLiveTvApi } from "@jellyfin/sdk/lib/utils/api/live-tv-api.js";
 import { getImageApi } from "@jellyfin/sdk/lib/utils/api/image-api.js";
 import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-api";
 import { GlobalContext } from "./main";
+import { returnAppsList } from "./apps";
 
 const serverUrl = "http://192.168.1.14:8097";
 
@@ -60,8 +61,8 @@ export default function App() {
     if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
     return (
         <ModernRootLayout>
-            <RowLayout className="p-10 flex flex-row items-center gap-3">
-                <div className="text-4xl font-medium stbkit-color-text">OnTV</div>
+            <RowLayout className="p-10 pb-0 flex flex-row items-center gap-3 sticky top-0 z-50 bg-neutral-900 z-60">
+                <div className="text-4xl font-medium stbkit-color-text">OnTV Play</div>
                 <div className="flex-1" />
                 <ModernIconButton Icon={SearchIcon} />
                 <ModernIconButton Icon={SettingsIcon} onSelected={() => {
@@ -72,98 +73,78 @@ export default function App() {
                     window.localStorage.removeItem("user");
                 }} />
             </RowLayout>
-            <div className="mb-3 pl-10 flex flex-row items-center">
-                <div className="text-2xl">Apps</div>
+            <div className="h-10" />
+            <div className="h-[204px] p-10 pt-0 flex flex-col justify-center gap-2">
+                <Tv2Icon className="pb-2" size={50} />
+                <div className="text-4xl font-medium stbkit-color-text">Welcome to OnTV Play</div>
+                <div className="text-2xl stbkit-color-text">Stream your favorite movies, TV shows, and more.</div>
             </div>
             <AppsRow />
-            <TVShowsOnNow api={jellyfinClient!} />
-            <div className="mb-3 pl-10 flex flex-row items-center">
-                <div className="text-2xl">Sources</div>
-            </div>
             <SourcesRow />
+            <TVShowsOnNow api={jellyfinClient!} />
+            <div className="h-[100dvh]" />
         </ModernRootLayout>
     )
 }
 
 function AppsRow() {
     const { view, setView } = useContext(GlobalContext);
+    const focusNode = useRef<HTMLElement>(null);
     return (
-        <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
-            <AppItem onSelected={() => {
-                window.open("https://www.youtube.com/tv", "_blank");
-            }}>
-                <img src="https://i.ibb.co/yB80JsQC/f7d5f5ff2646c63c5bd7d9ad9741bcda-fgraphic.png" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem onSelected={() => {
-                window.open("https://www.live.bbctvapps.co.uk/tap/iplayer", "_blank");
-            }}>
-                <img src="https://i.ibb.co/BHn4hT2c/BBC-i-Player-Rectangle.jpg" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem onSelected={() => {
-                window.open("https://www.live.bbctvapps.co.uk/tap/sounds", "_blank");
-            }}>
-                <img src="https://i.ibb.co/tTBBbYDn/BBC-Sounds-Rectangle.png" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem onSelected={() => {
-                window.open("https://app.plex.tv/tv-v5-generic", "_blank");
-            }}>
-                <img src="https://i.ibb.co/tTdc4WjT/plex.png" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem onSelected={() => {
-                window.open("https://celadon-arztjmkowcbjjgq11.tv.twitch.tv/", "_blank");
-            }}>
-                <img src="https://i.ibb.co/d08MsQmJ/image-2.png" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem onSelected={() => {
-                window.open("https://tv.dazn.com/app/sky/en-GB/home", "_blank");
-            }}>
-                <img src="https://i.ibb.co/MyLRtFgX/dazn.png" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem onSelected={() => {
-                window.open("https://app.10ft.itv.com/3.681.0/androidtv/", "_blank");
-            }}>
-                <img src="https://i.ibb.co/dwvj7vCP/itvx.png" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem onSelected={() => {
-                window.open("https://ott-androidtv.tubitv.com/", "_blank");
-            }}>
-                <img src="https://i.ibb.co/Q32Vttdg/tubi.png" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem>
-                <img src="https://i.ibb.co/wrpTd4QD/51i0m01-RSx-L.png" className="w-[200px] h-[98px] object-cover" />
-            </AppItem>
-            <AppItem onSelected={() => { setView("keyboarddemo") }}>
-                <KeyboardIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                <div className="text-xl font-medium stbkit-color-text">Keyboard Demo</div>
-            </AppItem>
-            <AppItem>
-                <ScreenShareIcon size={35} strokeWidth={1.7} className="text-emerald-800" />
-            </AppItem>
-        </RowLayout>
+        <FocusNode className="home-row" ref={focusNode} onFocused={() => {
+            focusNode.current?.scrollIntoView({ behavior: "smooth" });
+        }}>
+            <div className="mb-3 pl-10 flex flex-row items-center">
+                <div className="text-2xl">Apps</div>
+            </div>
+            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
+                {returnAppsList().map((app) => {
+                    return (
+                        <AppItem key={app.name} onSelected={() => {
+                            window.open(app.url, "_blank");
+                        }} showInfoHeader info={{
+                            name: app.name,
+                            overview: app.description,
+                            subtitle: app.company
+                        }}>
+                            <img src={app.icon} className="w-[200px] h-[98px] object-cover" />
+                        </AppItem>
+                    )
+                })}
+            </RowLayout>
+        </FocusNode>
     )
 }
 
 function SourcesRow() {
     const { view, setView } = useContext(GlobalContext);
+    const focusNode = useRef<HTMLElement>(null);
     return (
-        <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
-            <AppItem>
-                <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
-            </AppItem>
-            <AppItem onSelected={() => { setView("livetv") }}>
-                <Tv2Icon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                <div className="text-xl font-medium stbkit-color-text">Live TV</div>
-            </AppItem>
-            <AppItem>
-                <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                <div className="text-xl font-medium stbkit-color-text">HDMI 2</div>
-            </AppItem>
-            <AppItem>
-                <HardDriveIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                <div className="text-xl font-medium stbkit-color-text">Recorded</div>
-            </AppItem>
-        </RowLayout>
+        <FocusNode className="home-row" ref={focusNode} onFocused={() => {
+            focusNode.current?.scrollIntoView({ behavior: "smooth" });
+        }}>
+            <div className="mb-3 pl-10 flex flex-row items-center">
+                <div className="text-2xl">Sources</div>
+            </div>
+            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
+                <AppItem showInfoHeader info={{ name: "HDMI 1", overview: `View the device connected to HDMI 1`, subtitle: "Hardware Inputs" }} onSelected={() => { setView("hdmi?input=1") }}>
+                    <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                    <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
+                </AppItem>
+                <AppItem showInfoHeader info={{ name: "Live TV", overview: "View Live TV", subtitle: "TV Inputs" }} onSelected={() => { setView("livetv") }}>
+                    <Tv2Icon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                    <div className="text-xl font-medium stbkit-color-text">Live TV</div>
+                </AppItem>
+                <AppItem showInfoHeader info={{ name: "HDMI 2", overview: "View the device connected to HDMI 2", subtitle: "Hardware Inputs" }} onSelected={() => { setView("hdmi?input=2") }}>
+                    <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                    <div className="text-xl font-medium stbkit-color-text">HDMI 2</div>
+                </AppItem>
+                <AppItem showInfoHeader info={{ name: "Recorded", overview: "View Recorded Shows", subtitle: "TV Inputs" }}>
+                    <HardDriveIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                    <div className="text-xl font-medium stbkit-color-text">Recorded</div>
+                </AppItem>
+            </RowLayout>
+        </FocusNode>
     )
 }
 
@@ -190,8 +171,11 @@ function TVShowsOnNow({ api }: { api: Api }) {
             });
         });
     }, [api]);
+    const focusNode = useRef<HTMLElement>(null);
     return (
-        <>
+        <FocusNode className="home-row" ref={focusNode} onFocused={() => {
+            focusNode.current?.scrollIntoView({ behavior: "smooth" });
+        }}>
             <div className="mb-2 pl-10 flex flex-row items-center">
                 <div className="text-2xl">TV Shows On Now</div>
             </div>
@@ -200,7 +184,7 @@ function TVShowsOnNow({ api }: { api: Api }) {
                     <ShowCard key={item.Id} show={item} api={api} showInfoHeader={true} />
                 ))}
             </RowLayout>
-        </>
+        </FocusNode>
     )
 }
 
@@ -262,15 +246,36 @@ function UserPicker({ api, setCurrentUser, currentUser }: { api: Api, setCurrent
     )
 }
 
-function AppItem({ children, onSelected }: { children: React.ReactNode, onSelected?: () => void }) {
+interface AppItemInfo {
+    name: string;
+    subtitle?: string;
+    overview: string;
+    image: string;
+}
+
+function AppItem({ children, onSelected, showInfoHeader, info }: { children: React.ReactNode, onSelected?: () => void, showInfoHeader?: boolean, info?: AppItemInfo }) {
     const itemRef = useRef<HTMLDivElement>(null);
+    const [focused, setFocused] = useState(false);
     return (
-        <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3" ref={itemRef} onFocused={() => {
-            // itemRef.current?.scrollIntoView({ behavior: "smooth" });
-            itemRef.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemRef.current?.offsetLeft! - 40 });
-        }} onSelected={onSelected}>
-            {children}
-        </ModernItem>
+        <>
+            <ModernItem className="w-[200px] min-w-[200px] h-[98px] flex flex-row items-center justify-center gap-3" ref={itemRef} onFocused={() => {
+                setFocused(true);
+                // itemRef.current?.scrollIntoView({ behavior: "smooth" });
+                itemRef.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemRef.current?.offsetLeft! - 40 });
+            }} onBlur={() => {
+                setFocused(false);
+            }} onSelected={onSelected}>
+                {children}
+            </ModernItem>
+            {showInfoHeader && focused && <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className="w-full h-[250px] bg-neutral-900 p-10 flex flex-row gap-2">
+                <div className="flex-1">
+                    <div className="text-4xl">{info?.name}</div>
+                    <div className="text-xl py-4">{info?.subtitle}</div>
+                    <div className="text-2xl">{info?.overview}</div>
+                </div>
+                <img src={info?.image} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+            </div>}
+        </>
     )
 }
 

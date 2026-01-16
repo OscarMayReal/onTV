@@ -8,6 +8,7 @@ import LiveTV from './livetv.tsx'
 import click from "./public/click.mp3"
 import KeyboardDemo from './keyboarddemo.tsx'
 import { Settings } from './settings.tsx'
+import HDMIViewer from './hdmi.tsx'
 
 export const GlobalContext = createContext({
   view: "home",
@@ -56,6 +57,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "livetv" && <LiveTV />}
       {view.split("?")[0].split("/")[0] === "keyboarddemo" && <KeyboardDemo />}
       {view.split("?")[0].split("/")[0] === "settings" && <Settings />}
+      {view.split("?")[0].split("/")[0] === "hdmi" && <HDMIViewer />}
     </GlobalContext.Provider>
   )
 }

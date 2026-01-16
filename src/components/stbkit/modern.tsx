@@ -26,11 +26,11 @@ export function ModernItemFillScale({ children, className, onSelected, onFocused
     );
 }
 
-export function ModernRootLayout({ children, className, ref }: { children: React.ReactNode, className?: string, ref?: React.RefObject<HTMLDivElement> }) {
+export function ModernRootLayout({ children, className, ref, onBack }: { children: React.ReactNode, className?: string, ref?: React.RefObject<HTMLDivElement>, onBack?: () => void }) {
     return (
-        <div className="h-[100dvh] w-[100dvw] bg-neutral-900 fixed top-0 left-0 h-[100dvh] w-[100dvw]"><FocusRoot>
+        <div className="h-[100dvh] w-[100dvw] bg-neutral-900 fixed top-0 left-0 h-[100dvh] w-[100dvw] overflow-scroll"><FocusRoot>
             <DelKeyBack />
-            <FocusNode orientation="vertical" className={"flex flex-col " + (className ?? "")} ref={ref}>
+            <FocusNode onBack={onBack} orientation="vertical" className={"flex flex-col " + (className ?? "")} ref={ref}>
                 {children}
             </FocusNode>
         </FocusRoot></div>
@@ -41,13 +41,13 @@ function DelKeyBack() {
     const processKey = useProcessKey();
     useEffect(() => {
         window.addEventListener("keydown", (e) => {
-            if (e.key === "backspace") {
+            if (e.key === "Backspace") {
                 processKey.back()
             }
         })
         return () => {
             window.removeEventListener("keydown", (e) => {
-                if (e.key === "backspace") {
+                if (e.key === "Backspace") {
                     processKey.back()
                 }
             })
