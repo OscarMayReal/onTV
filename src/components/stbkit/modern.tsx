@@ -26,9 +26,9 @@ export function ModernItemFillScale({ children, className, onSelected, onFocused
     );
 }
 
-export function ModernRootLayout({ children, className, ref, onBack }: { children: React.ReactNode, className?: string, ref?: React.RefObject<HTMLDivElement>, onBack?: () => void }) {
+export function ModernRootLayout({ children, className, ref, onBack, bgClassName }: { children: React.ReactNode, className?: string, ref?: React.RefObject<HTMLDivElement>, onBack?: () => void, bgClassName?: string }) {
     return (
-        <div className="h-[100dvh] w-[100dvw] bg-neutral-900 fixed top-0 left-0 h-[100dvh] w-[100dvw] overflow-scroll"><FocusRoot>
+        <div className={"h-[100dvh] w-[100dvw] bg-neutral-900 fixed top-0 left-0 h-[100dvh] w-[100dvw] overflow-scroll " + (bgClassName ?? "")}><FocusRoot>
             <DelKeyBack />
             <FocusNode onBack={onBack} orientation="vertical" className={"flex flex-col " + (className ?? "")} ref={ref}>
                 {children}

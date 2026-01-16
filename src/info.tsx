@@ -1,9 +1,19 @@
 export const OnTVConfig = {
     deviceInfo: {
-        name: "OnTV Streamer",
+        name: "OnTV Premiere",
     },
     serviceInfo: {
-        name: "OnTV Play",
-        mode: "stream",
+        name: "OnTV",
+        mode: "stb",
     }
 }
+
+// export const OnTVConfig = {
+//     deviceInfo: {
+//         name: "OnTV Streamer",
+//     },
+//     serviceInfo: {
+//         name: "OnTV Play",
+//         mode: "streaming",
+//     }
+// }

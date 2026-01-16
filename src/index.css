@@ -16,6 +16,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.stbkit-background {
+  background: linear-gradient(to top, #21b989 0%, #117052 100%);
+}
+
 .stbkit-selectionstyle-outline.isFocused {
   outline: 4px solid #d1cd00;
 }

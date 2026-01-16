@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
+import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout, SearchBox } from "./components/stbkit";
 import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
 import click from "./public/click.mp3";
-import { ArrowRightCircleIcon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
+import { ArrowRightCircleIcon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, PlugIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
 import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";
@@ -13,6 +13,9 @@ import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-a
 import { GlobalContext } from "./main";
 import { returnAppsList } from "./apps";
 import { OnTVConfig } from "./info";
+import "./stbstyles.css";
+import { useClock } from "./lib/useclock";
+import logo from "./assets/logo.svg";
 
 const serverUrl = "http://192.168.1.14:8097";
 
@@ -35,7 +38,7 @@ const serverUrl = "http://192.168.1.14:8097";
 //     )
 // }
 
-export default function StbApp() {
+export default function App() {
     const { config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient, setView } = useContext(GlobalContext);
     useEffect(() => {
         if (jellyfinClient) return;
@@ -60,31 +63,34 @@ export default function StbApp() {
     }, [jellyfinClient, currentUser]);
     // if (!config) return <SetupUI />
     if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
+    const clock = useClock();
     return (
-        <ModernRootLayout>
-            <RowLayout className="p-10 pb-0 flex flex-row items-center gap-3 sticky top-0 z-50 bg-neutral-900 z-60">
-                <div className="text-4xl font-medium stbkit-color-text">{OnTVConfig.serviceInfo.name}</div>
+        <ModernRootLayout bgClassName="stbkit-background-flat" className="h-full">
+            <div className="flex flex-row items-center p-8 font-light">
+                <img src={logo} className="h-12 object-cover pr-5" />
+                <div>
+                    <div className="text-4xl stbkit-color-text">Home</div>
+                    <div className="text-lg stbkit-color-text">Box Device Name</div>
+                </div>
                 <div className="flex-1" />
-                <ModernIconButton Icon={SearchIcon} />
-                <ModernIconButton Icon={SettingsIcon} onSelected={() => {
-                    setView("settings");
-                }} />
-                <ModernIconButton Icon={UserIcon} onSelected={() => {
-                    setCurrentUser(null);
-                    window.localStorage.removeItem("user");
-                }} />
-            </RowLayout>
-            <div className="h-10" />
-            <div className="h-[204px] p-10 pt-0 flex flex-col justify-center gap-2">
-                <Tv2Icon className="pb-2" size={50} />
-                <div className="text-4xl font-medium stbkit-color-text">Welcome to {OnTVConfig.serviceInfo.name}</div>
-                <div className="text-2xl stbkit-color-text">Stream your favorite movies, TV shows, and more using your {OnTVConfig.deviceInfo.name}</div>
+                {/* <div className="text-3xl stbkit-color-text fixed right-[50%] translate-x-1/2 font-medium">{OnTVConfig.serviceInfo.name}</div> */}
+                <div className="text-3xl stbkit-color-text">{clock.toLocaleTimeString()}</div>
             </div>
-            <AppsRow />
-            <SourcesRow />
-            <TVShowsOnNow api={jellyfinClient!} />
-            <div className="h-[100dvh]" />
+            <ColumnLayout className="max-w-[400px] min-w-[400px] bg-black/30 ml-8 items-center py-4 rounded-t-xl border-2 border-b-0 h-full border-white gap-2">
+                <MenuListItem onSelected={() => { }} text="Live TV" Icon={Tv2Icon} />
+                <MenuListItem onSelected={() => { }} text="Sources" Icon={PlugIcon} />
+                <MenuListItem onSelected={() => { }} text="Settings" Icon={SettingsIcon} />
+            </ColumnLayout>
         </ModernRootLayout>
+    )
+}
+
+function MenuListItem({ onSelected, text, Icon }: { onSelected: () => void, text: string, Icon?: React.JSX.ElementType }) {
+    return (
+        <ModernItemFill onSelected={onSelected} className="p-2 pl-11 max-w-[430px] min-w-[430px] rounded-lg flex flex-row items-center gap-4">
+            <Icon size={24} />
+            <div className="text-xl">{text}</div>
+        </ModernItemFill>
     )
 }
 
