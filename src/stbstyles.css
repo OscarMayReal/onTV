@@ -5,3 +5,23 @@
 .stbkit-background-flat {
     background-color: rgb(20, 93, 71);
 }
+
+.vertical-list-menu.isFocused {
+    background-color: rgba(0, 0, 0, 0.30);
+    border-color: white;
+}
+
+.vertical-list-menu {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.119);
+    border-style: solid;
+    border-bottom: 0;
+    transition: all 0.1s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.main-layout {
+    height: 100vh !important;
+    max-height: 100vh !important;
+}

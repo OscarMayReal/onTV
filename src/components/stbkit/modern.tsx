@@ -10,9 +10,9 @@ export function ModernItem({ children, className, onSelected, onFocused, ref, on
     );
 }
 
-export function ModernItemFill({ children, className, onSelected, onFocused, ref, onBlur }: { children: React.ReactNode, className?: string, onSelected?: () => void, onFocused?: () => void, ref?: React.RefObject<HTMLDivElement>, onBlur?: () => void }) {
+export function ModernItemFill({ children, className, onSelected, onFocused, ref, onBlur, showOverflow }: { children: React.ReactNode, className?: string, onSelected?: () => void, onFocused?: () => void, ref?: React.RefObject<HTMLDivElement>, onBlur?: () => void, showOverflow?: boolean }) {
     return (
-        <FocusNode onFocused={onFocused} className={"flex flex-col stbkit-selectionstyle-fill-modern overflow-hidden " + (className ?? "")} onSelected={onSelected} ref={ref} onBlurred={onBlur}>
+        <FocusNode onFocused={onFocused} className={"flex flex-col stbkit-selectionstyle-fill-modern " + (className ?? "") + (showOverflow ? "" : " overflow-hidden")} onSelected={onSelected} ref={ref} onBlurred={onBlur}>
             {children}
         </FocusNode>
     );
@@ -26,9 +26,9 @@ export function ModernItemFillScale({ children, className, onSelected, onFocused
     );
 }
 
-export function ModernRootLayout({ children, className, ref, onBack, bgClassName }: { children: React.ReactNode, className?: string, ref?: React.RefObject<HTMLDivElement>, onBack?: () => void, bgClassName?: string }) {
+export function ModernRootLayout({ children, className, ref, onBack, bgClassName, style }: { children: React.ReactNode, className?: string, ref?: React.RefObject<HTMLDivElement>, onBack?: () => void, bgClassName?: string, style?: React.CSSProperties }) {
     return (
-        <div className={"h-[100dvh] w-[100dvw] bg-neutral-900 fixed top-0 left-0 h-[100dvh] w-[100dvw] overflow-scroll " + (bgClassName ?? "")}><FocusRoot>
+        <div className={"h-[100dvh] w-[100dvw] bg-neutral-900 fixed top-0 left-0 h-[100dvh] w-[100dvw] overflow-scroll " + (bgClassName ?? "")} style={style}><FocusRoot>
             <DelKeyBack />
             <FocusNode onBack={onBack} orientation="vertical" className={"flex flex-col " + (className ?? "")} ref={ref}>
                 {children}
