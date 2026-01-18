@@ -87,9 +87,9 @@ export function RowLayout({ children, className, defaultFocusChild, onBack }: { 
     )
 }
 
-export function ColumnLayout({ children, className, defaultFocusChild, onBack }: { children: React.ReactNode, className?: string, defaultFocusChild?: number, onBack?: () => void }) {
+export function ColumnLayout({ children, className, defaultFocusChild, onBack, focusId }: { children: React.ReactNode, className?: string, defaultFocusChild?: number, onBack?: () => void, focusId?: string }) {
     return (
-        <FocusNode orientation="vertical" className={"flex flex-col " + (className ?? "")} defaultFocusChild={defaultFocusChild} onBack={onBack}>
+        <FocusNode orientation="vertical" className={"flex flex-col " + (className ?? "")} defaultFocusChild={defaultFocusChild} onBack={onBack} focusId={focusId}>
             {children}
         </FocusNode>
     )

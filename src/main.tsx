@@ -10,7 +10,8 @@ import KeyboardDemo from './keyboarddemo.tsx'
 import { Settings } from './settings.tsx'
 import HDMIViewer from './hdmi.tsx'
 import { OnTVConfig } from './info.tsx'
-import StbApp from './stb.tsx'
+import StbApp from './stb/stb.tsx'
+import StbSettings from './stb/settings.tsx'
 
 export const GlobalContext = createContext({
   view: "home",
@@ -52,13 +53,16 @@ function AppWrapper() {
   const [view, setView] = useState("home")
   const [jellyfinClient, setJellyfinClient] = useState<Api | null>(null)
   const [config, setConfig] = useState(JSON.parse(window.localStorage.getItem("config") ?? "null"))
+  useEffect(() => {
+    window.localStorage.setItem("config", JSON.stringify(config))
+  }, [config])
   const [currentUser, setCurrentUser] = useState<UserDto | null>(JSON.parse(window.localStorage.getItem("user") ?? "null"))
   return (
     <GlobalContext.Provider value={{ view, setView, config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient }}>
-      {view.split("?")[0].split("/")[0] === "home" && OnTVConfig.serviceInfo.mode == "stb" ? <StbApp /> : <App />}
+      {view.split("?")[0].split("/")[0] === "home" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbApp /> : <App />)}
       {view.split("?")[0].split("/")[0] === "livetv" && <LiveTV />}
       {view.split("?")[0].split("/")[0] === "keyboarddemo" && <KeyboardDemo />}
-      {view.split("?")[0].split("/")[0] === "settings" && <Settings />}
+      {view.split("?")[0].split("/")[0] === "settings" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbSettings /> : <Settings />)}
       {view.split("?")[0].split("/")[0] === "hdmi" && <HDMIViewer />}
     </GlobalContext.Provider>
   )

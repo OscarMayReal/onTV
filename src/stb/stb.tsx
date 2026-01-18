@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout, SearchBox } from "./components/stbkit";
-import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
-import click from "./public/click.mp3";
+import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout, SearchBox } from "../components/stbkit";
+import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "../components/stbkit/modern";
 import { ArrowRightCircleIcon, CircleCheckBigIcon, ClockIcon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, LayoutGridIcon, NetworkIcon, PlayIcon, PlugIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
@@ -10,12 +9,13 @@ import { FocusNode, useProcessKey } from "@please/lrud";
 import { getLiveTvApi } from "@jellyfin/sdk/lib/utils/api/live-tv-api.js";
 import { getImageApi } from "@jellyfin/sdk/lib/utils/api/image-api.js";
 import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-api";
-import { GlobalContext } from "./main";
-import { returnAppsList } from "./apps";
-import { OnTVConfig } from "./info";
+import { GlobalContext } from "../main";
+import { returnAppsList } from "../apps";
+import { OnTVConfig } from "../info";
 import "./stbstyles.css";
-import { useClock } from "./lib/useclock";
-import logo from "./assets/logo.svg";
+import { useClock } from "../lib/useclock";
+import logo from "../assets/logo.svg";
+import { MenuListItem, ListColumn, STBHeader, STBRootLayout } from "../components/stbkit/stb";
 
 const serverUrl = "http://192.168.1.14:8097";
 
@@ -66,27 +66,19 @@ export default function App() {
     const clock = useClock();
     const [selectedMenu, setSelectedMenu] = useState("0");
     return (
-        <ModernRootLayout bgClassName="stbkit-background-flat main-layout" className="main-layout">
-            <div className="flex flex-row items-center p-8 font-light">
-                <img src={logo} className="h-12 object-cover pr-5" />
-                <div>
-                    <div className="text-4xl stbkit-color-text">Home</div>
-                    <div className="text-lg stbkit-color-text">Box Device Name</div>
-                </div>
-                <div className="flex-1" />
-                {/* <div className="text-3xl stbkit-color-text fixed right-[50%] translate-x-1/2 font-medium">{OnTVConfig.serviceInfo.name}</div> */}
-                <div className="text-3xl stbkit-color-text pr-4">{clock.toLocaleTimeString()}</div>
-            </div>
+        <STBRootLayout>
+            <STBHeader title="Home" subtitle="Box Device Name" />
             <RowLayout className="flex-1">
                 <MainMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
                 {selectedMenu === "1" && <SourceMenu />}
                 {selectedMenu === "3" && <RecordingsMenu />}
             </RowLayout>
-        </ModernRootLayout>
+        </STBRootLayout>
     )
 }
 
 function MainMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string, setSelectedMenu: (menu: string) => void }) {
+    const { setView } = useContext(GlobalContext);
     const processKey = useProcessKey();
     return (
         <ListColumn defaultFocusChild={parseInt(selectedMenu)}>
@@ -96,7 +88,7 @@ function MainMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string, set
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("3") }} text="Recordings & Media" Icon={HardDriveIcon} />
             <MenuListItem onFocused={() => { setSelectedMenu("4") }} text="Search" Icon={SearchIcon} extraInfo={{ title: "Search", subtitle: "Find content", description: "Search for shows, movies, and more" }} />
             <MenuListItem onFocused={() => { setSelectedMenu("5") }} text="Apps" Icon={LayoutGridIcon} extraInfo={{ title: "Apps", subtitle: "Explore apps", description: "Explore apps and games available on this box" }} />
-            <MenuListItem onFocused={() => { setSelectedMenu("6") }} text="Settings" Icon={SettingsIcon} extraInfo={{ title: "Settings", subtitle: "Edit settings", description: "Manage your settings for this box, or your entire system" }} />
+            <MenuListItem onSelected={() => { setView("settings") }} onFocused={() => { setSelectedMenu("6") }} text="Settings" Icon={SettingsIcon} extraInfo={{ title: "Settings", subtitle: "Edit settings", description: "Manage your settings for this box, or your entire system" }} />
         </ListColumn>
     )
 }
@@ -110,7 +102,9 @@ function SourceMenu() {
             <MenuListItem onSelected={() => {
                 setView("hdmi?input=1");
             }} text="HDMI 1 (This Box)" Icon={HdmiPortIcon} extraInfo={{ title: "HDMI 1", subtitle: "This Box", description: "Watch the device connected to HDMI 1" }} />
-            <MenuListItem onSelected={() => { }} text="HDMI 2 (This Box)" Icon={HdmiPortIcon} extraInfo={{ title: "HDMI 2", subtitle: "This Box", description: "Watch the device connected to HDMI 2" }} />
+            <MenuListItem onSelected={() => {
+                setView("hdmi?input=2");
+            }} text="HDMI 2 (This Box)" Icon={HdmiPortIcon} extraInfo={{ title: "HDMI 2", subtitle: "This Box", description: "Watch the device connected to HDMI 2" }} />
             <MenuListItem onSelected={() => { }} text="HDMI 1 (Living Room)" Icon={NetworkIcon} extraInfo={{ title: "HDMI 1", subtitle: "Living Room", description: "Watch the device connected to HDMI 1 on the Living Room Box" }} />
             <MenuListItem onSelected={() => { }} text="HDMI 1 (Kitchen)" Icon={NetworkIcon} extraInfo={{ title: "HDMI 1", subtitle: "Kitchen", description: "Watch the device connected to HDMI 1 on the Kitchen Box" }} />
         </ListColumn>
@@ -128,34 +122,6 @@ function RecordingsMenu() {
             <MenuListItem onSelected={() => { }} text="DLNA Share Name" Icon={NetworkIcon} extraInfo={{ title: "DLNA Share Name", subtitle: "Server Name", description: "Watch back content from the DLNA share hosted on Server Name" }} />
             <MenuListItem onSelected={() => { }} text="DLNA Share Name" Icon={NetworkIcon} extraInfo={{ title: "DLNA Share Name", subtitle: "Server Name", description: "Watch back content from the DLNA share hosted on Server Name" }} />
         </ListColumn>
-    )
-}
-
-function MenuListItem({ onSelected, text, Icon, onFocused, extraInfo }: { onSelected?: () => void, text: string, Icon?: React.JSX.ElementType, onFocused?: () => void, extraInfo?: { title: string, subtitle: string, description: string } }) {
-    const [isFocused, setIsFocused] = useState(false);
-    return (
-        <ModernItemFill onSelected={onSelected} onBlur={() => { setIsFocused(false) }} onFocused={() => { setIsFocused(true); onFocused?.() }} className="p-2 pl-11 max-w-[430px] min-w-[430px] rounded-lg flex flex-row items-center gap-4 relative overflow-visible" showOverflow={true}>
-            <Icon size={24} />
-            <div className="text-xl">{text}</div>
-            {extraInfo && isFocused && <div style={{ left: "calc(100% + 30px)" }} className="absolute">
-                <div className="fixed top-35 flex flex-col justify-center gap-1 z-10 text-white w-[400px]">
-                    <Icon size={30} className="mb-2" />
-                    <div className="text-xl font-medium">{extraInfo.title}</div>
-                    <div className="text-md font-medium">{extraInfo.subtitle}</div>
-                    <div className="text-lg">{extraInfo.description}</div>
-                </div>
-            </div>}
-        </ModernItemFill>
-    )
-}
-
-function ListColumn({ children, defaultFocusChild, onBack }: { children: React.ReactNode, defaultFocusChild?: number, onBack?: () => void }) {
-    return (
-        <ColumnLayout defaultFocusChild={defaultFocusChild} onBack={onBack} className="max-w-[400px] min-w-[400px] ml-8 items-center py-4 rounded-t-xl h-full vertical-list-menu">
-            <div className="h-full flex flex-col gap-2 overflow-x-visible">
-                {children}
-            </div>
-        </ColumnLayout>
     )
 }
 
@@ -183,38 +149,6 @@ function AppsRow() {
                         </AppItem>
                     )
                 })}
-            </RowLayout>
-        </FocusNode>
-    )
-}
-
-function SourcesRow() {
-    const { view, setView } = useContext(GlobalContext);
-    const focusNode = useRef<HTMLElement>(null);
-    return (
-        <FocusNode className="home-row" ref={focusNode} onFocused={() => {
-            focusNode.current?.scrollIntoView({ behavior: "smooth" });
-        }}>
-            <div className="mb-3 pl-10 flex flex-row items-center">
-                <div className="text-2xl">Sources</div>
-            </div>
-            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
-                <AppItem showInfoHeader info={{ name: "HDMI 1", overview: `View the device connected to HDMI 1`, subtitle: "Hardware Inputs" }} onSelected={() => { setView("hdmi?input=1") }}>
-                    <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
-                </AppItem>
-                <AppItem showInfoHeader info={{ name: "Live TV", overview: "View Live TV", subtitle: "TV Inputs" }} onSelected={() => { setView("livetv") }}>
-                    <Tv2Icon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">Live TV</div>
-                </AppItem>
-                <AppItem showInfoHeader info={{ name: "HDMI 2", overview: "View the device connected to HDMI 2", subtitle: "Hardware Inputs" }} onSelected={() => { setView("hdmi?input=2") }}>
-                    <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">HDMI 2</div>
-                </AppItem>
-                <AppItem showInfoHeader info={{ name: "Recorded", overview: "View Recorded Shows", subtitle: "TV Inputs" }}>
-                    <HardDriveIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">Recorded</div>
-                </AppItem>
             </RowLayout>
         </FocusNode>
     )

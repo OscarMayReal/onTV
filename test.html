@@ -1,0 +1,34 @@
+<!-- <script src="https://cdn.jsdelivr.net/npm/@cycjimmy/jsmpeg-player@6/dist/jsmpeg-player.umd.min.js"></script> -->
+
+<!-- <video id="videoWrapper" src="http://localhost:8080/feed" autoplay controls></video> -->
+
+<!-- <script type="module">
+    const pc = new RTCPeerConnection();
+    const video = document.querySelector("video");
+
+    pc.ontrack = (event) => { video.srcObject = event.streams[0]; };
+
+    // WebSocket signaling
+    const ws = new WebSocket("ws://localhost:3001");
+    ws.onopen = () => {
+        // Now the socket is open — safe to send
+        ws.send(JSON.stringify({ action: "createTransport" }));
+    };
+
+    ws.onmessage = async (e) => {
+        const data = JSON.parse(e.data);
+
+        if (data.action === "transportCreated") {
+            // Continue WebRTC setup
+            console.log("Transport ready", data);
+        }
+    };
+
+    // Create offer
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    // ws.send(JSON.stringify({ action: "createTransport" }));
+
+</script> -->
+
+<img src="http://localhost:8080/feed" alt="">

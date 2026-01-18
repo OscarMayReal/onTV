@@ -10,9 +10,9 @@ export function ModernItem({ children, className, onSelected, onFocused, ref, on
     );
 }
 
-export function ModernItemFill({ children, className, onSelected, onFocused, ref, onBlur, showOverflow }: { children: React.ReactNode, className?: string, onSelected?: () => void, onFocused?: () => void, ref?: React.RefObject<HTMLDivElement>, onBlur?: () => void, showOverflow?: boolean }) {
+export function ModernItemFill({ children, focusId, className, onSelected, onFocused, ref, onBlur, showOverflow }: { children: React.ReactNode, focusId?: string, className?: string, onSelected?: () => void, onFocused?: () => void, ref?: React.RefObject<HTMLDivElement>, onBlur?: () => void, showOverflow?: boolean }) {
     return (
-        <FocusNode onFocused={onFocused} className={"flex flex-col stbkit-selectionstyle-fill-modern " + (className ?? "") + (showOverflow ? "" : " overflow-hidden")} onSelected={onSelected} ref={ref} onBlurred={onBlur}>
+        <FocusNode focusId={focusId} onFocused={onFocused} className={"flex flex-col stbkit-selectionstyle-fill-modern " + (className ?? "") + (showOverflow ? "" : " overflow-hidden")} onSelected={onSelected} ref={ref} onBlurred={onBlur}>
             {children}
         </FocusNode>
     );
