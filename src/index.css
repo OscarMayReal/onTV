@@ -167,9 +167,32 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100dvh;
+  /* width: 100vw;
+  height: 100dvh; */
   /* --stbkit-color-text: #666666; */
+  width: 1920px;
+  height: 1080px;
+  max-width: 1920px;
+  max-height: 1080px;
+  min-width: 1920px;
+  min-height: 1080px;
+  overflow: hidden;
+}
+
+.main-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* width: 100vw;
+  height: 100dvh; */
+  /* --stbkit-color-text: #666666; */
+  width: 1280px !important;
+  height: 720px !important;
+  max-width: 1280px !important;
+  max-height: 720px !important;
+  min-width: 1280px !important;
+  min-height: 720px !important;
+  overflow: hidden !important;
 }
 
 .stbkit-color-text {

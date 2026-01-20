@@ -113,10 +113,11 @@ function SourceMenu() {
 
 function RecordingsMenu() {
     const processKey = useProcessKey();
+    const { setView } = useContext(GlobalContext);
     return (
         <ListColumn onBack={() => { processKey.left() }}>
             <div className="text-3xl stbkit-color-text pl-11 mb-3 mt-1 font-light text-white/50">Your OnTV System</div>
-            <MenuListItem onSelected={() => { }} text="Recordings" Icon={CircleCheckBigIcon} extraInfo={{ title: "Recordings", subtitle: "This Box", description: "Watch back content you have recorded from live TV" }} />
+            <MenuListItem onSelected={() => { setView("recordings") }} text="Recordings" Icon={CircleCheckBigIcon} extraInfo={{ title: "Recordings", subtitle: "This Box", description: "Watch back content you have recorded from live TV" }} />
             <MenuListItem onSelected={() => { }} text="Personal Media" Icon={PlayIcon} extraInfo={{ title: "Personal Media", subtitle: "This Box", description: "Watch back content you have transferred to this box from your computer" }} />
             <div className="text-3xl stbkit-color-text pl-11 mb-3 mt-1 font-light text-white/50 pt-5">On your network</div>
             <MenuListItem onSelected={() => { }} text="DLNA Share Name" Icon={NetworkIcon} extraInfo={{ title: "DLNA Share Name", subtitle: "Server Name", description: "Watch back content from the DLNA share hosted on Server Name" }} />

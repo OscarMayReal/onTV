@@ -12,6 +12,7 @@ import HDMIViewer from './hdmi.tsx'
 import { OnTVConfig } from './info.tsx'
 import StbApp from './stb/stb.tsx'
 import StbSettings from './stb/settings.tsx'
+import Recordings from './stb/recordings.tsx'
 
 export const GlobalContext = createContext({
   view: "home",
@@ -64,6 +65,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "keyboarddemo" && <KeyboardDemo />}
       {view.split("?")[0].split("/")[0] === "settings" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbSettings /> : <Settings />)}
       {view.split("?")[0].split("/")[0] === "hdmi" && <HDMIViewer />}
+      {view.split("?")[0].split("/")[0] === "recordings" && <Recordings />}
     </GlobalContext.Provider>
   )
 }

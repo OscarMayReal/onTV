@@ -30,7 +30,7 @@ function launchApp() {
 
     let scaleFactor = 1 / (1280 / width);
     // appwindow.webContents.zoomFactor = scaleFactor;
-    appwindow.webContents.setZoomLevel(scaleFactor);
+    appwindow.webContents.setZoomFactor(scaleFactor);
     appwindow.webContents.setUserAgent(json.useragent);
     appwindow.loadURL(json.url);
 }
@@ -64,7 +64,7 @@ function createWindow() {
 
     let scaleFactor = 1 / (1280 / width);
     // mainWindow.webContents.zoomFactor = scaleFactor;
-    mainWindow.webContents.setZoomLevel(scaleFactor);
+    mainWindow.webContents.setZoomFactor(scaleFactor);
     mainWindow.loadURL('http://localhost:5173/');
     // mainWindow.webContents.openDevTools();
     // mainWindow.webContents.executeJavaScript('localStorage.clear()');
