@@ -39,6 +39,7 @@ function createWindow() {
     var mainWindow = new BrowserWindow({
         // fullscreen: true,
         webPreferences: {
+            // zoomFactor: scaleFactor,
             nodeIntegration: true,
             contextIsolation: false,
             enableRemoteModule: true,
@@ -51,6 +52,7 @@ function createWindow() {
     });
     mainWindow.webContents.on('did-create-window', (window) => {
         window.maximize();
+        window.webContents.setZoomFactor(scaleFactor);
         window.on('close', () => {
             mainWindow.show();
         });
@@ -63,9 +65,15 @@ function createWindow() {
     let height = screenDimention.height
 
     let scaleFactor = 1 / (1280 / width);
-    // mainWindow.webContents.zoomFactor = scaleFactor;
-    mainWindow.webContents.setZoomFactor(scaleFactor);
     mainWindow.loadURL('http://localhost:5173/');
+    mainWindow.webContents.setZoomFactor(scaleFactor);
+    mainWindow.addListener("resize", () => {
+        let width = mainWindow.getSize()[0]
+        let height = mainWindow.getSize()[1]
+
+        let scaleFactor = 1 / (1280 / width);
+        mainWindow.webContents.setZoomFactor(scaleFactor);
+    })
     // mainWindow.webContents.openDevTools();
     // mainWindow.webContents.executeJavaScript('localStorage.clear()');
 }

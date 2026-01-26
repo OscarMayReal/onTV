@@ -1,10 +1,13 @@
 import { ListColumn, MenuListItem, STBHeader, STBRootLayout } from "../components/stbkit/stb";
 import { RowLayout } from "../components/stbkit";
 import { Tv2Icon } from "lucide-react";
+import { useContext } from "react";
+import { GlobalContext } from "../main";
 
 export default function Recordings() {
+    const { view, setView } = useContext(GlobalContext);
     return (
-        <STBRootLayout>
+        <STBRootLayout onBack={() => { setView("home") }}>
             <STBHeader title="Recordings" subtitle="Storage 30% full" />
             <RowLayout className="flex-1">
                 <ListColumn larger>

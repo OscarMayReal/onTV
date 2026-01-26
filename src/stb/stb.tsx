@@ -61,10 +61,10 @@ export default function App() {
         console.log(api);
         setJellyfinClient(api);
     }, [jellyfinClient, currentUser]);
-    // if (!config) return <SetupUI />
-    if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
     const clock = useClock();
     const [selectedMenu, setSelectedMenu] = useState("0");
+    // if (!config) return <SetupUI />
+    if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
     return (
         <STBRootLayout>
             <STBHeader title="Home" subtitle="Box Device Name" />
@@ -82,7 +82,7 @@ function MainMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string, set
     const processKey = useProcessKey();
     return (
         <ListColumn defaultFocusChild={parseInt(selectedMenu)}>
-            <MenuListItem onFocused={() => { setSelectedMenu("0") }} text="Watch Live TV" Icon={Tv2Icon} extraInfo={{ title: "Watch Live TV", subtitle: "Live TV", description: "Watch live TV on this box" }} />
+            <MenuListItem onFocused={() => { setSelectedMenu("0") }} onSelected={() => { setView("livetv") }} text="Watch Live TV" Icon={Tv2Icon} extraInfo={{ title: "Watch Live TV", subtitle: "Live TV", description: "Watch live TV on this box" }} />
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("1") }} text="Input Sources" Icon={PlugIcon} />
             <MenuListItem onFocused={() => { setSelectedMenu("2") }} text="TV Guide" Icon={ClockIcon} extraInfo={{ title: "TV Guide", subtitle: "Explore channels", description: "Find out what's coming up on TV, or go back in time to catch up on your favorite shows" }} />
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("3") }} text="Recordings & Media" Icon={HardDriveIcon} />

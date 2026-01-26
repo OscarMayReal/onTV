@@ -48,9 +48,9 @@ export function STBHeader({ title, subtitle }: { title: string, subtitle: string
     )
 }
 
-export function STBRootLayout({ children }: { children: React.ReactNode }) {
+export function STBRootLayout({ children, onBack }: { children: React.ReactNode, onBack?: () => void }) {
     return (
-        <ModernRootLayout bgClassName="stbkit-background-flat main-layout" className="main-layout">
+        <ModernRootLayout onBack={onBack} bgClassName="stbkit-background-flat main-layout" className="main-layout">
             {children}
         </ModernRootLayout>
     )

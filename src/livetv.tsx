@@ -47,6 +47,19 @@ export default function LiveTV() {
         });
     }, [channels, channelNumber, liveTvApi, jellyfinClient]);
     const mediaPlayerRef = useRef<HTMLVideoElement>(null);
+    useEffect(() => {
+        function PageKeyHandler(event: KeyboardEvent) {
+            if (event.key === "PageUp") {
+                setChannelNumber(channelNumber + 1);
+            } else if (event.key === "PageDown") {
+                setChannelNumber(channelNumber - 1);
+            }
+        }
+        window.addEventListener("keydown", PageKeyHandler);
+        return () => {
+            window.removeEventListener("keydown", PageKeyHandler);
+        };
+    }, [channelNumber]);
     return (
         <ModernRootLayout>
             <FocusNode onBack={() => {

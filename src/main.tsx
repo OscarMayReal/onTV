@@ -32,26 +32,37 @@ createRoot(document.getElementById('root')!).render(
 )
 
 function AppWrapper() {
+  const [view, setView] = useState("home")
   useEffect(() => {
     function PlayDirectionSound() {
       // document.body.requestFullscreen();
       const audio = new Audio(click);
       audio.play();
     }
-    window.addEventListener('keydown', (e) => {
+    function KeyListener(e: KeyboardEvent) {
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
         PlayDirectionSound();
       }
-    });
+      if (e.key === 's') {
+        setView("settings");
+      }
+      if (e.key === 'h') {
+        setView("home");
+      }
+      if (e.key === 'l') {
+        setView("livetv");
+      }
+      if (e.key === 'u') {
+        window.localStorage.removeItem("user");
+        setCurrentUser(null);
+        setView("home");
+      }
+    }
+    window.addEventListener('keydown', KeyListener);
     return () => {
-      window.removeEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-          PlayDirectionSound();
-        }
-      });
-    };
+      window.removeEventListener('keydown', KeyListener);
+    }
   }, []);
-  const [view, setView] = useState("home")
   const [jellyfinClient, setJellyfinClient] = useState<Api | null>(null)
   const [config, setConfig] = useState(JSON.parse(window.localStorage.getItem("config") ?? "null"))
   useEffect(() => {
