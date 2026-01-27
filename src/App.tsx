@@ -102,7 +102,7 @@ function AppsRow() {
                 {returnAppsList().map((app) => {
                     return (
                         <AppItem key={app.name} onSelected={() => {
-                            window.open(app.url, "_blank");
+                            launchApp(app);
                         }} showInfoHeader info={{
                             name: app.name,
                             overview: app.description,

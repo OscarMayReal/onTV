@@ -72,6 +72,7 @@ export default function App() {
                 <MainMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
                 {selectedMenu === "1" && <SourceMenu />}
                 {selectedMenu === "3" && <RecordingsMenu />}
+                {selectedMenu === "5" && <AppsMenu />}
             </RowLayout>
         </STBRootLayout>
     )
@@ -87,7 +88,7 @@ function MainMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string, set
             <MenuListItem onFocused={() => { setSelectedMenu("2") }} text="TV Guide" Icon={ClockIcon} extraInfo={{ title: "TV Guide", subtitle: "Explore channels", description: "Find out what's coming up on TV, or go back in time to catch up on your favorite shows" }} />
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("3") }} text="Recordings & Media" Icon={HardDriveIcon} />
             <MenuListItem onFocused={() => { setSelectedMenu("4") }} text="Search" Icon={SearchIcon} extraInfo={{ title: "Search", subtitle: "Find content", description: "Search for shows, movies, and more" }} />
-            <MenuListItem onFocused={() => { setSelectedMenu("5") }} text="Apps" Icon={LayoutGridIcon} extraInfo={{ title: "Apps", subtitle: "Explore apps", description: "Explore apps and games available on this box" }} />
+            <MenuListItem onFocused={() => { setSelectedMenu("5") }} text="Apps" Icon={LayoutGridIcon} />
             <MenuListItem onSelected={() => { setView("settings") }} onFocused={() => { setSelectedMenu("6") }} text="Settings" Icon={SettingsIcon} extraInfo={{ title: "Settings", subtitle: "Edit settings", description: "Manage your settings for this box, or your entire system" }} />
         </ListColumn>
     )
@@ -122,6 +123,21 @@ function RecordingsMenu() {
             <div className="text-3xl stbkit-color-text pl-11 mb-3 mt-1 font-light text-white/50 pt-5">On your network</div>
             <MenuListItem onSelected={() => { }} text="DLNA Share Name" Icon={NetworkIcon} extraInfo={{ title: "DLNA Share Name", subtitle: "Server Name", description: "Watch back content from the DLNA share hosted on Server Name" }} />
             <MenuListItem onSelected={() => { }} text="DLNA Share Name" Icon={NetworkIcon} extraInfo={{ title: "DLNA Share Name", subtitle: "Server Name", description: "Watch back content from the DLNA share hosted on Server Name" }} />
+        </ListColumn>
+    )
+}
+
+function AppsMenu() {
+    const processKey = useProcessKey();
+    const { setView } = useContext(GlobalContext);
+    return (
+        <ListColumn onBack={() => { processKey.left() }}>
+            <div className="text-3xl stbkit-color-text pl-11 mb-3 mt-1 font-light text-white/50">Apps</div>
+            {returnAppsList().map((app, index) => {
+                return (
+                    <MenuListItem key={index} onSelected={() => { console.log(app); launchApp(app) }} text={app.name} image={app.icon} extraInfo={{ title: app.name, subtitle: app.company, description: app.description }} />
+                )
+            })}
         </ListColumn>
     )
 }

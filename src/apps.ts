@@ -5,7 +5,8 @@ export function returnAppsList() {
             icon: "https://i.ibb.co/yB80JsQC/f7d5f5ff2646c63c5bd7d9ad9741bcda-fgraphic.png",
             url: "https://www.youtube.com/tv",
             company: "Google",
-            description: "See what the world is watching -- from the hottest music videos to what’s popular in gaming, fitness, movies, shows, news, learning and more. Subscribe to channels you love, browse personal recommendations, and enjoy the largest library of 4K content."
+            description: "See what the world is watching -- from the hottest music videos to what’s popular in gaming, fitness, movies, shows, news, learning and more. Subscribe to channels you love, browse personal recommendations, and enjoy the largest library of 4K content.",
+            userAgent: 'Mozilla/5.0 (PS4; Leanback Shell) Gecko/20100101 Firefox/65.0 LeanbackShell/01.00.01.75 Sony PS4/ (PS4, , no, CH)'
         },
         {
             name: "BBC iPlayer",
@@ -26,7 +27,7 @@ export function returnAppsList() {
             icon: "https://i.ibb.co/tTdc4WjT/plex.png",
             url: "https://app.plex.tv/tv-v5-generic",
             company: "Plex",
-            description: "Stream free movies and TV shows, plus 600+ channels of live TV, instantly, without a subscription. With Plex you can also customize your preferences to include the streaming services you use most and we’ll keep your home screen updated with the freshest finds across the streaming universe, recommended just for you."
+            description: "Stream free movies and TV shows, plus 600+ channels of live TV, instantly, without a subscription. With Plex you can also customize your preferences to include the streaming services you use most and we’ll keep your home screen updated with the freshest finds across the streaming universe."
         },
         {
             name: "Twitch",

@@ -34,6 +34,11 @@ createRoot(document.getElementById('root')!).render(
 function AppWrapper() {
   const [view, setView] = useState("home")
   useEffect(() => {
+    if (!window.goHome) {
+      window.goHome = () => {
+        setView("home");
+      }
+    }
     function PlayDirectionSound() {
       // document.body.requestFullscreen();
       const audio = new Audio(click);

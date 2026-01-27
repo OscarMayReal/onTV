@@ -4,15 +4,17 @@ import { ModernItemFill, ModernRootLayout } from "./modern";
 import { useClock } from "../../lib/useclock";
 import logo from "../../assets/logo.svg";
 
-export function MenuListItem({ focusId, onSelected, text, Icon, onFocused, extraInfo, larger }: { focusId?: string, onSelected?: () => void, text: string, Icon?: React.JSX.ElementType, onFocused?: () => void, extraInfo?: { title: string, subtitle: string, description: string }, larger?: boolean }) {
+export function MenuListItem({ focusId, onSelected, text, Icon, image, onFocused, extraInfo, larger }: { focusId?: string, onSelected?: () => void, text: string, Icon?: React.JSX.ElementType, image?: string, onFocused?: () => void, extraInfo?: { title: string, subtitle: string, description: string }, larger?: boolean }) {
     const [isFocused, setIsFocused] = useState(false);
     return (
         <ModernItemFill focusId={focusId} onSelected={onSelected} onBlur={() => { setIsFocused(false) }} onFocused={() => { setIsFocused(true); onFocused?.() }} className={`p-2 pl-11 rounded-lg flex flex-row items-center gap-4 relative overflow-visible ${larger ? "max-w-[870px] min-w-[870px]" : "max-w-[430px] min-w-[430px]"}`} showOverflow={true}>
-            <Icon size={24} />
+            {Icon && <Icon size={24} />}
+            {image && <img src={image} className="h-6 object-cover" />}
             <div className="text-xl">{text}</div>
             {extraInfo && isFocused && <div style={{ left: "calc(100% + 30px)" }} className="absolute">
                 <div className="fixed top-35 flex flex-col justify-center gap-1 z-10 text-white w-[325px]">
-                    <Icon size={30} className="mb-2" />
+                    {Icon && <Icon size={30} className="mb-2" />}
+                    {image && <img src={image} className="h-12 mb-2 w-fit object-cover" />}
                     <div className="text-xl font-medium">{extraInfo.title}</div>
                     <div className="text-md font-medium">{extraInfo.subtitle}</div>
                     <div className="text-lg">{extraInfo.description}</div>
