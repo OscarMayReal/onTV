@@ -1,4 +1,3 @@
-import "./stbstyles.css";
 import { RowLayout } from "../components/stbkit";
 import { ListColumn, MenuListItem, STBHeader, STBRootLayout } from "../components/stbkit/stb";
 import { Children, useContext, useState } from "react";

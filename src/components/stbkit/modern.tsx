@@ -1,5 +1,5 @@
 import { FocusNode, FocusRoot, useProcessKey } from "@please/lrud";
-import { useEffect, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { ColumnLayout, GridLayout, RowLayout } from ".";
 
 export function ModernItem({ children, className, onSelected, onFocused, ref, onBlur }: { children: React.ReactNode, className?: string, onSelected?: () => void, onFocused?: () => void, ref?: React.RefObject<HTMLDivElement>, onBlur?: () => void }) {
@@ -94,14 +94,21 @@ const keyboardKeys = [
     [{ key: "z", value: "z" }, { key: "x", value: "x" }, { key: "c", value: "c" }, { key: "v", value: "v" }, { key: "b", value: "b" }, { key: "n", value: "n" }, { key: "m", value: "m" }, { key: ",", value: "," }, { key: ".", value: "." }, { key: "/", value: "/" }],
 ]
 
-export function Keyboard({ value, setValue }: { value: string, setValue: (value: string) => void }) {
+export function Keyboard({ value, setValue, className, overlay }: { value: string, setValue: (value: string) => void, className?: string, overlay?: boolean }) {
+    const [isFocused, setIsFocused] = useState(false)
+    const [isShift, setIsShift] = useState(false)
     return (
-        <GridLayout className="bg-neutral-800 w-fit p-4 gap-3 rounded-2xl">
+        <GridLayout onFocused={() => setIsFocused(true)} onBlurred={() => setIsFocused(false)} className={"bg-neutral-800 p-4 gap-3 " + (className ?? "") + (overlay ? " fixed bottom-0 left-0 w-full rounded-none flex-col items-center" : "w-fit rounded-2xl") + (isFocused && overlay ? " flex" : " hidden")} >
             {keyboardKeys.map((row, index) => <RowLayout className="gap-3" key={index}>
                 {row.map((key, index) => <ColumnLayout key={index}>
-                    <ModernItemFillScale onSelected={() => setValue(value + key.value)} className="w-[50px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-md bg-neutral-700">{key.key}</ModernItemFillScale>
+                    <ModernItemFillScale onSelected={() => setValue(value + (isShift ? key.value.toUpperCase() : key.value))} className="w-[50px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-md bg-neutral-700">{isShift ? key.value.toUpperCase() : key.key}</ModernItemFillScale>
                 </ColumnLayout>)}
             </RowLayout>)}
+            <RowLayout className="gap-3">
+                <ModernItemFillScale onSelected={() => setIsShift(!isShift)} className="w-[112px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-md bg-neutral-700">{isShift ? "abc" : "ABC"}</ModernItemFillScale>
+                <ModernItemFillScale onSelected={() => setValue(value + " ")} className="w-[368px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-md bg-neutral-700">Space</ModernItemFillScale>
+                <ModernItemFillScale onSelected={() => setValue(value.slice(0, -1))} className="w-[112px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-md bg-neutral-700">Delete</ModernItemFillScale>
+            </RowLayout>
         </GridLayout>
     );
 }

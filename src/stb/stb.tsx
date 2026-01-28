@@ -12,7 +12,6 @@ import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-a
 import { GlobalContext } from "../main";
 import { returnAppsList } from "../apps";
 import { OnTVConfig } from "../info";
-import "./stbstyles.css";
 import { useClock } from "../lib/useclock";
 import logo from "../assets/logo.svg";
 import { MenuListItem, ListColumn, STBHeader, STBRootLayout } from "../components/stbkit/stb";

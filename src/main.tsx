@@ -13,6 +13,7 @@ import { OnTVConfig } from './info.tsx'
 import StbApp from './stb/stb.tsx'
 import StbSettings from './stb/settings.tsx'
 import Recordings from './stb/recordings.tsx'
+import { Setup } from './stb/setup.tsx'
 
 export const GlobalContext = createContext({
   view: "home",
@@ -36,7 +37,11 @@ function AppWrapper() {
   useEffect(() => {
     if (!window.goHome) {
       window.goHome = () => {
-        setView("home");
+        if (JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+          setView("home");
+        } else {
+          setView("setup");
+        }
       }
     }
     function PlayDirectionSound() {
@@ -48,16 +53,16 @@ function AppWrapper() {
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
         PlayDirectionSound();
       }
-      if (e.key === 's') {
+      if (e.key === 's' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
         setView("settings");
       }
-      if (e.key === 'h') {
+      if (e.key === 'h' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
         setView("home");
       }
-      if (e.key === 'l') {
+      if (e.key === 'l' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
         setView("livetv");
       }
-      if (e.key === 'u') {
+      if (e.key === 'u' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
         window.localStorage.removeItem("user");
         setCurrentUser(null);
         setView("home");
@@ -71,6 +76,9 @@ function AppWrapper() {
   const [jellyfinClient, setJellyfinClient] = useState<Api | null>(null)
   const [config, setConfig] = useState(JSON.parse(window.localStorage.getItem("config") ?? "null"))
   useEffect(() => {
+    // if (!config.isSetupCompleted) {
+    //   setView("setup");
+    // }
     window.localStorage.setItem("config", JSON.stringify(config))
   }, [config])
   const [currentUser, setCurrentUser] = useState<UserDto | null>(JSON.parse(window.localStorage.getItem("user") ?? "null"))
@@ -82,6 +90,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "settings" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbSettings /> : <Settings />)}
       {view.split("?")[0].split("/")[0] === "hdmi" && <HDMIViewer />}
       {view.split("?")[0].split("/")[0] === "recordings" && <Recordings />}
+      {view.split("?")[0].split("/")[0] === "setup" && <Setup />}
     </GlobalContext.Provider>
   )
 }

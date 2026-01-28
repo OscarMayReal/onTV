@@ -3,6 +3,7 @@ import { ColumnLayout } from ".";
 import { ModernItemFill, ModernRootLayout } from "./modern";
 import { useClock } from "../../lib/useclock";
 import logo from "../../assets/logo.svg";
+import "./stbstyles.css";
 
 export function MenuListItem({ focusId, onSelected, text, Icon, image, onFocused, extraInfo, larger }: { focusId?: string, onSelected?: () => void, text: string, Icon?: React.JSX.ElementType, image?: string, onFocused?: () => void, extraInfo?: { title: string, subtitle: string, description: string }, larger?: boolean }) {
     const [isFocused, setIsFocused] = useState(false);

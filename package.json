@@ -11,6 +11,7 @@
     "start": "electron electron.js"
   },
   "dependencies": {
+    "@ecobridge.xyz/devicemanager": "^3.1.0",
     "@jellyfin/sdk": "^0.0.0-unstable.202512091852",
     "@please/lrud": "^1.0.0",
     "@tailwindcss/vite": "^4.1.18",

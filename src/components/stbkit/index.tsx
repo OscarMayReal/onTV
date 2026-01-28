@@ -95,9 +95,9 @@ export function ColumnLayout({ children, className, defaultFocusChild, onBack, f
     )
 }
 
-export function GridLayout({ children, className }: { children: React.ReactNode, className?: string }) {
+export function GridLayout({ children, className, onFocused, onBlurred }: { children: React.ReactNode, className?: string, onFocused?: () => void, onBlurred?: () => void }) {
     return (
-        <FocusNode isGrid defaultFocusColumn={0} defaultFocusRow={0} className={"flex flex-col " + (className ?? "")}>
+        <FocusNode isGrid defaultFocusColumn={0} defaultFocusRow={0} className={"flex flex-col " + (className ?? "")} onFocused={onFocused} onBlurred={onBlurred}>
             {children}
         </FocusNode>
     )
