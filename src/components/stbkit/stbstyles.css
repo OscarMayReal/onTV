@@ -25,3 +25,12 @@
     height: 100vh !important;
     max-height: 100vh !important;
 } */
+
+.stbmainrow {
+    max-height: calc(100% - 132px);
+}
+
+.stb-menuitem {
+    scroll-margin-top: 75px !important;
+    scroll-margin-bottom: 100px !important;
+}

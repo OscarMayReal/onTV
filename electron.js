@@ -20,6 +20,30 @@ ipcMain.on('launchapp', (event, appData) => {
     launchApp(appData);
 });
 
+ipcMain.handle("tvguide:fetch", async (event, opts = {}) => {
+    const {
+        nid = 64257,
+        start = Math.floor(Date.now() / 1000),
+    } = opts;
+
+    const url = new URL("https://www.freeview.co.uk/api/tv-guide");
+    url.searchParams.set("nid", String(nid));
+    url.searchParams.set("start", String(start));
+
+    const res = await fetch(url.toString(), {
+        headers: {
+            "accept": "application/json",
+        },
+    });
+
+    if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(`Freeview API failed (${res.status}): ${text}`);
+    }
+
+    return res.json();
+});
+
 function launchApp(json) {
     appwindow = new BrowserWindow({
         fullscreen: true,
@@ -53,6 +77,7 @@ function createWindow() {
             // nodeIntegration: true,
             // contextIsolation: false,
             // enableRemoteModule: true,
+            sandbox: false
         }
     });
     mainWindow.setMenuBarVisibility(false);

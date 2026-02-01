@@ -13,6 +13,7 @@ import { OnTVConfig } from './info.tsx'
 import StbApp from './stb/stb.tsx'
 import StbSettings from './stb/settings.tsx'
 import Recordings from './stb/recordings.tsx'
+import TvGuide from './stb/tvguide.tsx'
 import { Setup } from './stb/setup.tsx'
 
 export const GlobalContext = createContext({
@@ -37,7 +38,8 @@ function AppWrapper() {
   useEffect(() => {
     if (!window.goHome) {
       window.goHome = () => {
-        if (JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+        // if (JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+        if (true) {
           setView("home");
         } else {
           setView("setup");
@@ -50,19 +52,24 @@ function AppWrapper() {
       audio.play();
     }
     function KeyListener(e: KeyboardEvent) {
+      // if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
         PlayDirectionSound();
       }
-      if (e.key === 's' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+      // if (e.key === 's' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+      if (e.key === 's') {
         setView("settings");
       }
-      if (e.key === 'h' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+      // if (e.key === 'h' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+      if (e.key === 'h') {
         setView("home");
       }
-      if (e.key === 'l' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+      // if (e.key === 'l' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+      if (e.key === 'l') {
         setView("livetv");
       }
-      if (e.key === 'u' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+      // if (e.key === 'u' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
+      if (e.key === 'u') {
         window.localStorage.removeItem("user");
         setCurrentUser(null);
         setView("home");
@@ -91,6 +98,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "hdmi" && <HDMIViewer />}
       {view.split("?")[0].split("/")[0] === "recordings" && <Recordings />}
       {view.split("?")[0].split("/")[0] === "setup" && <Setup />}
+      {view.split("?")[0].split("/")[0] === "tvguide" && <TvGuide />}
     </GlobalContext.Provider>
   )
 }

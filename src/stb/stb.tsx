@@ -84,10 +84,10 @@ function MainMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string, set
         <ListColumn defaultFocusChild={parseInt(selectedMenu)}>
             <MenuListItem onFocused={() => { setSelectedMenu("0") }} onSelected={() => { setView("livetv") }} text="Watch Live TV" Icon={Tv2Icon} extraInfo={{ title: "Watch Live TV", subtitle: "Live TV", description: "Watch live TV on this box" }} />
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("1") }} text="Input Sources" Icon={PlugIcon} />
-            <MenuListItem onFocused={() => { setSelectedMenu("2") }} text="TV Guide" Icon={ClockIcon} extraInfo={{ title: "TV Guide", subtitle: "Explore channels", description: "Find out what's coming up on TV, or go back in time to catch up on your favorite shows" }} />
+            <MenuListItem onSelected={() => { setView("tvguide") }} onFocused={() => { setSelectedMenu("2") }} text="TV Guide" Icon={ClockIcon} extraInfo={{ title: "TV Guide", subtitle: "Explore channels", description: "Find out what's coming up on TV, or go back in time to catch up on your favorite shows" }} />
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("3") }} text="Recordings & Media" Icon={HardDriveIcon} />
             <MenuListItem onFocused={() => { setSelectedMenu("4") }} text="Search" Icon={SearchIcon} extraInfo={{ title: "Search", subtitle: "Find content", description: "Search for shows, movies, and more" }} />
-            <MenuListItem onFocused={() => { setSelectedMenu("5") }} text="Apps" Icon={LayoutGridIcon} />
+            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("5") }} text="Apps" Icon={LayoutGridIcon} />
             <MenuListItem onSelected={() => { setView("settings") }} onFocused={() => { setSelectedMenu("6") }} text="Settings" Icon={SettingsIcon} extraInfo={{ title: "Settings", subtitle: "Edit settings", description: "Manage your settings for this box, or your entire system" }} />
         </ListColumn>
     )

@@ -2,7 +2,7 @@ import { RowLayout } from "../components/stbkit";
 import { ListColumn, MenuListItem, STBHeader, STBRootLayout } from "../components/stbkit/stb";
 import { Children, useContext, useState } from "react";
 import { useProcessKey } from "@please/lrud";
-import { Tv2Icon, PlugIcon, ClockIcon, HardDriveIcon, SearchIcon, LayoutGridIcon, SettingsIcon, NetworkIcon, CheckIcon, XCircleIcon, EyeIcon, SpeakerIcon } from "lucide-react";
+import { Tv2Icon, PlugIcon, ClockIcon, HardDriveIcon, SearchIcon, LayoutGridIcon, SettingsIcon, NetworkIcon, CheckIcon, XCircleIcon, EyeIcon, SpeakerIcon, WifiIcon, UnlockIcon } from "lucide-react";
 import { GlobalContext } from "../main";
 import { useEffect } from "react";
 import { FocusNode } from "@please/lrud";
@@ -12,9 +12,10 @@ export default function STBSettings() {
     return (
         <STBRootLayout>
             <STBHeader title="Settings" subtitle="Box Device Name" />
-            <RowLayout className="flex-1">
+            <RowLayout className="flex-1 stbmainrow">
                 <SettingsMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
                 {selectedMenu === "0" && <SourceSettings />}
+                {selectedMenu === "1" && <NetworkSettings />}
             </RowLayout>
         </STBRootLayout>
     )
@@ -29,6 +30,22 @@ function SettingsMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string,
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("1") }} text="Network" Icon={NetworkIcon} />
         </ListColumn>
     )
+}
+
+function NetworkSettings() {
+    const [networks, setNetworks] = useState({ networks: [], loaded: false })
+    useEffect(() => {
+        if (networks.loaded) return
+        wifi.scan().then((nw) => {
+            setNetworks({ loaded: true, networks: nw })
+        })
+    }, [networks])
+    return <ListColumn>
+        <div className="text-3xl stbkit-color-text pl-11 mb-3 mt-1 font-light text-white/50">Networks</div>
+        {networks.loaded && networks.networks.filter(nw => nw.ssid != "").map(nw => (
+            <MenuListItem text={nw.ssid} Icon={nw.security == "" ? UnlockIcon : WifiIcon} key={nw.mac} extraInfo={{ title: nw.ssid, subtitle: nw.mac + " - " + nw.security == "" ? "Unsecured" : nw.security, description: "Connect to this network" }} />
+        ))}
+    </ListColumn>
 }
 
 function SourceSettings() {

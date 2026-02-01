@@ -1,5 +1,13 @@
-const { contextBridge } = require('electron');
-const { ipcRenderer } = require('electron');
+import { contextBridge } from 'electron'
+import { createBluetooth } from 'node-ble'
+import { ipcRenderer } from 'electron'
+import wifi from 'node-wifi'
+// import { DeviceManager } from '@ecobridge.xyz/devicemanager'
+
+// contextBridge.exposeInMainWorld('createDeviceManager', () => {
+//     const deviceManager = new DeviceManager();
+//     return deviceManager;
+// })
 
 contextBridge.exposeInMainWorld('launchApp', (app) => {
     if (!app.userAgent) {
@@ -7,3 +15,15 @@ contextBridge.exposeInMainWorld('launchApp', (app) => {
     }
     ipcRenderer.send('launchapp', app);
 })
+
+contextBridge.exposeInMainWorld('createBluetooth', () => {
+    return createBluetooth()
+})
+
+wifi.init()
+
+contextBridge.exposeInMainWorld('wifi', wifi)
+
+contextBridge.exposeInMainWorld("fetchTvGuide", async (opts = {}) => {
+    return ipcRenderer.invoke("tvguide:fetch", opts);
+});

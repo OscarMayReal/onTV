@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ColumnLayout } from ".";
 import { ModernItemFill, ModernRootLayout } from "./modern";
 import { useClock } from "../../lib/useclock";
@@ -7,8 +7,9 @@ import "./stbstyles.css";
 
 export function MenuListItem({ focusId, onSelected, text, Icon, image, onFocused, extraInfo, larger }: { focusId?: string, onSelected?: () => void, text: string, Icon?: React.JSX.ElementType, image?: string, onFocused?: () => void, extraInfo?: { title: string, subtitle: string, description: string }, larger?: boolean }) {
     const [isFocused, setIsFocused] = useState(false);
+    const elref = useRef<HTMLDivElement>(null)
     return (
-        <ModernItemFill focusId={focusId} onSelected={onSelected} onBlur={() => { setIsFocused(false) }} onFocused={() => { setIsFocused(true); onFocused?.() }} className={`p-2 pl-11 rounded-lg flex flex-row items-center gap-4 relative overflow-visible ${larger ? "max-w-[870px] min-w-[870px]" : "max-w-[430px] min-w-[430px]"}`} showOverflow={true}>
+        <ModernItemFill ref={elref} focusId={focusId} onSelected={onSelected} onBlur={() => { setIsFocused(false) }} onFocused={() => { setIsFocused(true); elref.current?.scrollIntoView({ behavior: 'smooth' }); onFocused?.() }} className={`p-2 pl-11 stb-menuitem rounded-lg flex flex-row items-center gap-4 relative overflow-visible ${larger ? "max-w-[870px] min-w-[870px]" : "max-w-[430px] min-w-[430px]"}`} showOverflow={true}>
             {Icon && <Icon size={24} />}
             {image && <img src={image} className="h-6 object-cover" />}
             <div className="text-xl">{text}</div>
@@ -27,8 +28,8 @@ export function MenuListItem({ focusId, onSelected, text, Icon, image, onFocused
 
 export function ListColumn({ children, defaultFocusChild, onBack, focusId, larger }: { children: React.ReactNode, defaultFocusChild?: number, onBack?: () => void, focusId?: string, larger?: boolean }) {
     return (
-        <ColumnLayout defaultFocusChild={defaultFocusChild} onBack={onBack} focusId={focusId} className={`ml-8 items-center py-4 rounded-t-xl h-full vertical-list-menu ${larger ? "max-w-[840px] min-w-[840px]" : "max-w-[400px] min-w-[400px]"}`}>
-            <div className="h-full flex flex-col gap-2 overflow-x-visible">
+        <ColumnLayout defaultFocusChild={defaultFocusChild} onBack={onBack} focusId={focusId} className={`ml-8 items-center rounded-t-xl relative h-full vertical-list-menu ${larger ? "max-w-[840px] min-w-[840px]" : "max-w-[400px] min-w-[400px]"}`}>
+            <div className="h-full flex flex-col gap-2 overflow-y-scroll py-4 absolute">
                 {children}
             </div>
         </ColumnLayout>
