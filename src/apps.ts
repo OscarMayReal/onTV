@@ -23,6 +23,35 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             description: "BBC Sounds is the way to listen to BBC audio – your favourite programmes, podcasts, radio stations and music all in one place. Explore a wide variety of new podcasts, music mixes and live sets. Listen live to BBC radio stations. Catch up or listen again to your favourite BBC radio shows."
         },
         {
+            name: "Apple TV",
+            icon: "https://i.ibb.co/SXXw1VNz/appletv.png",
+            url: "https://atve.tv.apple.com/94819831-5404-4438-810e-afb648d6a826/tvw_1dc2aab0a313427dbc11818be8a18bd9/?deeplink=1",
+            company: "Apple",
+            description: "Stream free movies and TV shows, plus 600+ channels of live TV, instantly, without a subscription. With Plex you can also customize your preferences to include the streaming services you use most and we’ll keep your home screen updated with the freshest finds across the streaming universe.",
+            width: 1920,
+        },
+        {
+            name: "Amazon Music",
+            icon: "https://i.ibb.co/tpm07Nrn/amazonmusic.png",
+            url: "https://html5tv.music.amazon.dev/?deviceModel=A27F3L5WMHDOWD",
+            company: "Amazon",
+            description: "Stream free movies and TV shows, plus 600+ channels of live TV, instantly, without a subscription. With Plex you can also customize your preferences to include the streaming services you use most and we’ll keep your home screen updated with the freshest finds across the streaming universe."
+        },
+        {
+            name: "Disney+",
+            icon: "https://i.ibb.co/1fHBtj01/disney.png",
+            url: "https://cd-dmgz.bamgrid.com/bbd/prod/25.26.0.taserface.02/hisense_tv.html?bbdpid=hisense&bounceStart=1769873296846#ot_consent_banner",
+            company: "Disney",
+            description: "Stream free movies and TV shows, plus 600+ channels of live TV, instantly, without a subscription. With Plex you can also customize your preferences to include the streaming services you use most and we’ll keep your home screen updated with the freshest finds across the streaming universe."
+        },
+        {
+            name: "Paramount+",
+            icon: "https://i.ibb.co/M5jSgS8d/Paramount.png",
+            url: "https://www.intl.paramountplus.com/smart-console-apps/vidaa/",
+            company: "Paramount",
+            description: "Stream free movies and TV shows, plus 600+ channels of live TV, instantly, without a subscription. With Plex you can also customize your preferences to include the streaming services you use most and we’ll keep your home screen updated with the freshest finds across the streaming universe."
+        },
+        {
             name: "Plex",
             icon: "https://i.ibb.co/tTdc4WjT/plex.png",
             url: "https://app.plex.tv/tv-v5-generic",

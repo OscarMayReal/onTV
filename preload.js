@@ -27,3 +27,11 @@ contextBridge.exposeInMainWorld('wifi', wifi)
 contextBridge.exposeInMainWorld("fetchTvGuide", async (opts = {}) => {
     return ipcRenderer.invoke("tvguide:fetch", opts);
 });
+
+contextBridge.exposeInMainWorld("JWSearch", async (query, location = "GB") => {
+    return ipcRenderer.invoke("jw:search", query, location);
+});
+
+contextBridge.exposeInMainWorld("JWGetProviders", async (path, location = "GB") => {
+    return ipcRenderer.invoke("jw:getproviders", path, location);
+});

@@ -1,10 +1,13 @@
 import { app, BrowserWindow, globalShortcut, screen, ipcMain } from 'electron';
 import { fork, spawn } from 'child_process';
 import path from 'path';
+import JustWatch from 'justwatch-api-client'
 
 var appwindow;
 var mainWindow;
 var goingToUrl;
+var jw = new JustWatch(5000)
+
 // var server = fork('server.js');
 var server = spawn('npm', ['run', 'dev']);
 
@@ -44,6 +47,23 @@ ipcMain.handle("tvguide:fetch", async (event, opts = {}) => {
     return res.json();
 });
 
+ipcMain.handle("jw:search", async (event, query, location = "GB") => {
+    var req = await fetch(`https://discover.provider.plex.tv/library/search?query=${query}&searchProviders=discover&searchTypes=movies,tv,availabilityPlatforms&limit=30&includeElements=guid&includeDetails=1`, {
+        "headers": {
+            "accept": "application/json",
+        }
+    })
+
+    var res = await req.json();
+    return res.MediaContainer.SearchResults[0].SearchResult;
+});
+
+ipcMain.handle("jw:getproviders", async (event, path, location = "GB") => {
+    var res = await jw.getDataByPath(path, location);
+    console.log(res)
+    return res;
+});
+
 function launchApp(json) {
     appwindow = new BrowserWindow({
         fullscreen: true,
@@ -56,6 +76,8 @@ function launchApp(json) {
     mainWindow.hide();
     appwindow.webContents.setUserAgent(json.userAgent);
     appwindow.loadURL(json.url);
+    var localscaleFactor = 1 / ((json.width || 1280) / appwindow.getSize()[0]);
+    appwindow.webContents.setZoomFactor(localscaleFactor);
     appwindow.on('close', () => {
         mainWindow.show();
     });
@@ -63,8 +85,10 @@ function launchApp(json) {
         mainWindow.show();
     })
     appwindow.webContents.on('did-start-navigation', (event, url) => {
-        var localscaleFactor = 1 / (1280 / appwindow.getSize()[0]);
-        appwindow.webContents.setZoomFactor(localscaleFactor);
+        var localscaleFactor = 1 / ((json.width || 1280) / appwindow.getSize()[0]);
+        setTimeout(() => {
+            appwindow.webContents.setZoomFactor(localscaleFactor);
+        }, 1000);
     })
 }
 

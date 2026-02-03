@@ -18,7 +18,7 @@
     "axios": "^1.13.2",
     "electron": "^39.2.7",
     "express": "^5.2.1",
-    "justwatch": "^1.0.3",
+    "justwatch-api-client": "^1.0.4",
     "lucide-react": "^0.562.0",
     "mediasoup": "^3.19.14",
     "node-ble": "^1.13.0",

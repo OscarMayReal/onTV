@@ -31,7 +31,7 @@ export function profileBgFromText(text: string) {
 }
 
 
-const serverUrl = "http://192.168.8.242:8096";
+const serverUrl = "https://jellyfin.mayhouse.dedyn.io";
 
 // export default function App() {
 //     return (

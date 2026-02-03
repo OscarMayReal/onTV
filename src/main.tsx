@@ -15,6 +15,7 @@ import StbSettings from './stb/settings.tsx'
 import Recordings from './stb/recordings.tsx'
 import TvGuide from './stb/tvguide.tsx'
 import { Setup } from './stb/setup.tsx'
+import Search from './stb/search.tsx'
 
 export const GlobalContext = createContext({
   view: "home",
@@ -68,6 +69,9 @@ function AppWrapper() {
       if (e.key === 'l') {
         setView("livetv");
       }
+      if (e.key === 'f') {
+        setView("search");
+      }
       // if (e.key === 'u' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
       if (e.key === 'u') {
         window.localStorage.removeItem("user");
@@ -99,6 +103,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "recordings" && <Recordings />}
       {view.split("?")[0].split("/")[0] === "setup" && <Setup />}
       {view.split("?")[0].split("/")[0] === "tvguide" && <TvGuide />}
+      {view.split("?")[0].split("/")[0] === "search" && <Search />}
     </GlobalContext.Provider>
   )
 }

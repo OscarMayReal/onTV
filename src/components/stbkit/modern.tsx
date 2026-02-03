@@ -98,7 +98,7 @@ export function Keyboard({ value, setValue, className, overlay }: { value: strin
     const [isFocused, setIsFocused] = useState(false)
     const [isShift, setIsShift] = useState(false)
     return (
-        <GridLayout onFocused={() => setIsFocused(true)} onBlurred={() => setIsFocused(false)} className={"bg-neutral-800 p-4 gap-3 " + (className ?? "") + (overlay ? " fixed bottom-0 left-0 w-full rounded-none flex-col items-center" : "w-fit rounded-2xl") + (isFocused && overlay ? " flex" : " hidden")} >
+        <GridLayout onFocused={() => setIsFocused(true)} onBlurred={() => setIsFocused(false)} className={"bg-neutral-800 p-4 gap-3 " + (className ?? "") + (overlay ? " fixed bottom-0 left-0 w-full rounded-none flex-col items-center" : "w-fit rounded-2xl") + (isFocused && overlay ? " flex z-999" : " hidden")} >
             {keyboardKeys.map((row, index) => <RowLayout className="gap-3" key={index}>
                 {row.map((key, index) => <ColumnLayout key={index}>
                     <ModernItemFillScale onSelected={() => setValue(value + (isShift ? key.value.toUpperCase() : key.value))} className="w-[50px] h-[50px] flex items-center justify-center text-2xl font-medium rounded-md bg-neutral-700">{isShift ? key.value.toUpperCase() : key.key}</ModernItemFillScale>

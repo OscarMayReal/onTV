@@ -16,7 +16,7 @@ import { useClock } from "../lib/useclock";
 import logo from "../assets/logo.svg";
 import { MenuListItem, ListColumn, STBHeader, STBRootLayout } from "../components/stbkit/stb";
 
-const serverUrl = "http://192.168.8.242:8096";
+const serverUrl = "https://jellyfin.mayhouse.dedyn.io";
 
 // export default function App() {
 //     return (
@@ -68,7 +68,7 @@ export default function App() {
         <STBRootLayout>
             <STBHeader title="Home" subtitle="Box Device Name" />
             <RowLayout className="flex-1">
-                <MainMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
+                <MainMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setCurrentUser={setCurrentUser} />
                 {selectedMenu === "1" && <SourceMenu />}
                 {selectedMenu === "3" && <RecordingsMenu />}
                 {selectedMenu === "5" && <AppsMenu />}
@@ -77,7 +77,7 @@ export default function App() {
     )
 }
 
-function MainMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string, setSelectedMenu: (menu: string) => void }) {
+function MainMenu({ selectedMenu, setSelectedMenu, setCurrentUser }: { selectedMenu: string, setSelectedMenu: (menu: string) => void, setCurrentUser: (user: User | null) => void }) {
     const { setView } = useContext(GlobalContext);
     const processKey = useProcessKey();
     return (
@@ -86,9 +86,13 @@ function MainMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string, set
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("1") }} text="Input Sources" Icon={PlugIcon} />
             <MenuListItem onSelected={() => { setView("tvguide") }} onFocused={() => { setSelectedMenu("2") }} text="TV Guide" Icon={ClockIcon} extraInfo={{ title: "TV Guide", subtitle: "Explore channels", description: "Find out what's coming up on TV, or go back in time to catch up on your favorite shows" }} />
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("3") }} text="Recordings & Media" Icon={HardDriveIcon} />
-            <MenuListItem onFocused={() => { setSelectedMenu("4") }} text="Search" Icon={SearchIcon} extraInfo={{ title: "Search", subtitle: "Find content", description: "Search for shows, movies, and more" }} />
+            <MenuListItem onSelected={() => { setView("search") }} onFocused={() => { setSelectedMenu("4") }} text="Search" Icon={SearchIcon} extraInfo={{ title: "Search", subtitle: "Find content", description: "Search for shows, movies, and more" }} />
             <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("5") }} text="Apps" Icon={LayoutGridIcon} />
             <MenuListItem onSelected={() => { setView("settings") }} onFocused={() => { setSelectedMenu("6") }} text="Settings" Icon={SettingsIcon} extraInfo={{ title: "Settings", subtitle: "Edit settings", description: "Manage your settings for this box, or your entire system" }} />
+            <MenuListItem onSelected={() => {
+                setCurrentUser(null);
+                window.localStorage.removeItem("user");
+            }} onFocused={() => { setSelectedMenu("7") }} text={JSON.parse(window.localStorage.getItem("user") ?? "null").User.Name + " (switch user)"} Icon={UserIcon} extraInfo={{ title: "Sign Out", subtitle: "Switch User", description: "Switch to another user" }} />
         </ListColumn>
     )
 }
