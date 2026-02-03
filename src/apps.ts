@@ -1,5 +1,5 @@
-export function returnAppsList() {
-    return [
+export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
+    var apps = [
         {
             name: "YouTube",
             icon: "https://i.ibb.co/yB80JsQC/f7d5f5ff2646c63c5bd7d9ad9741bcda-fgraphic.png",
@@ -86,4 +86,16 @@ export function returnAppsList() {
             description: "Music lover? Stream and listen to top radio hits or discover new songs with the Deezer music player on your OnTV Play Streaming device."
         }
     ]
+    if (config?.jellyfinUrl) {
+        apps.push(
+            {
+                name: "Jellyfin",
+                icon: "https://i.ibb.co/wrpTd4QD/51i0m01-RSx-L.png",
+                url: config.jellyfinUrl,
+                company: "Jellyfin",
+                description: "Watch back media stored on your Jellyfin server, using the built in Jellyfin UI instead of the OnTV UI"
+            }
+        )
+    }
+    return apps
 }

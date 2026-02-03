@@ -16,7 +16,7 @@ import { useClock } from "../lib/useclock";
 import logo from "../assets/logo.svg";
 import { MenuListItem, ListColumn, STBHeader, STBRootLayout } from "../components/stbkit/stb";
 
-const serverUrl = "http://192.168.1.14:8097";
+const serverUrl = "http://192.168.8.242:8096";
 
 // export default function App() {
 //     return (
@@ -132,7 +132,7 @@ function AppsMenu() {
     return (
         <ListColumn onBack={() => { processKey.left() }}>
             <div className="text-3xl stbkit-color-text pl-11 mb-3 mt-1 font-light text-white/50">Apps</div>
-            {returnAppsList().map((app, index) => {
+            {returnAppsList({ jellyfinUrl: serverUrl }).map((app, index) => {
                 return (
                     <MenuListItem key={index} onSelected={() => { console.log(app); launchApp(app) }} text={app.name} image={app.icon} extraInfo={{ title: app.name, subtitle: app.company, description: app.description }} />
                 )

@@ -12,7 +12,7 @@ import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import { FocusNode, useSetFocus } from "@please/lrud";
 
 const MAX_EVENTS = 25;
-const PX_PER_MIN = 60;
+const PX_PER_MIN = 25;
 // const MIN_EVENT_W = 180;
 // const MAX_EVENT_W = 560;
 
@@ -83,7 +83,7 @@ function TvChannelRow({
             focusId={rowFocusId}
             orientation="horizontal"
             defaultFocusChild={0}
-            className="flex flex-row items-center w-full border-b border-gray-700 h-[78px]"
+            className="flex flex-row items-center w-full h-[75px]"
             onFocused={() => {
                 virtuosoRef.current?.scrollToIndex({
                     index: rowIndex,
@@ -101,21 +101,28 @@ function TvChannelRow({
             }}
         >
             {/* Channel title */}
-            <div className="w-44 h-full stb-menuitem border-r-2 bg-black/20 flex items-center px-4 shrink-0">
+            <div className="w-44 h-full stb-menuitem border-r-2 bg-black/20 border-b-2 border-b-white/20 flex items-center px-4 shrink-0">
                 <span className="text-base font-medium">{channel.title}</span>
             </div>
 
             {/* Events */}
-            <div className="flex-1 overflow-x-auto flex items-center min-w-0">
+            <div className="flex-1 overflow-x-visible flex items-center h-full border-b-2 border-white/20 flex-nowrap">
                 {events.map((event, i) => {
                     // const width = clamp(parseDurationMinutes(event.duration) * PX_PER_MIN, MIN_EVENT_W, MAX_EVENT_W);
                     const width = parseDurationMinutes(event.duration) * PX_PER_MIN
+                    const elementref = useRef<HTMLDivElement>(null)
                     return (
                         <ModernItemFill
+                            ref={elementref}
                             key={event.uuid}
+                            onFocused={() => {
+                                elementref.current?.scrollIntoView({ behavior: "smooth", inline: "center", block: "center" })
+                            }}
                             focusId={`row-${rowIndex}-event-${i}`}
-                            className={`line-clamp-1 h-full px-4 flex items-center text-[18px] leading-[22px] whitespace-nowrap overflow-hidden text-ellipsis min-w-[${width}px] max-w-[${width}px w-[${width}px] shrink-0 h-56`}
+                            className={`line-clamp-1 px-4 flex text-[18px] justify-center leading-[22px] whitespace-nowrap overflow-hidden shrink-0 text-ellipsis min-w-[${width}px] w-[${width}px] h-full border-white/20 ${i !== 0 ? "border-l-2" : ""}`}
                         >
+                            <div className="text-sm">{new Date(event.start_time).toLocaleTimeString()}</div>
+                            <div className="text-sm">{width}</div>
                             {event.main_title}
                         </ModernItemFill>
                     );

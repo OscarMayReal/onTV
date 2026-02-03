@@ -14,7 +14,24 @@ import { GlobalContext } from "./main";
 import { returnAppsList } from "./apps";
 import { OnTVConfig } from "./info";
 
-const serverUrl = "http://192.168.1.14:8097";
+export function profileBgFromText(text: string) {
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+        hash = text.charCodeAt(i) + ((hash << 5) - hash);
+        hash |= 0;
+    }
+
+    const hue = Math.abs(hash) % 360;
+
+    // Add variation but keep it "nice"
+    const sat = 55 + (Math.abs(hash) % 25);          // 55–79
+    const light = 22 + (Math.abs(hash >> 8) % 18);   // 22–39 (dark)
+
+    return `hsl(${hue} ${sat}% ${light}%)`;
+}
+
+
+const serverUrl = "http://192.168.8.242:8096";
 
 // export default function App() {
 //     return (
@@ -99,7 +116,7 @@ function AppsRow() {
                 <div className="text-2xl">Apps</div>
             </div>
             <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
-                {returnAppsList().map((app) => {
+                {returnAppsList({ jellyfinUrl: serverUrl }).map((app) => {
                     return (
                         <AppItem key={app.name} onSelected={() => {
                             launchApp(app);
@@ -282,7 +299,7 @@ function AppItem({ children, onSelected, showInfoHeader, info }: { children: Rea
 
 function UserItem({ user, setCurrentUser, currentUser, api }: { user: UserDto, setCurrentUser: (user: UserDto) => void, currentUser: UserDto | null, api: Api }) {
     return (
-        <FocusNode className="usermenu-item flex flex-col items-center gap-6" onSelected={async () => {
+        <FocusNode className={`usermenu-item flex flex-col items-center gap-6`} onSelected={async () => {
             if (!user.HasPassword) {
                 const result = await getUserApi(api).authenticateUserByName({
                     authenticateUserByName: {
@@ -296,8 +313,10 @@ function UserItem({ user, setCurrentUser, currentUser, api }: { user: UserDto, s
                 }
             }
         }}>
-            {user.PrimaryImageTag ? <img src={serverUrl + "/Users/" + user.Id + "/Images/Primary/"} className="w-[100px] h-[100px] object-cover rounded-full usermenu-item-image" /> : <div className="w-[100px] h-[100px] flex flex-row items-center justify-center rounded-full usermenu-item-image">
-                <UserIcon size={50} />
+            {user.PrimaryImageTag ? <img src={serverUrl + "/Users/" + user.Id + "/Images/Primary/"} className="w-[100px] h-[100px] object-cover rounded-full usermenu-item-image" /> : <div className="w-[100px] h-[100px] flex flex-row items-center justify-center rounded-full usermenu-item-image" style={{
+                backgroundColor: profileBgFromText(user.Name)
+            }}>
+                <UserIcon color="white" size={50} />
             </div>}
             <div className="usermenu-item-text w-fit px-2 rounded-full">
                 {user.Name}{user.HasPassword ? " (Locked)" : ""}
