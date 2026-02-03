@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
 import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
 import click from "./public/click.mp3";
-import { ArrowRightCircleIcon, Grid2X2Icon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightCircleIcon, Grid2X2Icon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
 import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";
@@ -13,7 +13,6 @@ import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-a
 import { GlobalContext } from "./main";
 import { returnAppsList } from "./apps";
 import { OnTVConfig } from "./info";
-import logo from "./assets/logo.svg";
 
 export function profileBgFromText(text: string) {
     let hash = 0;
@@ -53,6 +52,21 @@ const serverUrl = "https://jellyfin.mayhouse.dedyn.io";
 //     )
 // }
 
+function groupBy(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+        const key = keyGetter(item);
+        const collection = map.get(key);
+        if (!collection) {
+            map.set(key, [item]);
+        } else {
+            collection.push(item);
+        }
+    });
+    return map;
+}
+
+
 export default function StbApp() {
     const { config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient, setView } = useContext(GlobalContext);
     useEffect(() => {
@@ -79,55 +93,39 @@ export default function StbApp() {
     // if (!config) return <SetupUI />
     if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
     return (
-        <ModernRootLayout>
+        <ModernRootLayout onBack={() => setView("home")}>
             <RowLayout className="p-10 pb-0 flex flex-row items-center gap-3 sticky top-0 z-50 bg-neutral-900 z-60">
-                {/* <img src={logo} className="h-10 object-cover pr-5" /> */}
-                <div className="text-4xl font-medium stbkit-color-text">{OnTVConfig.serviceInfo.name}</div>
+                <ModernIconButton Icon={ArrowLeftIcon} onSelected={() => setView("home")} />
+                <div className="text-4xl font-medium stbkit-color-text">All Apps</div>
                 <div className="flex-1" />
-                <ModernIconButton Icon={SearchIcon} />
-                <ModernIconButton Icon={SettingsIcon} onSelected={() => {
-                    setView("settings");
-                }} />
-                <ModernIconButton Icon={UserIcon} onSelected={() => {
-                    setCurrentUser(null);
-                    window.localStorage.removeItem("user");
-                }} />
             </RowLayout>
             <div className="h-10" />
             <div className="h-[204px] p-10 pt-0 flex flex-col justify-center gap-2">
-                <Tv2Icon className="pb-2" size={50} />
-                <div className="text-4xl font-medium stbkit-color-text">Welcome to {OnTVConfig.serviceInfo.name}</div>
-                <div className="text-2xl stbkit-color-text">Stream your favorite movies, TV shows, and more using your {OnTVConfig.deviceInfo.name}</div>
+                <Grid2X2Icon className="pb-2" size={50} />
+                <div className="text-4xl font-medium stbkit-color-text">All Apps</div>
+                <div className="text-2xl stbkit-color-text">Browse and launch all available applications</div>
             </div>
-            <AppsRow />
-            <SourcesRow />
-            <TVShowsOnNow api={jellyfinClient!} />
+            {Array.from(groupBy(returnAppsList({ jellyfinUrl: serverUrl }), (app) => app.category).entries()).map(([category, apps]) => {
+                return (
+                    <AppsRow key={category} items={apps} title={category} />
+                )
+            })}
             <div className="h-[100dvh]" />
         </ModernRootLayout>
     )
 }
 
-function AppsRow() {
-    const { view, setView } = useContext(GlobalContext);
+function AppsRow({ items, title }: { items: { name: string, description: string, company: string, icon: string }[], title: string }) {
     const focusNode = useRef<HTMLElement>(null);
     return (
         <FocusNode className="home-row" ref={focusNode} onFocused={() => {
             focusNode.current?.scrollIntoView({ behavior: "smooth" });
         }}>
             <div className="mb-3 pl-10 flex flex-row items-center">
-                <div className="text-2xl">Apps</div>
+                <div className="text-2xl">{title}</div>
             </div>
             <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
-                <AppItem type="icon" key={"allapps"} onSelected={() => {
-                    setView("allapps");
-                }} showInfoHeader info={{
-                    name: "All Apps",
-                    overview: "View all available apps",
-                    subtitle: "OnTV"
-                }}>
-                    <Grid2X2Icon size={49} />
-                </AppItem>
-                {returnAppsList({ jellyfinUrl: serverUrl }).map((app) => {
+                {items.map((app) => {
                     return (
                         <AppItem key={app.name} onSelected={() => {
                             launchApp(app);
