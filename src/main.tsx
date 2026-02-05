@@ -17,6 +17,7 @@ import TvGuide from './stb/tvguide.tsx'
 import { Setup } from './stb/setup.tsx'
 import Search from './stb/search.tsx'
 import AllApps from './allapps.tsx'
+import HandTrackDemo from './handtrackdemo.tsx'
 
 export const GlobalContext = createContext({
   view: "home",
@@ -106,6 +107,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "tvguide" && <TvGuide />}
       {view.split("?")[0].split("/")[0] === "search" && <Search />}
       {view.split("?")[0].split("/")[0] === "allapps" && <AllApps />}
+      <HandTrackDemo hideinfo={view.split("?")[0].split("/")[0] !== "handtrackdemo"} />
     </GlobalContext.Provider>
   )
 }

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout, SearchBox } from "../components/stbkit";
 import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "../components/stbkit/modern";
-import { ArrowRightCircleIcon, CircleCheckBigIcon, ClockIcon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, LayoutGridIcon, NetworkIcon, PlayIcon, PlugIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
+import { ArrowRightCircleIcon, CircleCheckBigIcon, ClockIcon, HandIcon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, LayoutGridIcon, NetworkIcon, PlayIcon, PlugIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
 import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";

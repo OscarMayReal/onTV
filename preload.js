@@ -2,6 +2,7 @@ import { contextBridge } from 'electron'
 import { createBluetooth } from 'node-ble'
 import { ipcRenderer } from 'electron'
 import wifi from 'node-wifi'
+import { exec } from 'child_process'
 // import { DeviceManager } from '@ecobridge.xyz/devicemanager'
 
 // contextBridge.exposeInMainWorld('createDeviceManager', () => {
@@ -35,3 +36,8 @@ contextBridge.exposeInMainWorld("JWSearch", async (query, location = "GB") => {
 contextBridge.exposeInMainWorld("JWGetProviders", async (path, location = "GB") => {
     return ipcRenderer.invoke("jw:getproviders", path, location);
 });
+
+contextBridge.exposeInMainWorld("tvPower", async (state) => {
+    exec(`echo "${state ? "on" : "standby"} 0" | cec-client -s -d 1`)
+});
+
