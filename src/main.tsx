@@ -107,7 +107,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "tvguide" && <TvGuide />}
       {view.split("?")[0].split("/")[0] === "search" && <Search />}
       {view.split("?")[0].split("/")[0] === "allapps" && <AllApps />}
-      <HandTrackDemo hideinfo={view.split("?")[0].split("/")[0] !== "handtrackdemo"} />
+      {config.smartFeatures?.camera?.autoPower && <HandTrackDemo hideinfo={true} />}
     </GlobalContext.Provider>
   )
 }

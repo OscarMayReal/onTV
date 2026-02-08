@@ -2,7 +2,7 @@ import { RowLayout } from "../components/stbkit";
 import { ListColumn, MenuListItem, STBHeader, STBRootLayout } from "../components/stbkit/stb";
 import { Children, useContext, useState } from "react";
 import { useProcessKey } from "@please/lrud";
-import { Tv2Icon, PlugIcon, ClockIcon, HardDriveIcon, SearchIcon, LayoutGridIcon, SettingsIcon, NetworkIcon, CheckIcon, XCircleIcon, EyeIcon, SpeakerIcon, WifiIcon, UnlockIcon } from "lucide-react";
+import { Tv2Icon, PlugIcon, ClockIcon, HardDriveIcon, SearchIcon, LayoutGridIcon, SettingsIcon, NetworkIcon, CheckIcon, XCircleIcon, EyeIcon, SpeakerIcon, WifiIcon, UnlockIcon, SparklesIcon, Camera } from "lucide-react";
 import { GlobalContext } from "../main";
 import { useEffect } from "react";
 import { FocusNode } from "@please/lrud";
@@ -16,6 +16,7 @@ export default function STBSettings() {
                 <SettingsMenu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
                 {selectedMenu === "0" && <SourceSettings />}
                 {selectedMenu === "1" && <NetworkSettings />}
+                {selectedMenu === "2" && <SmartFeatureSettings />}
             </RowLayout>
         </STBRootLayout>
     )
@@ -26,8 +27,9 @@ function SettingsMenu({ selectedMenu, setSelectedMenu }: { selectedMenu: string,
     const processKey = useProcessKey();
     return (
         <ListColumn defaultFocusChild={parseInt(selectedMenu)} onBack={() => { setView("home") }}>
-            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("0") }} text="Input Sources" Icon={PlugIcon} />
-            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("1") }} text="Network" Icon={NetworkIcon} />
+            <MenuListItem BgActive={selectedMenu == "0"} onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("0") }} text="Input Sources" Icon={PlugIcon} />
+            <MenuListItem BgActive={selectedMenu == "1"} onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("1") }} text="Network" Icon={NetworkIcon} />
+            <MenuListItem BgActive={selectedMenu == "2"} onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("2") }} text="Smart Features" Icon={SparklesIcon} />
         </ListColumn>
     )
 }
@@ -45,6 +47,17 @@ function NetworkSettings() {
         {networks.loaded && networks.networks.filter(nw => nw.ssid != "").map(nw => (
             <MenuListItem text={nw.ssid} Icon={nw.security == "" ? UnlockIcon : WifiIcon} key={nw.mac} extraInfo={{ title: nw.ssid, subtitle: nw.mac + " - " + nw.security == "" ? "Unsecured" : nw.security, description: "Connect to this network" }} />
         ))}
+    </ListColumn>
+}
+
+function SmartFeatureSettings() {
+    const { config, setConfig } = useContext(GlobalContext);
+    return <ListColumn>
+        <div className="text-3xl stbkit-color-text pl-11 pr-11 mb-3 mt-1 font-light text-white/50">Camera Auto Power</div>
+        <div className="text-xl stbkit-color-text pl-11 pr-11 mb-3 mt-1 font-medium text-white/50">Camera Auto Power uses the camera to automatically turn the TV on and off when people are detected. Camera footage is never saved and never leaves your device</div>
+        <MenuListItem text={config.smartFeatures?.camera?.autoPower ? "Enabled" : "Disabled"} onSelected={() => {
+            setConfig({ ...config, smartFeatures: { ...config.smartFeatures, camera: { ...config.smartFeatures?.camera, autoPower: !config.smartFeatures?.camera?.autoPower } } })
+        }} Icon={config.smartFeatures?.camera?.autoPower ? CheckIcon : XCircleIcon} extraInfo={{ title: "State", subtitle: config.smartFeatures?.camera?.autoPower ? "Enabled" : "Disabled", description: "Enable or disable auto power" }} />
     </ListColumn>
 }
 

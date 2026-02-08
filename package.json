@@ -16,6 +16,7 @@
     "@please/lrud": "^1.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.2",
+    "cors": "^2.8.6",
     "electron": "^39.2.7",
     "express": "^5.2.1",
     "handtrackjs": "^0.1.5",

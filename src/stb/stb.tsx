@@ -82,13 +82,13 @@ function MainMenu({ selectedMenu, setSelectedMenu, setCurrentUser }: { selectedM
     const processKey = useProcessKey();
     return (
         <ListColumn defaultFocusChild={parseInt(selectedMenu)}>
-            <MenuListItem onFocused={() => { setSelectedMenu("0") }} onSelected={() => { setView("livetv") }} text="Watch Live TV" Icon={Tv2Icon} extraInfo={{ title: "Watch Live TV", subtitle: "Live TV", description: "Watch live TV on this box" }} />
-            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("1") }} text="Input Sources" Icon={PlugIcon} />
-            <MenuListItem onSelected={() => { setView("tvguide") }} onFocused={() => { setSelectedMenu("2") }} text="TV Guide" Icon={ClockIcon} extraInfo={{ title: "TV Guide", subtitle: "Explore channels", description: "Find out what's coming up on TV, or go back in time to catch up on your favorite shows" }} />
-            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("3") }} text="Recordings & Media" Icon={HardDriveIcon} />
-            <MenuListItem onSelected={() => { setView("search") }} onFocused={() => { setSelectedMenu("4") }} text="Search" Icon={SearchIcon} extraInfo={{ title: "Search", subtitle: "Find content", description: "Search for shows, movies, and more" }} />
-            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("5") }} text="Apps" Icon={LayoutGridIcon} />
-            <MenuListItem onSelected={() => { setView("settings") }} onFocused={() => { setSelectedMenu("6") }} text="Settings" Icon={SettingsIcon} extraInfo={{ title: "Settings", subtitle: "Edit settings", description: "Manage your settings for this box, or your entire system" }} />
+            <MenuListItem onFocused={() => { setSelectedMenu("0") }} onSelected={() => { setView("livetv") }} BgActive={selectedMenu == "0"} text="Watch Live TV" Icon={Tv2Icon} extraInfo={{ title: "Watch Live TV", subtitle: "Live TV", description: "Watch live TV on this box" }} />
+            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("1") }} BgActive={selectedMenu == "1"} text="Input Sources" Icon={PlugIcon} />
+            <MenuListItem onSelected={() => { setView("tvguide") }} onFocused={() => { setSelectedMenu("2") }} BgActive={selectedMenu == "2"} text="TV Guide" Icon={ClockIcon} extraInfo={{ title: "TV Guide", subtitle: "Explore channels", description: "Find out what's coming up on TV, or go back in time to catch up on your favorite shows" }} />
+            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("3") }} BgActive={selectedMenu == "3"} text="Recordings & Media" Icon={HardDriveIcon} />
+            <MenuListItem onSelected={() => { setView("search") }} onFocused={() => { setSelectedMenu("4") }} BgActive={selectedMenu == "4"} text="Search" Icon={SearchIcon} extraInfo={{ title: "Search", subtitle: "Find content", description: "Search for shows, movies, and more" }} />
+            <MenuListItem onSelected={() => { processKey.right() }} onFocused={() => { setSelectedMenu("5") }} BgActive={selectedMenu == "5"} text="Apps" Icon={LayoutGridIcon} />
+            <MenuListItem onSelected={() => { setView("settings") }} onFocused={() => { setSelectedMenu("6") }} BgActive={selectedMenu == "6"} text="Settings" Icon={SettingsIcon} extraInfo={{ title: "Settings", subtitle: "Edit settings", description: "Manage your settings for this box, or your entire system" }} />
             <MenuListItem onSelected={() => {
                 setCurrentUser(null);
                 window.localStorage.removeItem("user");
