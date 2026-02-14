@@ -44,7 +44,9 @@ ipcMain.handle("tvguide:fetch", async (event, opts = {}) => {
         throw new Error(`Freeview API failed (${res.status}): ${text}`);
     }
 
-    return res.json();
+    var x = res.json();
+    console.log(x)
+    return x
 });
 
 ipcMain.handle("jw:search", async (event, query, location = "GB") => {

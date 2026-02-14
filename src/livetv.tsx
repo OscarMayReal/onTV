@@ -1,4 +1,4 @@
-import { ModernItem, ModernRootLayout } from "./components/stbkit/modern";
+import { ModernIconButton, ModernItem, ModernRootLayout } from "./components/stbkit/modern";
 import { RowLayout } from "./components/stbkit";
 import { FocusNode } from "@please/lrud";
 import { useEffect, useRef, useState } from "react";
@@ -6,6 +6,8 @@ import { useContext } from "react";
 import { GlobalContext } from "./main";
 import React from "react";
 import Hls from "hls.js";
+import { OnTVConfig } from "./info";
+import { FastForwardIcon, PauseIcon, PlayIcon, RewindIcon } from "lucide-react";
 
 const REWIND_SEC = 5; // seconds to rewind
 const FASTFORWARD_SEC = 5; // seconds to fast-forward
@@ -17,7 +19,9 @@ export default function LiveTV() {
     const [tempChannelNumber, setTempChannelNumber] = useState("");
     const [showChannelNumber, setShowChannelNumber] = useState(true);
     const [isLive, setIsLive] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(false)
     const [loading, setLoading] = useState(false);
+    const mainFocusRef = useRef<HTMLDivElement>(null)
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const hlsRef = useRef<Hls | null>(null);
@@ -49,6 +53,7 @@ export default function LiveTV() {
     // Keyboard channel changing
     useEffect(() => {
         const handlePageKeys = (event: KeyboardEvent) => {
+            if (!mainFocusRef.current?.classList.contains("isFocused")) return
             if (event.key === "PageUp") {
                 const idx = channels.findIndex(c => c.number === channelNumber);
                 setChannelNumber(channels[Math.min(idx + 1, channels.length - 1)]?.number ?? channelNumber);
@@ -137,8 +142,14 @@ export default function LiveTV() {
                         }
                     }, 1000);
 
-                    video.onpause = () => setIsLive(false);
-                    video.onplay = () => setIsLive(true);
+                    video.onpause = () => {
+                        setIsLive(false);
+                        setIsPlaying(false)
+                    }
+                    video.onplay = () => {
+                        setIsLive(true);
+                        setIsPlaying(true)
+                    }
 
                     return () => clearInterval(interval);
                 } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -174,12 +185,14 @@ export default function LiveTV() {
         <ModernRootLayout>
             <FocusNode
                 onBack={() => setView("home")}
+                ref={mainFocusRef}
             >
                 <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
                     {loading && (
-                        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "black", color: "white", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 20 }}>
-                            Loading Stream...
-                        </div>
+                        // <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "black", color: "white", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 20 }}>
+                        //     Loading Stream...
+                        // </div>
+                        <div />
                     )}
                     <video ref={videoRef} style={{ width: "100%", height: "100%" }} controls autoPlay />
                     {showChannelNumber && (OnTVConfig.serviceInfo.mode == "stb" ?
@@ -202,11 +215,22 @@ export default function LiveTV() {
                 </div>
             </FocusNode>
 
-            <FocusNode className="livetv-controls flex flex-col scroll-row">
+            <FocusNode className="livetv-controls flex flex-col" orientation="vertical">
+                <RowLayout className="bg-white w-[calc(100vw - 80px)] p-4 gap-2 mx-[40px] justify-center items-center text-black gap live-control-row">
+                    <ModernIconButton Icon={RewindIcon} onSelected={() => {
+                        if (videoRef.current) videoRef.current.currentTime = Math.max(videoRef.current.currentTime - REWIND_SEC, 0);
+                    }} />
+                    <ModernIconButton Icon={isPlaying ? PauseIcon : PlayIcon} onSelected={() => {
+                        if (videoRef.current) videoRef.current.paused ? videoRef.current.play() : videoRef.current.pause();
+                    }} />
+                    <ModernIconButton Icon={FastForwardIcon} onSelected={() => {
+                        if (videoRef.current) videoRef.current.currentTime = Math.min(videoRef.current.currentTime + FASTFORWARD_SEC, videoRef.current.buffered.length ? videoRef.current.buffered.end(videoRef.current.buffered.length - 1) : videoRef.current.duration);
+                    }} />
+                </RowLayout>
                 <div className="mb-3 pl-10 mt-10 flex flex-row items-center">
                     <div className="text-2xl text-white">Channels</div>
                 </div>
-                <RowLayout className="p-10 pt-0 scroll-row gap-4" defaultFocusChild={channels.findIndex(c => c.number === channelNumber) ?? 0}>
+                <RowLayout className="p-10 pt-0 scroll-row gap-4 show-row" defaultFocusChild={channels.findIndex(c => c.number === channelNumber) ?? 0}>
                     {channels.map((channel, index) => (
                         <ChannelItem key={index} channel={channel} setChannelNumber={setChannelNumber} />
                     ))}
@@ -228,7 +252,7 @@ function ChannelItem({ channel, setChannelNumber }: { channel: { number: string;
                 itemref.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemref.current.offsetLeft - 40 });
             }}
         >
-            {channel.logo && <img src={channel.logo} className="h-[100px] w-[100px] object-contain" alt={channel.name} />}
+            {channel.logo && <img src={channel.logo} className="h-[80px] w-[80px] object-contain" alt={channel.name} />}
             <div className="absolute bottom-2 left-2 text-xl">{channel.number.padStart(3, "0")}</div>
         </ModernItem>
     );

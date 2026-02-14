@@ -1,0 +1,15 @@
+paths:
+  tuner1:
+    alwaysAvailable: true
+    # alwaysAvailableFile: "./holding-error.mp4"
+  tuner2:
+    alwaysAvailable: true
+    # alwaysAvailableFile: "./holding-error.mp4"
+  hdmi1:
+    alwaysAvailable: true
+    # alwaysAvailableFile: "./holding-error.mp4"
+    runOnInit: ffmpeg -f v4l2 -r 30 -i /dev/video2 -c:v libx264 -pix_fmt yuv420p -c:a copy -preset ultrafast -rtsp_transport tcp -b:v 50k -f rtsp rtsp://localhost:$RTSP_PORT/$MTX_PATH
+    runOnInitRestart: yes
+  hdmi2:
+    alwaysAvailable: true
+    # alwaysAvailableFile: "./holding-error.mp4"
