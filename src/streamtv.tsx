@@ -11,7 +11,8 @@ import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-a
 import ReactPlayer from "react-player";
 import { getImageApi } from "@jellyfin/sdk/lib/utils/api/image-api";
 import { M3uMedia, M3uParser } from 'm3u-parser-generator';
-import { getFreeviewTvGuide, type FreeviewServiceProgram } from "./lib/freeview";
+import { getCurrentEvent, getFreeviewTvGuide, type FreeviewServiceProgram } from "./lib/freeview";
+import { ArrowLeftIcon, BookmarkIcon, TvIcon } from "lucide-react";
 
 export default function LiveTV() {
     const { jellyfinClient, setView } = useContext(GlobalContext);
@@ -116,12 +117,27 @@ export default function LiveTV() {
                 // setView("home");
                 processKey.up()
             }} className="livetv-controls flex flex-col scroll-row">
-                <div className="mb-3 pl-10 mt-10 flex flex-row items-center">
+                {mediaInfo && mediaInfo.guideItem ? <div className="mb-3 pl-10 mt-10">
+                    <div className="text-4xl pb-2">{getCurrentEvent(mediaInfo.guideItem.events)?.main_title}</div>
+                    <div className="text-2xl">{getCurrentEvent(mediaInfo.guideItem.events)?.secondary_title}</div>
+                </div> : <div className="h-5" />}
+                <div className="mb-3 pl-10 pt-5 flex flex-row items-center">
                     <div className="text-2xl text-white">Channels</div>
                 </div>
                 <RowLayout className="p-10 pt-0 scroll-row gap-4" defaultFocusChild={channels?.findIndex((channel) => channel.attributes["tvg-chno"] === channelNumber.toString()) ?? 0}>
                     {channels?.map((channel, index) => <ChannelItem key={index} channel={channel} setChannelNumber={setChannelNumber} />)}
                 </RowLayout>
+                <div className="h-15 flex flex-row items-center gap-5 pl-10">
+                    <div className="flex flex-row items-center text-[20px] gap-3">
+                        <BookmarkIcon className="rounded-full bg-white text-black p-1.5 w-8 h-8" /> <div>Bookmark Current Show</div>
+                    </div>
+                    <div className="flex flex-row text-[20px] items-center gap-3">
+                        <TvIcon className="rounded-full bg-white text-black p-1.5 w-8 h-8" /> <div>Open TV Guide</div>
+                    </div>
+                    <div className="flex flex-row text-[20px] items-center gap-3">
+                        <ArrowLeftIcon className="rounded-full bg-white text-black p-1.5 w-8 h-8" /> <div>Close Miniguide</div>
+                    </div>
+                </div>
             </FocusNode>
         </ModernRootLayout>
     )
