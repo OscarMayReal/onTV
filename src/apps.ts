@@ -8,7 +8,8 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             description: "See what the world is watching -- from the hottest music videos to what’s popular in gaming, fitness, movies, shows, news, learning and more. Subscribe to channels you love, browse personal recommendations, and enjoy the largest library of 4K content.",
             // userAgent: 'Mozilla/5.0 (PS4; Leanback Shell) Gecko/20100101 Firefox/65.0 LeanbackShell/01.00.01.75 Sony PS4/ (PS4, , no, CH)',
             category: "Web Video",
-            userAgent: "Roku/DVP-15.0 (15.0.4.5531-AY)"
+            // userAgent: "Roku/DVP-15.0 (15.0.4.5531-AY)"
+            userAgent: 'Mozilla/5.0 (Linux; Tizen 5.0) AppleWebKit/538.1 (KHTML, like Gecko) Version/5.0 TV Safari/538.1'
         },
         {
             name: "BBC iPlayer",
@@ -57,6 +58,14 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             url: "https://www.intl.paramountplus.com/smart-console-apps/vidaa/",
             company: "Paramount",
             description: "Stream blockbusters, new originals, exclusive series and hit shows across drama, action, reality, comedy and family favourites. Paramount+ offers a mountain of entertainment that’s captivating in every way.",
+            category: "Premium"
+        },
+        {
+            name: "Hayu",
+            icon: "https://i.ibb.co/67PzHqfd/hayu.png",
+            company: "NBC Universal International",
+            url: "https://mytv.hayu.com/home",
+            description: "Hayu is THE home of reality TV – Sign up today and start your free trial!. Step into a world of endless reality TV with over 9000 episodes, All the drama the same day as the USA, Every episode, every season, every spin-off, ever!",
             category: "Premium"
         },
         {

@@ -23,31 +23,82 @@ ipcMain.on('launchapp', (event, appData) => {
     launchApp(appData);
 });
 
-ipcMain.handle("tvguide:fetch", async (event, opts = {}) => {
-    const {
-        nid = 64257,
-        start = Math.floor(Date.now() / 1000),
-    } = opts;
+// ipcMain.handle("tvguide:fetch", async (event, opts = {}) => {
+//     const now = new Date();
 
-    const url = new URL("https://www.freeview.co.uk/api/tv-guide");
-    url.searchParams.set("nid", String(nid));
-    url.searchParams.set("start", String(start));
+//     // Midnight LOCAL time
+//     const midnightLocal = new Date(
+//         now.getFullYear(),
+//         now.getMonth(),
+//         now.getDate(),
+//         0, 0, 0, 0
+//     );
 
-    const res = await fetch(url.toString(), {
-        headers: {
-            "accept": "application/json",
-        },
-    });
+//     const {
+//         nid = 64257,
+//         start = Math.floor(midnightLocal.getTime() / 1000),
+//     } = opts;
 
-    if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        throw new Error(`Freeview API failed (${res.status}): ${text}`);
+//     const url = new URL("https://www.freeview.co.uk/api/tv-guide");
+//     url.searchParams.set("nid", String(nid));
+//     url.searchParams.set("start", String(start));
+
+//     console.log("Using start timestamp:", start);
+
+//     const res = await fetch(url.toString(), {
+//         headers: {
+//             "accept": "application/json",
+//             "user-agent": "Mozilla/5.0",
+//             "referer": "https://www.freeview.co.uk/",
+//         },
+//     });
+
+//     const text = await res.text();
+
+//     console.log("Status:", res.status);
+//     console.log("First 200 chars:", text.slice(0, 200));
+
+//     if (!res.ok) {
+//         throw new Error(`Freeview API failed (${res.status}): ${text}`);
+//     }
+
+//     if (!text.trim()) {
+//         throw new Error("Freeview returned empty body");
+//     }
+
+//     try {
+//         return JSON.parse(text);
+//     } catch (err) {
+//         throw new Error("Invalid JSON returned from Freeview");
+//     }
+// });
+
+ipcMain.handle("tvguide:fetch", async () => {
+    try {
+        // Step 1: Get the index.json
+        const indexRes = await fetch(
+            "https://raw.githubusercontent.com/elyobelyob/freely_tv_guide/refs/heads/main/docs/index.json"
+        );
+        if (!indexRes.ok) throw new Error(`Failed to fetch index.json (${indexRes.status})`);
+        const indexData = await indexRes.json();
+
+        // Step 2: Grab the "start" property
+        const start = indexData.start;
+        if (!start) throw new Error("No start property in index.json");
+
+        // Step 3: Fetch the guide_{start}.json
+        const guideUrl = `https://raw.githubusercontent.com/elyobelyob/freely_tv_guide/refs/heads/main/docs/raw/guide_${start}.json`;
+        const guideRes = await fetch(guideUrl);
+        if (!guideRes.ok) throw new Error(`Failed to fetch guide JSON (${guideRes.status})`);
+        const guideData = await guideRes.json();
+
+        return guideData;
+    } catch (err) {
+        console.error("tvguide fetch error:", err);
+        throw err;
     }
-
-    var x = res.json();
-    console.log(x)
-    return x
 });
+
 
 ipcMain.handle("jw:search", async (event, query, location = "GB") => {
     var req = await fetch(`https://discover.provider.plex.tv/library/search?query=${query}&searchProviders=discover&searchTypes=movies,tv,availabilityPlatforms&limit=30&includeElements=guid&includeDetails=1`, {

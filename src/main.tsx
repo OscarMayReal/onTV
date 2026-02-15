@@ -18,6 +18,7 @@ import { Setup } from './stb/setup.tsx'
 import Search from './stb/search.tsx'
 import AllApps from './allapps.tsx'
 import HandTrackDemo from './handtrackdemo.tsx'
+import StreamTV from "./streamtv.tsx"
 
 export const GlobalContext = createContext({
   view: "home",
@@ -98,7 +99,7 @@ function AppWrapper() {
   return (
     <GlobalContext.Provider value={{ view, setView, config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient }}>
       {view.split("?")[0].split("/")[0] === "home" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbApp /> : <App />)}
-      {view.split("?")[0].split("/")[0] === "livetv" && <LiveTV />}
+      {view.split("?")[0].split("/")[0] === "livetv" && (OnTVConfig.serviceInfo.mode == "stb" ? <LiveTV /> : <StreamTV />)}
       {view.split("?")[0].split("/")[0] === "keyboarddemo" && <KeyboardDemo />}
       {view.split("?")[0].split("/")[0] === "settings" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbSettings /> : <Settings />)}
       {view.split("?")[0].split("/")[0] === "hdmi" && <HDMIViewer />}

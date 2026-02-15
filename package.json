@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ecobridge.xyz/devicemanager": "^3.1.0",
+    "@iptv/playlist": "^1.2.1",
     "@jellyfin/sdk": "^0.0.0-unstable.202512091852",
     "@please/lrud": "^1.0.0",
     "@tailwindcss/vite": "^4.1.18",
@@ -22,6 +23,7 @@
     "handtrackjs": "^0.1.5",
     "justwatch-api-client": "^1.0.4",
     "lucide-react": "^0.562.0",
+    "m3u-parser-generator": "^5.0.2",
     "mediasoup": "^3.19.14",
     "node-ble": "^1.13.0",
     "node-wifi": "^2.0.16",

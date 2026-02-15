@@ -1,0 +1,321 @@
+#EXTM3U
+#EXTINF:-1 radio="false" hd="true" tvg-chno="1" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcone.svg" serviceid="37124",BBC One
+#EXTGRP:dash
+https://vs-cmaf-push-uk-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_one_london/pc_hd_abr_v2.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="2" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbctwo.svg" serviceid="37184",BBC Two
+#EXTGRP:dash
+https://vs-cmaf-push-uk-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_two_hd/pc_hd_abr_v2.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="4" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/channel4.svg" serviceid="17664",Channel 4
+https://viamotionhsi.netplus.ch/live/eds/channel4/browser-HLS8/channel4.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="9" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcfour.svg" serviceid="18048",BBC Four
+#EXTGRP:dash
+https://vs-cmaf-pushb-uk.live.fastly.md.bbci.co.uk/x=4/i=urn:bbc:pips:service:bbc_four_hd/iptv_hd_abr_v1.mpd
+#EXTINF:-1 radio="true" hd="false" tvg-chno="711" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradioberkshire.svg",BBC Radio Berkshire
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_berkshire&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="712" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcthreecountiesradio.svg",BBC Three Counties Radio
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_three_counties_radio&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="713" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradiolondon.svg" serviceid="6148",BBC Radio London
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_london&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="714" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradiosurrey.svg",BBC Radio Surrey
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_surrey&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="716" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcessex.svg" serviceid="6279",BBC Essex
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_essex&bitrate=320000
+#EXTINF:-1 radio="false" hd="false" tvg-chno="718" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/smoothradio.svg" serviceid="26368",Smooth Radio
+#EXTGRP:audio
+https://media-ssl.musicradio.com/SmoothLondon
+#EXTINF:-1 radio="false" hd="false" tvg-chno="728" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/heart.svg" serviceid="22656",Heart
+#EXTGRP:audio
+https://media-ssl.musicradio.com/HeartLondon
+#EXTINF:-1 radio="false" hd="false" tvg-chno="3" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/itv1.svg" serviceid="17604",ITV1
+#EXTGRP:iframe
+https://www.livetvuk.com/embed/itv-watch-live/
+#EXTINF:-1 radio="false" hd="true" tvg-chno="5" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/channel5.svg" serviceid="17728",5
+#EXTGRP:dash
+https://viamotionhsi.netplus.ch/live/eds/channel5/browser-dash/channel5.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="6" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/itv2.svg" serviceid="8325",ITV2
+#EXTGRP:hls
+https://viamotionhsi.netplus.ch/live/eds/itv2/browser-HLS8/itv2.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="10" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/itv3.svg" serviceid="8294",ITV3
+#EXTGRP:hls
+https://viamotionhsi.netplus.ch/live/eds/itv3/browser-HLS8/itv3.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="11" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/skymix.svg" serviceid="22208",Sky Mix
+#EXTGRP:hls
+https://d3ulpxjxf8pfh5.cloudfront.net/out/v1/316245defadc4a61bb09258e05eef128/HLS_CMAF_DRM/index.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="12" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/quest.svg" serviceid="27328",Quest
+#EXTGRP:hls
+zappr://filmon/2707
+#EXTINF:-1 radio="false" hd="true" tvg-chno="13" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/e4.svg" serviceid="8448",E4
+#EXTGRP:dash
+https://olsp.live.dash.c4assets.com/dash_iso_sp_tl/live/channel(e4)/manifest.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="14" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/film4.svg" serviceid="8385",Film4
+#EXTGRP:dash
+https://olsp.live.dash.c4assets.com/dash_iso_sp_tl/live/channel(f4)/manifest.mpd
+#EXTINF:-1 radio="false" hd="false" tvg-chno="16" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/qvc.svg" serviceid="13120",QVC
+#EXTGRP:hls
+https://qvcuk-live.akamaized.net/hls/live/2097112/qvc/master.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="17" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/really.svg" serviceid="23712",Really
+#EXTGRP:hls
+zappr://filmon/372
+#EXTINF:-1 radio="false" hd="true" tvg-chno="18" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/more4.svg" serviceid="8442",More4
+#EXTGRP:dash
+https://olsp.live.dash.c4assets.com/dash_iso_sp_tl/live/channel(m4)/manifest.mpd
+#EXTINF:-1 radio="false" hd="false" tvg-chno="19" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/u&dave.svg" serviceid="22272",U&Dave
+#EXTGRP:iframe
+https://www.livehdtv.com/yayin/?kanal=552
+#EXTINF:-1 radio="false" hd="false" tvg-chno="20" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/u&drama.svg" serviceid="16208",U&Drama
+#EXTGRP:iframe
+https://www.livetvuk.com/embed/drama-live/
+#EXTINF:-1 radio="false" hd="false" tvg-chno="21" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/5usa.svg" serviceid="12992",5USA
+#EXTGRP:dash
+https://akadashlive-5usa.akamaized.net/out/v1/5fd4d85d778f431985cfa11190826777/index.mpd
+#EXTINF:-1 radio="false" hd="false" tvg-chno="22" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/tjc.svg" serviceid="15592",TJC
+#EXTGRP:hls
+https://cdn-shop-lc-01.akamaized.net/Content/HLS_HLS/Live/channel(TJCOTT)/master.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="23" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcthree.svg" serviceid="17920",BBC Three
+#EXTGRP:dash
+https://vs-cmaf-pushb-uk.live.fastly.md.bbci.co.uk/x=4/i=urn:bbc:pips:service:bbc_three_hd/iptv_hd_abr_v1.mpd
+#EXTINF:-1 radio="false" hd="false" tvg-chno="25" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/u&w.svg" serviceid="12298",U&W
+#EXTGRP:iframe
+https://www.livetvuk.com/embed/watch/
+#EXTINF:-1 radio="false" hd="true" tvg-chno="26" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/itv4.svg" serviceid="8330",ITV4
+#EXTGRP:hls
+https://viamotionhsi.netplus.ch/live/eds/itv4/browser-HLS8/itv4.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="27" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/u&yesterday.svg" serviceid="25792",U&Yesterday
+#EXTGRP:iframe
+https://www.livetvuk.com/embed/yesterday-live/
+#EXTINF:-1 radio="false" hd="false" tvg-chno="28" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/itvquiz.svg" serviceid="8340",ITV Quiz
+#EXTGRP:iframe
+https://www.livetvuk.com/embed/itv-be-live/
+#EXTINF:-1 radio="false" hd="false" tvg-chno="32" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/5star.svg" serviceid="12928",5STAR
+#EXTGRP:dash
+https://akadashlive-5star.akamaized.net/out/v1/c7150fa2d717466cae6740c9b75e0973/index.mpd
+#EXTINF:-1 radio="false" hd="false" tvg-chno="33" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/5action.svg" serviceid="16112",5ACTION
+#EXTGRP:dash
+https://akadashlive-paramount.akamaized.net/out/v1/074b4a2bf3564611b4a6908d78b8e2c0/index.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="36" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/skyarts" serviceid="22144",Sky Arts
+#EXTGRP:hls
+https://d263m8g5my89g4.cloudfront.net/out/v1/b2814f8068dd4b64a0ba0471ffac35fc/HLS_CMAF_DRM/index.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="38" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/5plus1.svg" serviceid="13024",5 +1
+#EXTGRP:hls
+https://viamotionhsi.netplus.ch/live/eds/channel5/browser-HLS8/channel5.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="41" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/legend.svg" serviceid="14480",Legend
+#EXTGRP:hls
+zappr://filmon/1952
+#EXTINF:-1 radio="false" hd="false" tvg-chno="42" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/greataction" serviceid="15576",GREAT! action
+#EXTGRP:hls
+zappr://filmon/6212
+#EXTINF:-1 radio="false" hd="false" tvg-chno="44" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/hgtv.svg",HGTV
+#EXTGRP:hls
+zappr://filmon/6227
+#EXTINF:-1 radio="false" hd="true" tvg-chno="45" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/gemstv",Gems TV
+#EXTGRP:hls
+https://lo3.gemporia.com/abrgemporiaukgfx/smil:livestream.smil/playlist.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="46" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/5select.svg" serviceid="20256",5SELECT
+#EXTGRP:dash
+https://akadashlive-5select.akamaized.net/out/v1/f23dc3e45f1b4824a36cb33c1aafaa8a/index.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="48" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/challenge" serviceid="22226",Challenge
+#EXTGRP:hls
+https://d33c53jye60q66.cloudfront.net/out/v1/778eabe924be48288f1f695913d8abd3/HLS_CMAF_DRM/index.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="49" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/4seven.svg" serviceid="8460",4seven
+#EXTGRP:dash
+https://olsp.live.dash.c4assets.com/dash_iso_sp_tl/live/channel(4s)/manifest.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="51" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/idealworld.svg" serviceid="25920",Ideal World
+#EXTGRP:hls
+https://cdn-shop-lc-01.akamaized.net/Content/HLS_HLS/Live/channel(HDTJCBeauty)/master.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="52" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/greatchristmas",GREAT! Christmas
+#EXTGRP:hls
+https://amg01753-amg01753c8-samsung-gb-8060.playouts.now.amagi.tv/playlist/amg01753-narrativeuk-greatmystery-samsunggb/playlist.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="57" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/u&eden.svg" serviceid="19968",U&eden
+#EXTGRP:iframe
+https://www.livetvuk.com/embed/eden/
+#EXTINF:-1 radio="false" hd="true" tvg-chno="61" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/greatmovies" serviceid="15584",GREAT! movies
+#EXTGRP:hls
+https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01753-narrativeentert-greatmovies-samsunguk/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="66" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/tbn.svg" serviceid="20160",TBN UK
+#EXTGRP:hls
+https://cdn.jwplayer.com/live/broadcast/r08fY89I.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="67" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/truecrime.svg" serviceid="14448",True Crime
+#EXTGRP:hls
+https://b6cca454.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1nYl9UcnVlQ3JpbWVVS2Zyb21DQlNSZWFsaXR5X0hMUw/playlist.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="68" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/truecrimextra.svg" serviceid="14456",True Crime Xtra
+#EXTGRP:hls
+zappr://filmon/1805
+#EXTINF:-1 radio="false" hd="false" tvg-chno="72" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/jewellerymaker.svg" serviceid="27200",Jewellery Maker
+#EXTGRP:hls
+https://lo3.gemporia.com/abrjewellerymaker/smil:livestream.smil/playlist.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="73" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/hobbymaker.svg" serviceid="27840",Hobby Maker
+#EXTGRP:hls
+https://lo3.gemporia.com/abrhobbymakerukgfx/smil:livestream.smil/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="83" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/togethertv.svg" serviceid="16364",Together TV
+#EXTGRP:hls
+https://d1uw9hvdgmm030.cloudfront.net/v1/master/8a60d8d801256399c3819ed2744d4bbee0de11a6/TTV_Website_Desktop/0c33ef5f1fd4407db5f78d488a6718cf/index.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="94" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/sbn",SBN
+#EXTGRP:youtube
+UCf1y3FvYJYPbgMqHX7ZzeZA
+#EXTINF:-1 radio="false" hd="true" tvg-chno="96" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/musthaveideas" serviceid="23680",Must Have Ideas
+#EXTGRP:youtube
+UCYaD__DXDKk597uT12U6Qjg
+#EXTINF:-1 radio="false" hd="false" tvg-chno="97" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/hobbycraft.svg" serviceid="27232",Hobbycraft TV
+#EXTGRP:youtube
+UCaGHuBf8xmW1BYGc1kDMOWQ
+#EXTINF:-1 radio="false" hd="true" tvg-chno="201" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/cbbc.svg" serviceid="18112",CBBC
+#EXTGRP:dash
+https://vs-cmaf-pushb-uk.live.fastly.md.bbci.co.uk/x=4/i=urn:bbc:pips:service:cbbc_hd/iptv_hd_abr_v1.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="202" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/cbeebies.svg" serviceid="18176",CBeebies
+#EXTGRP:dash
+https://vs-cmaf-pushb-uk.live.fastly.md.bbci.co.uk/x=4/i=urn:bbc:pips:service:cbeebies_hd/iptv_hd_abr_v1.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="205" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/pop.svg" serviceid="16272",Pop
+#EXTGRP:hls
+https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01753-narrativeentert-popkids-samsunguk/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="206" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/tinypop.svg" serviceid="16280",Tiny Pop
+#EXTGRP:hls
+https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01753-narrativeentert-tinypop-samsunguk/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="207" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/popup.svg" serviceid="27424",Pop Up
+#EXTGRP:hls
+https://amg01753-amg01753c9-samsung-gb-8005.playouts.now.amagi.tv/playlist/amg01753-narrativeuk-popup-samsunggb/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="209" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/ketchuptv.svg" serviceid="16200",Ketchup TV
+#EXTGRP:hls
+https://d24p9tv2w5yorn.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-hv7b0gembp7xn/vod.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="211" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/yaaas" serviceid="34368",YAAAS!
+#EXTGRP:hls
+https://d3knqoaufvjug3.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-caepqnvi5dnka/yas.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="231" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcnews.svg" serviceid="4352",BBC News
+#EXTGRP:dash
+https://vs-cmaf-push-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_news_channel_hd/pc_hd_abr_v2.mpd
+#EXTINF:-1 radio="false" hd="false" tvg-chno="232" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcparliament.svg" serviceid="4736",BBC Parliament
+#EXTGRP:dash
+https://vs-cmaf-pushb-uk.live.fastly.md.bbci.co.uk/x=4/i=urn:bbc:pips:service:bbc_parliament/iptv_hd_abr_v1.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="233" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/skynews.svg" serviceid="22080",Sky News
+#EXTGRP:hls
+https://linear417-gb-hls1-prd-ak.cdn.skycdp.com/100e/Content/HLS_001_1080_30/Live/channel(skynews)/index_1080-30.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="236" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/gbnews.svg" serviceid="27360",GB News
+#EXTGRP:hls
+https://amg01076-lightning-amg01076c7-lg-gb-2019.playouts.now.amagi.tv/playlist/amg01076-lightning-gbnews-lggb/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="250" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcredbutton.svg" serviceid="4416",BBC Red Button
+#EXTGRP:dash
+https://vs-cmaf-pushb-uk.live.cf.md.bbci.co.uk/x=4/i=urn:bbc:pips:service:red_button_one/iptv_hd_abr_v1.mpd
+#EXTINF:-1 radio="false" hd="true" tvg-chno="251" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/aljazeera.svg" serviceid="16278",Al Jazeera English
+#EXTGRP:hls
+https://live-hls-web-aje.getaj.net/AJE/index.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="252" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/aljazeera.svg" serviceid="16284",Al Jazeera Arabic
+#EXTGRP:hls
+https://live-hls-web-aja-fa.thehlive.com/AJA/index.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="255" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/france24.svg" serviceid="16370",France 24
+#EXTGRP:hls
+https://live.france24.com/hls/live/2037218/F24_EN_HI_HLS/master_5000.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="257" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/euronews.svg",euronews.
+#EXTGRP:hls
+https://cdn-euronews.akamaized.net/live/eds/euronews-en/25080/euronews-en.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="258" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/indiatoday.svg",India Today
+#EXTGRP:hls
+https://feeds.intoday.in/hltapps/api/master.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="259" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/mybingechannel",My Binge Channel
+#EXTGRP:hls
+https://cdn8.fntvchannel.com/v1/master/02eeb1726c343dc9c30c32e93dee82013e157021/FNTV-CHANNEL_CDN77/index.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="260" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/asharqnews.svg" serviceid="34304",Asharq News
+#EXTGRP:hls
+https://bcovlive-a.akamaihd.net/0b75ef0a49e24704a4ca023d3a82c2df/ap-south-1/6203311941001/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="261" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/alarabiya.svg" serviceid="34240",Al Arabiya
+#EXTGRP:hls
+https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="264" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/alaraby.svg",Al Araby
+#EXTGRP:hls
+https://live.kwikmotion.com/alaraby1live/alaraby_abr/playlist.m3u8?orig=arabic&out=english,french,persian
+#EXTINF:-1 radio="false" hd="false" tvg-chno="266" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/revelationtv" serviceid="16248",Revelation TV
+#EXTGRP:hls
+https://stream.mdc.akamaized.net/live/ngrp:revelationtv.stream_web/master.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="267" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/godtv.svg",GOD TV
+#EXTGRP:iframe
+https://www.lightcast.com/embed/player.php?responsive=1&skinColor=000000&autoPlay=1&id=50860&type=live&multiBitrate=1&autoStart=1&skipPreviewPlayer=1
+#EXTINF:-1 radio="false" hd="false" tvg-chno="268" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/3abn.svg",3ABN
+#EXTGRP:hls
+https://3abn.bozztv.com/3abn2/Int_live/smil:Int_live.smil/playlist.m3u8
+#EXTINF:-1 radio="false" hd="false" tvg-chno="269" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/newmedia",New Media
+#EXTGRP:hls
+https://cdn3.wowza.com/5/L1Uzd2FrbVlLRG1W/live/smil:nmtvuk.smil/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="272" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/nhkworldjapan.svg",NHK World Japan
+#EXTGRP:hls
+https://master.nhkworld.jp/nhkworld-tv/playlist/live.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="273" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/newsmax.svg" serviceid="16328",Newsmax
+#EXTGRP:hls
+https://nmx1ota.akamaized.net/hls/live/2107010/Live_1/index.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="274" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/amazingfactstv",Amazing Facts TV
+#EXTGRP:iframe
+https://player.zype.com/embed/67801367f1c3e50001f758c5.html?api_key=tq1hOEn0RGXLdpr2Z69t61rs2EPMmOk6Y4vh8YGDCBqNmUuSMfer2kzdp0nBup2z&autoplay=false&controls=true
+#EXTINF:-1 radio="false" hd="true" tvg-chno="275" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/wedotvmovies" serviceid="33920",wedotv movies
+#EXTGRP:hls
+https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00735-videosolutionsa-wedomoviesen-ono/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="276" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/cna.svg" serviceid="16164",CNA Originals
+#EXTGRP:hls
+https://d35j504z0x2vu2.cloudfront.net/v1/master/0bc8e8376bd8417a1b6761138aa41c26c7309312/cna-originals/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="278" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/nosey" serviceid="16376",Nosey
+#EXTGRP:hls
+https://wurlnosey.global.transmit.live/hls/678a8e220d785cafbf154147/v1/nosey_2/samsung_us/latest/main/hls/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="280" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/talk" serviceid="16406",Talk
+#EXTGRP:hls
+https://488f4ce4.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEctZ2JfVGFsa19ITFM/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="286" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/itiswrittentv" serviceid="33984",It Is Written TV
+#EXTGRP:hls
+https://itiswrittentv.akamaized.net/xR8gyATuHMVx69u9G79DXnpNRL/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="287" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/nollyafrica" serviceid="34560",Nolly Africa
+#EXTGRP:hls
+https://amg02784-amg02784c1-distrotv-us-3394.playouts.now.amagi.tv/playlist/amg02784-nollyafricafast-nollyafricahd-distrotvus/playlist.m3u8
+#EXTINF:-1 radio="false" hd="true" tvg-chno="288" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/outtvproud",OUTtv Proud
+#EXTGRP:hls
+https://dplsy81obpo46.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-66x5q4k9ervn1/OutTV_US.m3u8
+#EXTINF:-1 radio="true" hd="false" tvg-chno="700" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio1.svg" serviceid="6720",BBC Radio 1
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_one&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="701" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio1xtra.svg",BBC Radio 1Xtra
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_1xtra&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="702" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio2.svg" serviceid="6784",BBC Radio 2
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_two&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="703" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio3.svg" serviceid="6848",BBC Radio 3
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_three&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="704" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio4.svg" serviceid="6912",BBC Radio 4
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_fourfm&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="705" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio5live.svg",BBC Radio 5 Live
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_five_live&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="706" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio5sportsextra.svg",BBC Radio 5 Sports Extra
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_five_live_sports_extra&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="707" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio6music.svg",BBC Radio 6 Music
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_6music&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="708" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcradio4extra.svg",BBC Radio 4 Extra
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_radio_four_extra&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="709" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcasiannetwork.svg",BBC Asian Network
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_asian_network&bitrate=320000
+#EXTINF:-1 radio="true" hd="false" tvg-chno="710" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/bbcworldservice.svg",BBC World Service
+#EXTGRP:hls
+https://lsn.lv/bbcradio.m3u8?station=bbc_world_service&bitrate=320000
+#EXTINF:-1 radio="false" hd="false" tvg-chno="723" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/talksport.svg" serviceid="22592",talkSPORT
+#EXTGRP:audio
+https://radio.talksport.com/stream
+#EXTINF:-1 radio="false" hd="false" tvg-chno="724" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/capital.svg" serviceid="22688",Capital
+#EXTGRP:audio
+https://media-ssl.musicradio.com/Capital
+#EXTINF:-1 radio="false" hd="false" tvg-chno="725" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/premierchristianradio.svg",Premier Christian Radio
+#EXTGRP:audio
+https://pcr.streamguys1.com/pcrnational-96k.aac
+#EXTINF:-1 radio="false" hd="false" tvg-chno="730" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/rnibconnectradio",RNIB Connect Radio
+#EXTGRP:audio
+https://n05a-eu.rcs.revma.com/yv4znr4xcg0uv
+#EXTINF:-1 radio="false" hd="false" tvg-chno="731" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/classicfm.svg" serviceid="22848",Classic FM
+#EXTGRP:audio
+https://media-ssl.musicradio.com/ClassicFM
+#EXTINF:-1 radio="false" hd="false" tvg-chno="732" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/lbc.svg" serviceid="22880",LBC
+#EXTGRP:audio
+https://media-ssl.musicradio.com/LBCUK
