@@ -55,7 +55,7 @@ export default function LiveTV() {
         };
     }, [channelNumber]);
     useEffect(() => {
-        if (!channels) return
+        if (!channels || !programs) return
         const item = channels.find(item => item.attributes["tvg-chno"]?.padStart(3, "0") == channelNumber.toString().padStart(3, "0"))
         if (!item) return
         console.log(item.attributes["serviceid"])
@@ -68,7 +68,7 @@ export default function LiveTV() {
             m3uItem: item,
             guideItem: item.attributes["serviceid"] ? programs.find(program => program.service_id == item.attributes["serviceid"]) : null
         })
-    }, [channelNumber, channels])
+    }, [channelNumber, channels, programs])
     useEffect(() => {
         if (tempChannelNumber !== "") {
             setTimeout(() => {
@@ -117,10 +117,10 @@ export default function LiveTV() {
                 // setView("home");
                 processKey.up()
             }} className="livetv-controls flex flex-col scroll-row">
-                {mediaInfo && mediaInfo.guideItem ? <div className="mb-3 pl-10 mt-10">
+                {mediaInfo && mediaInfo.guideItem ? <div className="mb-3 pl-10 mt-15">
                     <div className="text-4xl pb-2">{getCurrentEvent(mediaInfo.guideItem.events)?.main_title}</div>
                     <div className="text-2xl">{getCurrentEvent(mediaInfo.guideItem.events)?.secondary_title}</div>
-                </div> : <div className="h-5" />}
+                </div> : <div className="h-10" />}
                 <div className="mb-3 pl-10 pt-5 flex flex-row items-center">
                     <div className="text-2xl text-white">Channels</div>
                 </div>

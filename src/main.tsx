@@ -14,6 +14,7 @@ import StbApp from './stb/stb.tsx'
 import StbSettings from './stb/settings.tsx'
 import Recordings from './stb/recordings.tsx'
 import TvGuide from './stb/tvguide.tsx'
+import StreamTvGuide from './tvguide.tsx'
 import { Setup } from './stb/setup.tsx'
 import Search from './stb/search.tsx'
 import AllApps from './allapps.tsx'
@@ -70,7 +71,11 @@ function AppWrapper() {
       }
       // if (e.key === 'l' && JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
       if (e.key === 'l') {
-        setView("livetv");
+        if (view == "livetv") {
+          setView("tvguide");
+        } else {
+          setView("livetv");
+        }
       }
       if (e.key === 'f') {
         setView("search");
@@ -86,7 +91,7 @@ function AppWrapper() {
     return () => {
       window.removeEventListener('keydown', KeyListener);
     }
-  }, []);
+  }, [view]);
   const [jellyfinClient, setJellyfinClient] = useState<Api | null>(null)
   const [config, setConfig] = useState(JSON.parse(window.localStorage.getItem("config") ?? "null"))
   useEffect(() => {
@@ -105,7 +110,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "hdmi" && <HDMIViewer />}
       {view.split("?")[0].split("/")[0] === "recordings" && <Recordings />}
       {view.split("?")[0].split("/")[0] === "setup" && <Setup />}
-      {view.split("?")[0].split("/")[0] === "tvguide" && <TvGuide />}
+      {view.split("?")[0].split("/")[0] === "tvguide" && (OnTVConfig.serviceInfo.mode == "stb" ? <TvGuide /> : <StreamTvGuide />)}
       {view.split("?")[0].split("/")[0] === "search" && <Search />}
       {view.split("?")[0].split("/")[0] === "allapps" && <AllApps />}
       {config.smartFeatures?.camera?.autoPower && <HandTrackDemo hideinfo={true} />}
