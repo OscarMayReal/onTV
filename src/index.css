@@ -218,3 +218,7 @@
   background-color: #117052;
   color: white;
 }
+
+[data-viewport-type="element"] {
+  width: fit-content !important;
+}

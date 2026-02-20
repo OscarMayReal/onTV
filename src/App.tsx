@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
 import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
 import click from "./public/click.mp3";
-import { ArrowRightCircleIcon, Grid2X2Icon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
+import { ArrowRightCircleIcon, BookmarkIcon, Grid2X2Icon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
 import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";
@@ -160,7 +160,7 @@ function SourcesRow() {
                     <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
                     <div className="text-xl font-medium stbkit-color-text">HDMI 1</div>
                 </AppItem>
-                <AppItem showInfoHeader info={{ name: "Live TV", overview: "View Live TV", subtitle: "TV Inputs" }} onSelected={() => { setView("livetv") }}>
+                <AppItem showInfoHeader info={{ name: "Live TV", overview: "View Live TV streaming over the internet", subtitle: "TV Inputs" }} onSelected={() => { setView("livetv") }}>
                     <Tv2Icon size={35} strokeWidth={1.4} className="stbkit-color-text" />
                     <div className="text-xl font-medium stbkit-color-text">Live TV</div>
                 </AppItem>
@@ -168,9 +168,9 @@ function SourcesRow() {
                     <HdmiPortIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
                     <div className="text-xl font-medium stbkit-color-text">HDMI 2</div>
                 </AppItem>
-                <AppItem showInfoHeader info={{ name: "Recorded", overview: "View Recorded Shows", subtitle: "TV Inputs" }}>
-                    <HardDriveIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
-                    <div className="text-xl font-medium stbkit-color-text">Recorded</div>
+                <AppItem showInfoHeader info={{ name: "Recorded", overview: "View shows you have bookmarked.", subtitle: "TV Inputs" }}>
+                    <BookmarkIcon size={35} strokeWidth={1.4} className="stbkit-color-text" />
+                    <div className="text-xl font-medium stbkit-color-text">Bookmarks</div>
                 </AppItem>
             </RowLayout>
         </FocusNode>
