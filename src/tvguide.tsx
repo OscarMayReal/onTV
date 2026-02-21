@@ -2,6 +2,7 @@ import { STBHeader, STBRootLayout } from "./components/stbkit/stb";
 import { ColumnLayout, RootLayout, RowLayout } from "./components/stbkit";
 import { useContext, useEffect, useRef, useState } from "react";
 import { GlobalContext } from "./main";
+import { database } from "./lib/prisma";
 import {
     getFreeviewTvGuide,
     type FreeviewServiceProgram,
@@ -14,6 +15,7 @@ import { FocusNode, useSetFocus } from "@please/lrud";
 import { BookmarkIcon, TvIcon } from "lucide-react";
 import { M3uMedia, M3uParser } from "m3u-parser-generator";
 import { useClock } from "./lib/useclock";
+import { Prisma, type Bookmark } from "./generated/prisma/browser";
 const MAX_EVENTS = 999;
 const PX_PER_MIN = 4;
 // const MIN_EVENT_W = 180;
@@ -32,6 +34,12 @@ function TVGuide() {
     const [programs, setPrograms] = useState<FreeviewServiceProgram[]>([]);
     const [channels, setChannels] = useState<M3uMedia[] | undefined>(undefined);
     const virtuosoRef = useRef<VirtuosoHandle>(null);
+    const [bookmarks, setBookmarks] = useState<Prisma.BookmarkModel[] | null>(null)
+    useEffect(() => {
+        database.bookmark.findMany({}).then(items => {
+            setBookmarks(items)
+        })
+    }, [])
     const setFocus = useSetFocus();
     // Tracks the time window of the currently focused event so up/down
     // navigation lands on the event with the most overlap in the new row.
@@ -121,6 +129,8 @@ function TVGuide() {
                                 timelineWidthPx={timelineWidthPx}
                                 focusedWindowRef={focusedWindowRef}
                                 programs={programs}
+                                bookmarks={bookmarks}
+                                setBookmarks={setBookmarks}
                             />
                         )}
                     />
@@ -148,6 +158,8 @@ function TvChannelRow({
     timelineWidthPx,
     focusedWindowRef,
     programs,
+    bookmarks,
+    setBookmarks,
 }: {
     channel: FreeviewServiceProgram;
     rowIndex: number;
@@ -158,6 +170,8 @@ function TvChannelRow({
     timelineWidthPx: number;
     focusedWindowRef: React.RefObject<{ start: number; end: number }>;
     programs: FreeviewServiceProgram[];
+    bookmarks: Prisma.BookmarkModel[] | null;
+    setBookmarks: (bm: Prisma.BookmarkModel[]) => void
 }) {
     const setFocus = useSetFocus();
     const events = (channel.events ?? []).slice(0, MAX_EVENTS);
@@ -221,8 +235,44 @@ function TvChannelRow({
                     const [isCurrent, setIsCurrent] = useState(getCurrentEvent(events)?.event_locator == event.event_locator)
                     const clock = useClock()
                     useEffect(() => {
+                        if (clock.getMilliseconds() !== 0) return
                         setIsCurrent(getCurrentEvent(events)?.event_locator == event.event_locator)
                     }, [clock])
+                    useEffect(() => {
+                        function handleKey(e: KeyboardEvent) {
+                            if (e.key == "q" && isFocused) {
+                                if (bookmarks.find(bm => bm.programId == event.program_id)) {
+                                    database.bookmark.delete({
+                                        where: {
+                                            bookmarkId: bookmarks.find(bm => bm.programId == event.program_id)?.bookmarkId
+                                        }
+                                    }).then(() => {
+                                        database.bookmark.findMany({}).then(items => {
+                                            setBookmarks(items)
+                                        })
+                                    })
+                                } else {
+                                    database.bookmark.create({
+                                        data: {
+                                            programId: event.program_id,
+                                            availabilityEnd: new Date(event.on_demand?.end_of_availability),
+                                            availabilityStart: new Date(event.on_demand?.start_of_availability),
+                                            onDemand: event.on_demand,
+                                            mainTitle: event.main_title,
+                                            secondaryTitle: event.secondary_title,
+                                            imageUrl: event.image_url,
+                                            eventUUID: event.uuid,
+                                            originalEventLocator: event.event_locator,
+                                        }
+                                    }).then(item => setBookmarks([...bookmarks, item]))
+                                }
+                            }
+                        }
+                        window.addEventListener("keydown", handleKey)
+                        return () => {
+                            window.removeEventListener("keydown", handleKey)
+                        }
+                    }, [isFocused, bookmarks])
 
                     const startMs = new Date(event.start_time).getTime();
                     const leftPx = ((startMs - globalStartMs) / 60000) * PX_PER_MIN;
@@ -234,7 +284,7 @@ function TvChannelRow({
                             data-current={isCurrent ? "true" : undefined}
                             data-event-index={i}
                             ref={elementref}
-                            className={`absolute top-0 h-full border-white/20 border-l-2 ${isCurrent ? "bg-white/10" : ""}`}
+                            className={`absolute top-0 h-full border-white/20 border-l-2 scroll-ml-[176px] ${isCurrent ? "bg-white/10" : ""}`}
                             style={{ left: leftPx, width: widthPx, minWidth: widthPx, maxWidth: widthPx }}
                         >
                             <ModernItemFill
@@ -251,15 +301,18 @@ function TvChannelRow({
                                 focusId={`row-${rowIndex}-event-${i}`}
                                 className="w-full h-full text-[18px] leading-[22px] overflow-hidden"
                             >
-                                <div className="flex flex-col justify-center px-2 w-full h-full overflow-hidden">
-                                    <div className="text-sm opacity-70">{new Date(event.start_time).toLocaleTimeString()}</div>
-                                    <div className="truncate">{event.main_title}</div>
+                                <div className="flex flex-row items-center px-2 w-full h-full overflow-hidden">
+                                    {bookmarks.find(bm => bm.programId == event.program_id) && <BookmarkIcon className="mr-3 mr-3 flex-shrink-0" />}
+                                    <div>
+                                        <div className="text-sm opacity-70">{new Date(event.start_time).toLocaleTimeString()}</div>
+                                        <div className="truncate">{event.main_title}</div>
+                                    </div>
                                 </div>
                             </ModernItemFill>
                             {isFocused && <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50 }} className="w-full h-[200px] bg-neutral-900 p-10 flex flex-row gap-2">
                                 <div className="flex-1">
                                     <div className="text-4xl text-white">{event.main_title}</div>
-                                    <div className="text-lg py-3 text-white">{event.on_demand ? "Bookmarkable" : "Cannot Be Bookmarked"}</div>
+                                    <div className="text-lg py-3 text-white">{bookmarks.find(bm => bm.programId == event.program_id) ? "Bookmarked" : event.on_demand ? "Bookmarkable" : "Cannot Be Bookmarked"}</div>
                                     <div className="text-xl text-white">{event.secondary_title}</div>
                                 </div>
                                 <img src={event.image_url + "?w=800"} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />

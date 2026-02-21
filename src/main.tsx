@@ -19,6 +19,7 @@ import { Setup } from './stb/setup.tsx'
 import Search from './stb/search.tsx'
 import AllApps from './allapps.tsx'
 import HandTrackDemo from './handtrackdemo.tsx'
+import Bookmarks from './Bookmarks.tsx'
 import StreamTV from "./streamtv.tsx"
 
 export const GlobalContext = createContext({
@@ -113,6 +114,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "tvguide" && (OnTVConfig.serviceInfo.mode == "stb" ? <TvGuide /> : <StreamTvGuide />)}
       {view.split("?")[0].split("/")[0] === "search" && <Search />}
       {view.split("?")[0].split("/")[0] === "allapps" && <AllApps />}
+      {view.split("?")[0].split("/")[0] === "bookmarks" && <Bookmarks />}
       {config.smartFeatures?.camera?.autoPower && <HandTrackDemo hideinfo={true} />}
     </GlobalContext.Provider>
   )

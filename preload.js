@@ -1,8 +1,19 @@
+import "dotenv/config"
 import { contextBridge } from 'electron'
 import { createBluetooth } from 'node-ble'
 import { ipcRenderer } from 'electron'
 import wifi from 'node-wifi'
 import { exec } from 'child_process'
+import { PrismaClient } from "./src/generated/prisma/client.ts";
+import { PrismaPg } from '@prisma/adapter-pg'
+import { create } from "domain"
+
+const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL,
+})
+
+const prisma = new PrismaClient({ adapter })
+
 // import { DeviceManager } from '@ecobridge.xyz/devicemanager'
 
 // contextBridge.exposeInMainWorld('createDeviceManager', () => {
@@ -41,3 +52,18 @@ contextBridge.exposeInMainWorld("tvPower", async (state) => {
     exec(`echo "${state ? "on" : "standby"} 0" | cec-client -s -d 1`)
 });
 
+contextBridge.exposeInMainWorld("db", {
+    bookmark: {
+        findMany: (options) => {
+            return prisma.bookmark.findMany(options)
+        },
+        create: async (options) => {
+            var x = await prisma.bookmark.create(options)
+            return x
+        },
+        delete: async (options) => {
+            var x = await prisma.bookmark.delete(options)
+            return x
+        }
+    }
+})
