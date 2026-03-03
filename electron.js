@@ -141,7 +141,7 @@ function launchApp(json) {
         var localscaleFactor = 1 / ((json.width || 1280) / appwindow.getSize()[0]);
         setTimeout(() => {
             appwindow.webContents.setZoomFactor(localscaleFactor);
-        }, 1000);
+        }, 100);
     })
 }
 

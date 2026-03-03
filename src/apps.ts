@@ -42,7 +42,15 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             url: "https://html5tv.music.amazon.dev/?deviceModel=A27F3L5WMHDOWD",
             company: "Amazon",
             description: "We're changing the way you discover and play the music you love. Listen free to music and podcasts with ads – no credit card required. Want more benefits? Get 100 million songs on demand, ad-free top podcasts and audiobooks from Audible with Amazon Music Unlimited.",
-            category: "Premium"
+            category: "Music"
+        },
+        {
+            name: "Radioplayer",
+            icon: "https://i.ibb.co/fzm9K5Yf/Radio-Player.png",
+            url: "https://vidaa.prod.tv.radioplayer.org/#/",
+            company: "Radioplayer Worldwide",
+            description: "Radioplayer brings you all your favourite national and local radio stations with the official app released and owned by radio stations worldwide. Unleash the power of audio entertainment with Radioplayer.",
+            category: "Music"
         },
         {
             name: "Disney+",
@@ -138,7 +146,7 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             url: "https://tv2.deezer.com/foxxum",
             company: "Deezer",
             description: "Music lover? Stream and listen to top radio hits or discover new songs with the Deezer music player on your OnTV Play Streaming device.",
-            category: "Premium"
+            category: "Music"
         }
     ]
     if (config?.jellyfinUrl) {

@@ -54,7 +54,7 @@ zappr://filmon/2707
 https://olsp.live.dash.c4assets.com/dash_iso_sp_tl/live/channel(e4)/manifest.mpd
 #EXTINF:-1 radio="false" hd="true" tvg-chno="14" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/film4.svg" serviceid="37901",Film4
 #EXTGRP:dash
-https://olsp.live.dash.c4assets.com/dash_iso_sp_tl/live/channel(f4)/manifest.mpd
+https://cache1a.netplus.ch/tok_eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIxNzcyMzMyMDI4Iiwic2lwIjoiIiwicGF0aCI6Ii9saXZlL2Vkcy9maWxtNC9icm93c2VyLUhMUzgvIiwic2Vzc2lvbl9jZG5faWQiOiJhNDM5MjcwZmYzYWQ3NTVlIiwic2Vzc2lvbl9pZCI6IiIsImNsaWVudF9pZCI6IiIsImRldmljZV9pZCI6IiIsIm1heF9zZXNzaW9ucyI6MCwic2Vzc2lvbl9kdXJhdGlvbiI6MCwidXJsIjoiaHR0cHM6Ly8xMC4wLjIyOS4xOCIsInNlc3Npb25fdGltZW91dCI6MCwiYXVkIjoiNTMiLCJzb3VyY2VzIjpbMTAwXX0=.m99_ACtO4l65p5RnvlFQ_gtL_yuAuNWyIpgD0pGXWsfYNAA8X5dBeOGipMjT81CiQTJ-6u57U-YhTXw7HBzGBg==/live/eds/film4/browser-HLS8/film4.m3u8
 #EXTINF:-1 radio="false" hd="false" tvg-chno="16" tvg-logo="https://raw.githubusercontent.com/ZapprTV/channels/refs/heads/main/logos/uk/optimized/qvc.svg" serviceid="39169",QVC
 #EXTGRP:hls
 https://qvcuk-live.akamaized.net/hls/live/2097112/qvc/master.m3u8

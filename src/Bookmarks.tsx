@@ -13,6 +13,8 @@ import type { LiveTvApi } from "@jellyfin/sdk/lib/generated-client/api/live-tv-a
 import { GlobalContext } from "./main";
 import { returnAppsList } from "./apps";
 import { OnTVConfig } from "./info";
+import { database } from "./lib/prisma";
+import type { Prisma } from "./generated/prisma/client";
 
 export function profileBgFromText(text: string) {
     let hash = 0;
@@ -69,29 +71,12 @@ function groupBy(list, keyGetter) {
 
 export default function StbApp() {
     const { config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient, setView } = useContext(GlobalContext);
+    const [bookmarks, setBookmarks] = useState<Prisma.BookmarkModel[] | null>(null)
     useEffect(() => {
-        if (jellyfinClient) return;
-        const jellyfin = new Jellyfin({
-            clientInfo: {
-                name: OnTVConfig.serviceInfo.name,
-                version: '1.0.0'
-            },
-            deviceInfo: {
-                name: OnTVConfig.deviceInfo.name,
-                id: '01'
-            }
-        });
-        var api = null as Api | null;
-        if (currentUser) {
-            api = jellyfin.createApi(serverUrl, currentUser.AccessToken);
-        } else {
-            api = jellyfin.createApi(serverUrl);
-        }
-        console.log(api);
-        setJellyfinClient(api);
-    }, [jellyfinClient, currentUser]);
-    // if (!config) return <SetupUI />
-    if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
+        database.bookmark.findMany({}).then(items => {
+            setBookmarks(items)
+        })
+    }, [])
     return (
         <ModernRootLayout onBack={() => setView("home")}>
             <RowLayout className="p-10 pb-0 flex flex-row items-center gap-3 sticky top-0 z-50 bg-neutral-900 z-60">
@@ -105,14 +90,23 @@ export default function StbApp() {
                 <div className="text-4xl font-medium stbkit-color-text">Bookmarks</div>
                 <div className="text-2xl stbkit-color-text">Save shows from Live TV to watch later</div>
             </div>
-            <AllBookmarksGrid />
+            <AllBookmarksGrid bookmarks={bookmarks} />
             <div className="h-[100dvh]" />
         </ModernRootLayout>
     )
 }
 
-function AllBookmarksGrid() {
+function AllBookmarksGrid({ bookmarks }: { bookmarks: Prisma.BookmarkModel[] | null }) {
     const focusNode = useRef<HTMLElement>(null);
+
+    // Split bookmarks into rows of 4
+    const rows: Prisma.BookmarkModel[][] = [];
+    if (bookmarks) {
+        for (let i = 0; i < bookmarks.length; i += 4) {
+            rows.push(bookmarks.slice(i, i + 4));
+        }
+    }
+
     return (
         <FocusNode className="home-row" ref={focusNode} onFocused={() => {
             focusNode.current?.scrollIntoView({ behavior: "smooth" });
@@ -120,12 +114,55 @@ function AllBookmarksGrid() {
             <div className="mb-3 pl-10 flex flex-row items-center">
                 <div className="text-2xl">All Bookmarks</div>
             </div>
-            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
-                {
-
-                }
-            </RowLayout>
+            <GridLayout className="gap-[10px] p-10 pt-5">
+                {bookmarks === null && (
+                    <div className="text-xl text-neutral-500 pl-2">Loading...</div>
+                )}
+                {bookmarks !== null && rows.length === 0 && (
+                    <div className="text-xl text-neutral-500 pl-2">No bookmarks yet.</div>
+                )}
+                {rows.map((row, i) => (
+                    <BookmarkGridRow key={i} items={row} />
+                ))}
+            </GridLayout>
         </FocusNode>
+    )
+}
+
+function BookmarkGridRow({ items }: { items: Prisma.BookmarkModel[] }) {
+    const focusNode = useRef<HTMLElement>(null);
+    return (
+        <FocusNode className="flex flex-row bookmark-grid-row gap-[10px]" ref={focusNode} onFocused={() => {
+            focusNode.current?.scrollIntoView({ behavior: "smooth" });
+        }}>
+            {items.map((bookmark) => (
+                <BookmarkItem key={bookmark.bookmarkId} bookmark={bookmark} />
+            ))}
+        </FocusNode>
+    )
+}
+
+function BookmarkItem({ bookmark }: { bookmark: Prisma.BookmarkModel }) {
+    const [isFocused, setIsFocused] = useState(false)
+    return (
+        <>
+            <ModernItem className="w-[292.5px] h-[164.53125px] relative" onFocused={() => setIsFocused(true)} onBlur={() => setIsFocused(false)}>
+                <img className="w-full h-full" src={bookmark.imageUrl + "?w=800"} />
+                <div className="w-full h-full flex flex-col items-start justify-end gap-2 absolute top-0 left-0 bg-black/50 text-white p-4">
+                    <TvIcon size={36} strokeWidth={1.4} className="stbkit-color-text" />
+                    <div className="text-base font-medium stbkit-color-text text-center line-clamp-2">{bookmark.mainTitle}</div>
+                </div>
+            </ModernItem>
+            {isFocused && <><div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className="w-full h-[284px] bg-neutral-900 p-10 flex flex-row gap-2">
+                <div className="flex-1 flex flex-col justify-center">
+                    <div className="text-4xl">{bookmark.mainTitle}</div>
+                    <div className="text-xl py-4">{new Date(bookmark.availabilityStart).toLocaleDateString()}</div>
+                    <div className="text-2xl">{bookmark.secondaryTitle ?? ""}</div>
+                </div>
+                <img src={bookmark.imageUrl + "?w=800"} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+            </div>
+                <div style={{ position: "fixed", top: "364px", left: "0", zIndex: 1, height: 30 }} className="w-full bg-neutral-900" /></>}
+        </>
     )
 }
 
