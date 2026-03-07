@@ -106,7 +106,10 @@ export default function LiveTV() {
             }}>
                 {mediaInfo && <>
                     {/* <ReactPlayer src={jellyfinClient?.basePath + mediaInfo.MediaSources?.[0].TranscodingUrl!} autoPlay controls /> */}
-                    <ReactPlayer style={{ width: "100vw", height: "100vh" }} src={mediaInfo.m3uItem.location} playing={true} />
+                    <ReactPlayer style={{ width: "100vw", height: "100vh" }} src={mediaInfo.m3uItem.location} onError={(e) => {
+                        e.currentTarget.src = "/unavailable-regular.mp4"
+                        e.currentTarget.play()
+                    }} playing={true} />
                     {showChannelNumber && tempChannelNumber == "" && <div style={{ position: "fixed" }} className="px-5 py-3 top-10 left-10 bg-black text-white flex items-center justify-center z-10">{channelNumber}: {mediaInfo.m3uItem.name}</div>}
                     {/* {showChannelNumber && tempChannelNumber == "" && <div style={{ position: "fixed" }} className="px-5 py-3 top-10 right-10 bg-black text-white flex items-center justify-center z-10">Press 🔴 to watch on iPlayer</div>} */}
                 </>}

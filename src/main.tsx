@@ -136,7 +136,7 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "search" && <Search />}
       {view.split("?")[0].split("/")[0] === "allapps" && <AllApps />}
       {view.split("?")[0].split("/")[0] === "bookmarks" && <Bookmarks />}
-      {config.smartFeatures?.camera?.autoPower && <HandTrackDemo hideinfo={true} />}
+      {config?.smartFeatures?.camera?.autoPower == true && <HandTrackDemo hideinfo={true} />}
     </GlobalContext.Provider>
   )
 }
