@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "electron electron.js"
+    "start": "electron electron.js --enable-features=UseOzonePlatform --ozone-platform=wayland"
   },
   "dependencies": {
     "@ecobridge.xyz/devicemanager": "^3.1.0",
