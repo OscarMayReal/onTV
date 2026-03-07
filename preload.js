@@ -7,6 +7,8 @@ import { exec } from 'child_process'
 import { PrismaClient } from "./src/generated/prisma/client.ts";
 import { PrismaPg } from '@prisma/adapter-pg'
 import { create } from "domain"
+import { Core, EmittedEvent } from "mdns-listener-advanced"
+import { StreamClient } from "./streamClient.ts"
 
 const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL,
@@ -67,3 +69,45 @@ contextBridge.exposeInMainWorld("db", {
         }
     }
 })
+
+contextBridge.exposeInMainWorld("createMdns", async (state) => {
+    return new Core(null)
+});
+
+var hasScanned = false
+
+contextBridge.exposeInMainWorld("scanMdns", ({ timeOut = 3000 }) => {
+    return new Promise((resolve, reject) => {
+        const mdns = new Core()
+        const scan = mdns.listen("_OnTvStb._tcp.local")
+        var items = []
+        scan.on(EmittedEvent.DISCOVERY, device => {
+            items.push(device)
+        })
+        setTimeout(() => {
+            console.log("done")
+            mdns.stop()
+            resolve(items)
+        }, timeOut)
+    })
+});
+
+contextBridge.exposeInMainWorld("playStream", async (apiBase, defaultPort) => {
+    const client = new StreamClient({
+        apiBase: "http://192.168.1.16:3000",
+        defaultPort: 9080
+    })
+    await client.startAndPlay({
+        videoDevice: '/dev/video0',
+        audioDevice: 'plughw:2,0',
+        framerate: 20,
+        videoSize: '1280x720',
+        videoBitrate: '2400k',
+        audioBitrate: '128k',
+    });
+    return {
+        stop: () => {
+            client.stopAndClosePlayer()
+        }
+    }
+});

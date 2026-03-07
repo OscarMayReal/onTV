@@ -31,6 +31,10 @@ export const GlobalContext = createContext({
   setCurrentUser: (user: UserDto | null) => { },
   jellyfinClient: null as Api | null,
   setJellyfinClient: (client: Api | null) => { },
+  hosts: null as any,
+  setHosts: (hosts: any) => { },
+  tvClient: null as any,
+  setTvClient: (client: any) => { },
 })
 
 createRoot(document.getElementById('root')!).render(
@@ -41,17 +45,20 @@ createRoot(document.getElementById('root')!).render(
 
 function AppWrapper() {
   const [view, setView] = useState("home")
+  const [tvClient, setTvClient] = useState(null)
   useEffect(() => {
-    if (!window.goHome) {
-      window.goHome = () => {
-        // if (JSON.parse(window.localStorage.getItem("config") ?? "null").isSetupCompleted) {
-        if (true) {
-          setView("home");
-        } else {
-          setView("setup");
-        }
+    window.goHome = () => {
+      console.log(tvClient)
+      if (typeof tvClient?.stop == 'function') {
+        console.log(tvClient)
+        tvClient.stop()
+        // setTvClient(null)
+      } else if (tvClient == null) {
+        setView("home");
+      } else {
+        setView("setup");
       }
-    }
+    };
     function PlayDirectionSound() {
       // document.body.requestFullscreen();
       const audio = new Audio(click);
@@ -92,7 +99,7 @@ function AppWrapper() {
     return () => {
       window.removeEventListener('keydown', KeyListener);
     }
-  }, [view]);
+  }, [view, tvClient]);
   const [jellyfinClient, setJellyfinClient] = useState<Api | null>(null)
   const [config, setConfig] = useState(JSON.parse(window.localStorage.getItem("config") ?? "null"))
   useEffect(() => {
@@ -102,8 +109,22 @@ function AppWrapper() {
     window.localStorage.setItem("config", JSON.stringify(config))
   }, [config])
   const [currentUser, setCurrentUser] = useState<UserDto | null>(JSON.parse(window.localStorage.getItem("user") ?? "null"))
+  const [hosts, setHosts] = useState({ loaded: false, items: [] })
+  useEffect(() => {
+    if (hosts.loaded) return
+    scanMdns({ timeOut: 3000 }).then(items => {
+      setHosts({ loaded: true, items })
+    }).catch(() => {
+      console.log("2nd")
+    })
+  }, [hosts])
   return (
-    <GlobalContext.Provider value={{ view, setView, config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient }}>
+    <GlobalContext.Provider value={{
+      view, setView, config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient, hosts, setHosts, tvClient, setTvClient: (inp) => {
+        console.log(inp)
+        setTvClient(inp)
+      }
+    }}>
       {view.split("?")[0].split("/")[0] === "home" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbApp /> : <App />)}
       {view.split("?")[0].split("/")[0] === "livetv" && (OnTVConfig.serviceInfo.mode == "stb" ? <LiveTV /> : <StreamTV />)}
       {view.split("?")[0].split("/")[0] === "keyboarddemo" && <KeyboardDemo />}

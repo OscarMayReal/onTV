@@ -99,7 +99,7 @@ function MainMenu({ selectedMenu, setSelectedMenu, setCurrentUser }: { selectedM
 
 function SourceMenu() {
     const processKey = useProcessKey();
-    const { view, setView } = useContext(GlobalContext);
+    const { view, setView, hosts, setTvClient } = useContext(GlobalContext);
     return (
         <ListColumn onBack={() => { processKey.left() }} >
             <div className="text-3xl stbkit-color-text pl-11 mb-3 mt-1 font-light text-white/50">Input Sources</div>
@@ -109,8 +109,17 @@ function SourceMenu() {
             <MenuListItem onSelected={() => {
                 setView("hdmi?input=2");
             }} text="HDMI 2 (This Box)" Icon={HdmiPortIcon} extraInfo={{ title: "HDMI 2", subtitle: "This Box", description: "Watch the device connected to HDMI 2" }} />
-            <MenuListItem onSelected={() => { }} text="HDMI 1 (Living Room)" Icon={NetworkIcon} extraInfo={{ title: "HDMI 1", subtitle: "Living Room", description: "Watch the device connected to HDMI 1 on the Living Room Box" }} />
-            <MenuListItem onSelected={() => { }} text="HDMI 1 (Kitchen)" Icon={NetworkIcon} extraInfo={{ title: "HDMI 1", subtitle: "Kitchen", description: "Watch the device connected to HDMI 1 on the Kitchen Box" }} />
+            {hosts.items.map((item, index) => <MenuListItem key={index} onSelected={() => {
+                playStream({
+                    apiBase: "http://192.168.1.16:3000",
+                    defaultPort: 9080
+                }).then((tvc) => {
+                    console.log(tvc)
+                    setTvClient(tvc)
+                })
+            }} text={"HDMI (" + item.name + ")"} Icon={NetworkIcon} extraInfo={{ title: "HDMI", subtitle: item.name, description: "Watch the device connected to HDMI on the " + item.name + " box" }} />)}
+            {/* <MenuListItem onSelected={() => { }} text="HDMI 1 (Living Room)" Icon={NetworkIcon} extraInfo={{ title: "HDMI 1", subtitle: "Living Room", description: "Watch the device connected to HDMI 1 on the Living Room Box" }} />
+            <MenuListItem onSelected={() => { }} text="HDMI 1 (Kitchen)" Icon={NetworkIcon} extraInfo={{ title: "HDMI 1", subtitle: "Kitchen", description: "Watch the device connected to HDMI 1 on the Kitchen Box" }} /> */}
         </ListColumn>
     )
 }
