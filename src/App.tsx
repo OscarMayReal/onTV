@@ -1,8 +1,8 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
 import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
 import click from "./public/click.mp3";
-import { ArrowRightCircleIcon, BookmarkIcon, Grid2X2Icon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
+import { ArrowRightCircleIcon, BookmarkIcon, Grid2X2Icon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, MedalIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
 import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";
@@ -14,6 +14,13 @@ import { GlobalContext } from "./main";
 import { returnAppsList } from "./apps";
 import { OnTVConfig } from "./info";
 import logo from "./assets/logo.svg";
+import { getFreeviewTvGuide, type FreeviewEvent } from "./lib/freeview";
+import type { IPlayerCollection, IPlayerElement } from "./lib/iplayer";
+
+const HomeContext = createContext({
+    setBgColor: null as (c: string) => void,
+    bgColor: "neutral-900"
+})
 
 export function profileBgFromText(text: string) {
     let hash = 0;
@@ -54,6 +61,7 @@ const serverUrl = "https://jellyfin.mayhouse.dedyn.io";
 // }
 
 export default function StbApp() {
+    const [bgColor, setBgColor] = useState("neutral-900")
     const { config, setConfig, currentUser, setCurrentUser, jellyfinClient, setJellyfinClient, setView } = useContext(GlobalContext);
     useEffect(() => {
         if (jellyfinClient) return;
@@ -77,10 +85,10 @@ export default function StbApp() {
         setJellyfinClient(api);
     }, [jellyfinClient, currentUser]);
     // if (!config) return <SetupUI />
-    if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
+    // if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
     return (
-        <ModernRootLayout>
-            <RowLayout className="p-10 pb-0 flex flex-row items-center gap-3 sticky top-0 z-50 bg-neutral-900 z-60">
+        <HomeContext.Provider value={{ setBgColor, bgColor }}><ModernRootLayout className={"bg-" + bgColor}>
+            <RowLayout className={"p-10 pb-0 flex flex-row items-center gap-3 sticky top-0 z-40 bg-" + bgColor + " z-60"}>
                 {/* <img src={logo} className="h-10 object-cover pr-5" /> */}
                 <div className="text-4xl font-medium stbkit-color-text">{OnTVConfig.serviceInfo.name}</div>
                 <div className="flex-1" />
@@ -99,12 +107,33 @@ export default function StbApp() {
                 <div className="text-4xl font-medium stbkit-color-text">Welcome to {OnTVConfig.serviceInfo.name}</div>
                 <div className="text-2xl stbkit-color-text">Stream your favorite movies, TV shows, and more using your {OnTVConfig.deviceInfo.name}</div>
             </div>
-            <AppsRow />
-            <SourcesRow />
-            <TVShowsOnNow api={jellyfinClient!} />
-            <div className="h-[100dvh]" />
-        </ModernRootLayout>
+            <FocusNode orientation="vertical" onFocused={() => setBgColor("neutral-900")} className={"bg-" + bgColor}>
+                <AppsRow />
+                <SourcesRow />
+                <TVShowsOnNow api={jellyfinClient!} />
+                <IplayerCollectionRow id="m0024gj3" />
+            </FocusNode>
+            <FocusNode orientation="vertical" onFocused={() => setBgColor("[#2d1341]")} className={"bg-" + bgColor}>
+                <SectionTitle />
+                <AppsByTagRow tag="sport" />
+                <IplayerCollectionRow id="m0015hl0" />
+            </FocusNode>
+            <div className="h-[100dvh]">
+                <div className="pl-10 text-2xl font-medium text-white/50">You have reached the end</div>
+            </div>
+        </ModernRootLayout></HomeContext.Provider>
     )
+}
+
+function SectionTitle() {
+    const focusNode = useRef<HTMLElement>(null);
+    return <FocusNode ref={focusNode} onFocused={() => {
+        focusNode.current?.scrollIntoView({ behavior: "smooth" });
+    }} className="scroll-mt-33 h-[204px] p-10 pt-0 flex flex-col justify-center gap-2">
+        <MedalIcon className="pb-2" size={50} />
+        <div className="text-4xl font-medium stbkit-color-text">Sports</div>
+        <div className="text-2xl stbkit-color-text">Watch sports</div>
+    </FocusNode>
 }
 
 function AppsRow() {
@@ -128,6 +157,34 @@ function AppsRow() {
                     <Grid2X2Icon size={49} />
                 </AppItem>
                 {returnAppsList({ jellyfinUrl: serverUrl }).map((app) => {
+                    return (
+                        <AppItem key={app.name} onSelected={() => {
+                            launchApp(app);
+                        }} showInfoHeader info={{
+                            name: app.name,
+                            overview: app.description,
+                            subtitle: app.company
+                        }}>
+                            <img src={app.icon} className="w-[200px] h-[98px] object-cover" />
+                        </AppItem>
+                    )
+                })}
+            </RowLayout>
+        </FocusNode>
+    )
+}
+
+function AppsByTagRow({ tag }: { tag: string }) {
+    const focusNode = useRef<HTMLElement>(null);
+    return (
+        <FocusNode className="home-row" ref={focusNode} onFocused={() => {
+            focusNode.current?.scrollIntoView({ behavior: "smooth" });
+        }}>
+            <div className="mb-3 pl-10 flex flex-row items-center">
+                <div className="text-2xl">Apps: {tag}</div>
+            </div>
+            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8">
+                {returnAppsList({ jellyfinUrl: serverUrl }).filter(item => item.tags?.includes(tag)).map((app) => {
                     return (
                         <AppItem key={app.name} onSelected={() => {
                             launchApp(app);
@@ -178,26 +235,17 @@ function SourcesRow() {
 }
 
 function TVShowsOnNow({ api }: { api: Api }) {
-    const [liveTvApi, setLiveTvApi] = useState<LiveTvApi | null>(null);
-    const [onNow, setOnNow] = useState<RecommendationDto | null>(null);
+    const [onNow, setOnNow] = useState<FreeviewEvent[] | null>(null);
     useEffect(() => {
-        if (!api) return;
-        const liveTvApi = getLiveTvApi(api);
-        setLiveTvApi(liveTvApi);
-        const userApi = getUserApi(api);
-        userApi.getCurrentUser().then((user) => {
-            liveTvApi.getRecommendedPrograms({
-                userId: user.data.Id,
-                limit: 30,
-                isAiring: true,
-                fields: [
-                    "Overview",
-                    "ChannelInfo",
-                ]
-            }).then((onNow) => {
-                console.log(onNow.data);
-                setOnNow(onNow.data);
-            });
+        getFreeviewTvGuide().then((items) => {
+            console.log(items)
+            var on: FreeviewEvent[] = []
+            items.data.programs.forEach(c => {
+                if (c.events.length == 0) return
+                on.push(c.events[0])
+            })
+            setOnNow(on)
+            console.log(on)
         });
     }, [api]);
     const focusNode = useRef<HTMLElement>(null);
@@ -209,7 +257,7 @@ function TVShowsOnNow({ api }: { api: Api }) {
                 <div className="text-2xl">TV Shows On Now</div>
             </div>
             <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8 show-row">
-                {onNow?.Items.map((item) => (
+                {onNow?.map((item) => (
                     <ShowCard key={item.Id} show={item} api={api} showInfoHeader={true} />
                 ))}
             </RowLayout>
@@ -217,14 +265,10 @@ function TVShowsOnNow({ api }: { api: Api }) {
     )
 }
 
-function ShowCard({ show, api, showInfoHeader }: { show: BaseItemDto, api: Api, showInfoHeader?: boolean }) {
-    const [image, setImage] = useState<string | null>(null);
+function ShowCard({ show, api, showInfoHeader }: { show: FreeviewEvent, api: Api, showInfoHeader?: boolean }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const [focused, setFocused] = useState(false);
-    useEffect(() => {
-        const imageApi = getImageApi(api);
-        setImage(imageApi.getItemImageUrl(show, "Primary"));
-    }, [show]);
+    const { bgColor } = useContext(HomeContext)
     return (
         <>
             <ModernItem ref={itemRef} onFocused={() => {
@@ -235,24 +279,101 @@ function ShowCard({ show, api, showInfoHeader }: { show: BaseItemDto, api: Api, 
                 setFocused(false);
             }} className="w-[125px] min-w-[125px] h-[180px]">
                 {/* <div>{show.Name}</div> */}
-                {image && <img src={image} className="w-full h-full object-cover" onError={(e) => { setImage(null) }} />}
-                {!image && <div className="w-full h-full flex items-center justify-center">
+                {show.image_url && <img src={show.image_url + "?w=800"} className="w-full h-full object-cover" />}
+                {!show.image_url && <div className="w-full h-full flex items-center justify-center">
                     <VideoIcon size={50} strokeWidth={1.4} className="stbkit-color-text" />
                 </div>}
             </ModernItem>
             {showInfoHeader && focused && (
-                <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className="w-full h-[250px] bg-neutral-900 p-10 flex flex-row gap-2">
+                <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className={"w-full h-[250px] bg-" + bgColor + " p-10 flex flex-row gap-2"}>
                     <div className="flex-1">
-                        <div className="text-4xl">{show.Name}</div>
-                        <div className="text-xl py-4">{show.ChannelName} • {new Date(show.StartDate).toLocaleTimeString()} - {new Date(show.EndDate).toLocaleTimeString()}</div>
-                        <div className="text-2xl">{show.Overview}</div>
+                        <div className="text-4xl">{show.main_title}</div>
+                        <div className="text-xl py-4">{show.duration} • Started at {new Date(show.start_time).toLocaleTimeString()}</div>
+                        <div className="text-2xl">{show.secondary_title}</div>
                     </div>
-                    <img src={image} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+                    {/* <img src={image} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} /> */}
                 </div>
             )}
         </>
     )
 }
+
+// function TVShowsOnNow({ api }: { api: Api }) {
+//     const [liveTvApi, setLiveTvApi] = useState<LiveTvApi | null>(null);
+//     const [onNow, setOnNow] = useState<RecommendationDto | null>(null);
+//     useEffect(() => {
+//         if (!api) return;
+//         const liveTvApi = getLiveTvApi(api);
+//         setLiveTvApi(liveTvApi);
+//         const userApi = getUserApi(api);
+//         userApi.getCurrentUser().then((user) => {
+//             liveTvApi.getRecommendedPrograms({
+//                 userId: user.data.Id,
+//                 limit: 30,
+//                 isAiring: true,
+//                 fields: [
+//                     "Overview",
+//                     "ChannelInfo",
+//                 ]
+//             }).then((onNow) => {
+//                 console.log(onNow.data);
+//                 setOnNow(onNow.data);
+//             });
+//         });
+//     }, [api]);
+//     const focusNode = useRef<HTMLElement>(null);
+//     return (
+//         <FocusNode className="home-row" ref={focusNode} onFocused={() => {
+//             focusNode.current?.scrollIntoView({ behavior: "smooth" });
+//         }}>
+//             <div className="mb-2 pl-10 flex flex-row items-center">
+//                 <div className="text-2xl">TV Shows On Now</div>
+//             </div>
+//             <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8 show-row">
+//                 {onNow?.Items.map((item) => (
+//                     <ShowCard key={item.Id} show={item} api={api} showInfoHeader={true} />
+//                 ))}
+//             </RowLayout>
+//         </FocusNode>
+//     )
+// }
+
+// function ShowCard({ show, api, showInfoHeader }: { show: BaseItemDto, api: Api, showInfoHeader?: boolean }) {
+//     const [image, setImage] = useState<string | null>(null);
+//     const itemRef = useRef<HTMLDivElement>(null);
+//     const [focused, setFocused] = useState(false);
+//     useEffect(() => {
+//         const imageApi = getImageApi(api);
+//         setImage(imageApi.getItemImageUrl(show, "Primary"));
+//     }, [show]);
+//     return (
+//         <>
+//             <ModernItem ref={itemRef} onFocused={() => {
+//                 setFocused(true);
+//                 // itemRef.current?.scrollIntoView({ behavior: 'smooth' });
+//                 itemRef.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemRef.current?.offsetLeft! - 40 });
+//             }} onBlur={() => {
+//                 setFocused(false);
+//             }} className="w-[125px] min-w-[125px] h-[180px]">
+//                 {/* <div>{show.Name}</div> */}
+//                 {image && <img src={image} className="w-full h-full object-cover" onError={(e) => { setImage(null) }} />}
+//                 {!image && <div className="w-full h-full flex items-center justify-center">
+//                     <VideoIcon size={50} strokeWidth={1.4} className="stbkit-color-text" />
+//                 </div>}
+//             </ModernItem>
+//             {showInfoHeader && focused && (
+//                 <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className="w-full h-[250px] bg-neutral-900 p-10 flex flex-row gap-2">
+//                     <div className="flex-1">
+//                         <div className="text-4xl">{show.Name}</div>
+//                         <div className="text-xl py-4">{show.ChannelName} • {new Date(show.StartDate).toLocaleTimeString()} - {new Date(show.EndDate).toLocaleTimeString()}</div>
+//                         <div className="text-2xl">{show.Overview}</div>
+//                     </div>
+//                     <img src={image} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
+//                 </div>
+//             )}
+//         </>
+//     )
+// }
 
 function UserPicker({ api, setCurrentUser, currentUser }: { api: Api, setCurrentUser: (user: UserDto) => void, currentUser: UserDto | null }) {
     const [users, setUsers] = useState<UserDto[]>([]);
@@ -285,6 +406,7 @@ interface AppItemInfo {
 function AppItem({ children, onSelected, showInfoHeader, info, type = "app" }: { children: React.ReactNode, onSelected?: () => void, showInfoHeader?: boolean, info?: AppItemInfo, type?: "icon" | "app" }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const [focused, setFocused] = useState(false);
+    const { bgColor } = useContext(HomeContext)
     return (
         <>
             <ModernItem className={(type == "icon" ? "w-[98px] min-w-[98px]" : "w-[200px] min-w-[200px]") + " h-[98px] flex flex-row items-center justify-center gap-3"} ref={itemRef} onFocused={() => {
@@ -296,7 +418,7 @@ function AppItem({ children, onSelected, showInfoHeader, info, type = "app" }: {
             }} onSelected={onSelected}>
                 {children}
             </ModernItem>
-            {showInfoHeader && focused && <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className="w-full h-[250px] bg-neutral-900 p-10 flex flex-row gap-2">
+            {showInfoHeader && focused && <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className={"w-full h-[250px] bg-" + bgColor + " p-10 flex flex-row gap-2"}>
                 <div className="flex-1">
                     <div className="text-4xl">{info?.name}</div>
                     <div className="text-xl py-4">{info?.subtitle}</div>
@@ -348,5 +470,62 @@ function SetupUI() {
                 <ModernListButton Icon={XCircleIcon} Text="Skip" />
             </ColumnLayout>
         </ModernRootLayout>
+    )
+}
+
+function IplayerCollectionRow({ id }: { id: string }) {
+    const [data, setData] = useState<IPlayerCollection | null>(null);
+    useEffect(() => {
+        fetch("https://ibl.api.bbci.co.uk/ibl/v1/groups/" + id + "/episodes?rights=tv&per_page=40&mixin=live").then(res => res.json()).then(res => {
+            setData(res)
+        })
+    }, []);
+    const focusNode = useRef<HTMLElement>(null);
+    return (
+        <FocusNode className="home-row" ref={focusNode} onFocused={() => {
+            focusNode.current?.scrollIntoView({ behavior: "smooth" });
+        }}>
+            <div className="mb-2 pl-10 flex flex-row items-center">
+                <div className="text-2xl">BBC iPlayer: {data?.group_episodes.group.title}</div>
+            </div>
+            <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8 show-row">
+                {data?.group_episodes.elements?.map((item) => (
+                    <IplayerCollectionCard key={item.Id} item={item} showInfoHeader={true} />
+                ))}
+            </RowLayout>
+        </FocusNode>
+    )
+}
+
+function IplayerCollectionCard({ item, showInfoHeader }: { item: IPlayerElement, showInfoHeader?: boolean }) {
+    const itemRef = useRef<HTMLDivElement>(null);
+    const [focused, setFocused] = useState(false);
+    const { bgColor } = useContext(HomeContext)
+    return (
+        <>
+            <ModernItem ref={itemRef} onFocused={() => {
+                setFocused(true);
+                // itemRef.current?.scrollIntoView({ behavior: 'smooth' });
+                itemRef.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemRef.current?.offsetLeft! - 40 });
+            }} onBlur={() => {
+                setFocused(false);
+            }} className="w-[125px] min-w-[125px] h-[180px]">
+                {/* <div>{show.Name}</div> */}
+                {item.images.portrait && <img src={item.images.portrait.replace("{recipe}", "304x456")} className="w-full h-full object-cover" />}
+                {!item.images.portrait && <div className="w-full h-full flex items-center justify-center">
+                    <VideoIcon size={50} strokeWidth={1.4} className="stbkit-color-text" />
+                </div>}
+            </ModernItem>
+            {showInfoHeader && focused && (
+                <div style={{ position: "fixed", top: "80px", left: "0", zIndex: 50, }} className={"w-full h-[250px] bg-" + bgColor + " p-10 flex flex-row gap-2"}>
+                    <div className="flex-1">
+                        <div className="text-4xl">{item.title}</div>
+                        <div className="text-xl py-4">{item.status} • Released at {new Date(item.release_date_time).toLocaleTimeString()}</div>
+                        <div className="text-2xl">{item.synopses.medium}</div>
+                    </div>
+                    {/* <img src={image} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} /> */}
+                </div>
+            )}
+        </>
     )
 }

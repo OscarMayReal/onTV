@@ -17,7 +17,8 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             url: "https://www.live.bbctvapps.co.uk/tap/iplayer",
             company: "BBC",
             description: "With the BBC iPlayer app you’ll never miss your favourite BBC TV programmes. Catch-up on the last 30 days and enjoy BBC iPlayer exclusive shows.",
-            category: "UK Free to Air"
+            category: "UK Free to Air",
+            tags: ["sport", "entertainment", "british", "freetoair"]
         },
         {
             name: "BBC Sounds",
@@ -25,7 +26,8 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             url: "https://www.live.bbctvapps.co.uk/tap/sounds",
             company: "BBC",
             description: "BBC Sounds is the way to listen to BBC audio – your favourite programmes, podcasts, radio stations and music all in one place. Explore a wide variety of new podcasts, music mixes and live sets. Listen live to BBC radio stations. Catch up or listen again to your favourite BBC radio shows.",
-            category: "UK Free to Air"
+            category: "UK Free to Air",
+            tags: ["audio", "entertainment", "british", "freetoair"]
         },
         {
             name: "Apple TV",
@@ -98,7 +100,8 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             url: "https://tv.dazn.com/app/sky/en-GB/home",
             company: "DAZN",
             description: "The Ultimate Sports Entertainment Platform. DAZN is the only truly global pure-play sports entertainment platform. We uniquely integrate the entire fan experience for fans to watch, play, and socialize, all in one place.",
-            category: "Premium"
+            category: "Premium",
+            tags: ["sport"]
         },
         {
             name: "ITVX",
@@ -106,7 +109,8 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             url: "https://app.10ft.itv.com/3.681.0/androidtv/",
             company: "ITV",
             description: "Welcome to the ITVX, your home for everything ITV! Here, you can stream live telly, catch up on the programmes you’ve missed and binge on the box sets that everyone’s talking about.",
-            category: "UK Free to Air"
+            category: "UK Free to Air",
+            tags: ["sport", "entertainment", "british", "freetoair"]
         },
         {
             name: "Tubi",
