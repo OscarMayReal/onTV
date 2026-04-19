@@ -1,3 +1,5 @@
+import { Tags } from "lucide-react"
+
 export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
     var apps = [
         {
@@ -18,7 +20,7 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             company: "BBC",
             description: "With the BBC iPlayer app you’ll never miss your favourite BBC TV programmes. Catch-up on the last 30 days and enjoy BBC iPlayer exclusive shows.",
             category: "UK Free to Air",
-            tags: ["sport", "entertainment", "british", "freetoair"]
+            tags: ["sport", "entertainment", "british", "freetoair", "news", "kids"]
         },
         {
             name: "BBC Sounds",
@@ -27,7 +29,7 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             company: "BBC",
             description: "BBC Sounds is the way to listen to BBC audio – your favourite programmes, podcasts, radio stations and music all in one place. Explore a wide variety of new podcasts, music mixes and live sets. Listen live to BBC radio stations. Catch up or listen again to your favourite BBC radio shows.",
             category: "UK Free to Air",
-            tags: ["audio", "entertainment", "british", "freetoair"]
+            tags: ["audio", "entertainment", "british", "freetoair", "news"]
         },
         {
             name: "Apple TV",
@@ -123,10 +125,12 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
         {
             name: "UKTV Play",
             icon: "https://i.ibb.co/VFVX74k/uktvplay.png",
-            url: "https://tvapp.uktv.co.uk/?brand=default&amp;model=fvp&amp;house_num=None",
+            url: "https://ctv-primary.ppdevuktv.co.uk",
+            // url: "https://tvapp.uktv.co.uk/?brand=default&amp;model=fvp&amp;house_num=None",
             company: "UKTV",
             description: "TV Shows and Programmes: Catch up on all your favourite TV series, entertainment shows, on-demand television episodes, and streaming programmes with UKTV Play – the ultimate online video streaming destination for British television!",
-            category: "UK Free to Air"
+            category: "UK Free to Air",
+            width: 1920,
         },
         {
             name: "5 on Demand",
@@ -151,7 +155,16 @@ export function returnAppsList(config: { jellyfinUrl: string | undefined }) {
             company: "Deezer",
             description: "Music lover? Stream and listen to top radio hits or discover new songs with the Deezer music player on your OnTV Play Streaming device.",
             category: "Music"
-        }
+        },
+        {
+            name: "Euronews",
+            icon: "https://eu.app.titanos.tv/img/width/362/height/204/quality/80/kwlbeepu0zw1i8q5kt8d9sz8woa4",
+            url: "https://whalelive.zeasn.tv/whalelive_web/?productId=MbobFBw41DxO1Ka82rzlOg%3D%3D&vodLang=en",
+            company: "Euronews",
+            description: "Latest breaking news available as free video on demand. Stay informed on European and world news about economy, politics, diplomacy… with Euronews.",
+            category: "News",
+            Tags: ["news"]
+        },
     ]
     if (config?.jellyfinUrl) {
         apps.push(

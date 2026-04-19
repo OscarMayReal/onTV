@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type JSX } from "react";
 import { ColumnLayout, GridLayout, MenuTile, RootLayout, RowLayout } from "./components/stbkit";
 import { ModernIconButton, ModernItem, ModernItemFill, ModernListButton, ModernRootLayout } from "./components/stbkit/modern";
 import click from "./public/click.mp3";
-import { ArrowRightCircleIcon, BookmarkIcon, Grid2X2Icon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, MedalIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
+import { ArrowRightCircleIcon, BabyIcon, BookmarkIcon, Grid2X2Icon, HardDriveIcon, HdmiPortIcon, KeyboardIcon, MedalIcon, NewspaperIcon, ScreenShareIcon, SearchIcon, SettingsIcon, Tv2Icon, TvIcon, UserIcon, VideoIcon, XCircleIcon } from "lucide-react";
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api.js';
 import type { BaseItemDto, RecommendationDto, UserDto } from "@jellyfin/sdk/lib/generated-client/models";
@@ -114,9 +114,24 @@ export default function StbApp() {
                 <IplayerCollectionRow id="m0024gj3" />
             </FocusNode>
             <FocusNode orientation="vertical" onFocused={() => setBgColor("[#2d1341]")} className={"bg-" + bgColor}>
-                <SectionTitle />
+                <SectionTitle Icon={MedalIcon} title="Sports" subtitle="Watch Sports" />
                 <AppsByTagRow tag="sport" />
                 <IplayerCollectionRow id="m0015hl0" />
+            </FocusNode>
+            <FocusNode orientation="vertical" onFocused={() => setBgColor("[#660909]")} className={"bg-" + bgColor}>
+                <SectionTitle Icon={NewspaperIcon} title="News" subtitle="Watch News" />
+                <AppsByTagRow tag="news" />
+                <IplayerCollectionRow elementimages={"promotional_with_logo"} id="latest-news" />
+                <IplayerCollectionRow elementimages={"promotional_with_logo"} id="m00133vz" />
+                <IplayerCollectionRow elementimages={"promotional_with_logo"} id="local-news" />
+                <div className="h-0 bg-[#660909]" />
+            </FocusNode>
+            <FocusNode orientation="vertical" onFocused={() => setBgColor("[#887A0F]")} className={"bg-" + bgColor}>
+                <SectionTitle Icon={BabyIcon} title="Kids" subtitle="Watch Kids Shows" />
+                <AppsByTagRow tag="kids" />
+                <IplayerCollectionRow elementimages={"promotional_with_logo"} id="m001b670" />
+                <IplayerCollectionRow elementimages={"promotional_with_logo"} id="m001b677" />
+                <div className="h-0 bg-[#887A0F]" />
             </FocusNode>
             <div className="h-[100dvh]">
                 <div className="pl-10 text-2xl font-medium text-white/50">You have reached the end</div>
@@ -125,14 +140,14 @@ export default function StbApp() {
     )
 }
 
-function SectionTitle() {
+function SectionTitle({ Icon, title, subtitle }: { Icon: JSX.ElementType, title: string, subtitle: string }) {
     const focusNode = useRef<HTMLElement>(null);
     return <FocusNode ref={focusNode} onFocused={() => {
         focusNode.current?.scrollIntoView({ behavior: "smooth" });
     }} className="scroll-mt-33 h-[204px] p-10 pt-0 flex flex-col justify-center gap-2">
-        <MedalIcon className="pb-2" size={50} />
-        <div className="text-4xl font-medium stbkit-color-text">Sports</div>
-        <div className="text-2xl stbkit-color-text">Watch sports</div>
+        <Icon className="pb-2" size={50} />
+        <div className="text-4xl font-medium stbkit-color-text">{title}</div>
+        <div className="text-2xl stbkit-color-text">{subtitle}</div>
     </FocusNode>
 }
 
@@ -473,7 +488,7 @@ function SetupUI() {
     )
 }
 
-function IplayerCollectionRow({ id }: { id: string }) {
+function IplayerCollectionRow({ id, elementimages = "portrait" }: { id: string, elementimages: String }) {
     const [data, setData] = useState<IPlayerCollection | null>(null);
     useEffect(() => {
         fetch("https://ibl.api.bbci.co.uk/ibl/v1/groups/" + id + "/episodes?rights=tv&per_page=40&mixin=live").then(res => res.json()).then(res => {
@@ -490,29 +505,37 @@ function IplayerCollectionRow({ id }: { id: string }) {
             </div>
             <RowLayout className="gap-2 pl-10 pr-10 scroll-row mb-8 show-row">
                 {data?.group_episodes.elements?.map((item) => (
-                    <IplayerCollectionCard key={item.Id} item={item} showInfoHeader={true} />
+                    <IplayerCollectionCard elementimages={elementimages} key={item.Id} item={item} showInfoHeader={true} />
                 ))}
             </RowLayout>
         </FocusNode>
     )
 }
 
-function IplayerCollectionCard({ item, showInfoHeader }: { item: IPlayerElement, showInfoHeader?: boolean }) {
+function IplayerCollectionCard({ item, showInfoHeader, elementimages = "portrait" }: { item: IPlayerElement, showInfoHeader?: boolean, elementimages: String }) {
     const itemRef = useRef<HTMLDivElement>(null);
     const [focused, setFocused] = useState(false);
     const { bgColor } = useContext(HomeContext)
     return (
         <>
-            <ModernItem ref={itemRef} onFocused={() => {
+            <ModernItem ref={itemRef} onSelected={() => {
+                var app = returnAppsList().find(item => item.name == "BBC iPlayer")
+                app.url = app?.url + "?campaign=catalogue&deeplink=tv/playback/urn:bbc:iplayer:episode:" + item.id + "&medium=referral&partner=net.freeviewplay"
+                launchApp(app)
+            }} onFocused={() => {
                 setFocused(true);
                 // itemRef.current?.scrollIntoView({ behavior: 'smooth' });
                 itemRef.current?.parentElement?.scrollTo({ behavior: "smooth", left: itemRef.current?.offsetLeft! - 40 });
             }} onBlur={() => {
                 setFocused(false);
-            }} className="w-[125px] min-w-[125px] h-[180px]">
+            }} className="w-fit min-w-fit h-[180px]">
                 {/* <div>{show.Name}</div> */}
-                {item.images.portrait && <img src={item.images.portrait.replace("{recipe}", "304x456")} className="w-full h-full object-cover" />}
-                {!item.images.portrait && <div className="w-full h-full flex items-center justify-center">
+                {(item.images.portrait || item.images.standard) && elementimages == "portrait" && <img src={item.images.portrait !== undefined ? item.images.portrait.replace("{recipe}", "304x456") : item.images.standard.replace("{recipe}", "464x261")} className="w-full h-full object-cover" />}
+                {(item.images.promotional_with_logo || item.images.standard) && elementimages == "promotional_with_logo" && <img src={item.images.promotional_with_logo !== undefined ? item.images.promotional_with_logo.replace("{recipe}", "464x261") : item.images.standard.replace("{recipe}", "464x261")} className="w-full h-full object-cover" />}
+                {!(item.images.promotional_with_logo || item.images.standard) && elementimages == "promotional_with_logo" && <div className={"w-[320px] h-full flex items-center justify-center"}>
+                    <VideoIcon size={50} strokeWidth={1.4} className="stbkit-color-text" />
+                </div>}
+                {!(item.images.portrait || item.images.standard) && elementimages == "portrait" && <div className={"w-[120px] h-full flex items-center justify-center"}>
                     <VideoIcon size={50} strokeWidth={1.4} className="stbkit-color-text" />
                 </div>}
             </ModernItem>
@@ -521,7 +544,7 @@ function IplayerCollectionCard({ item, showInfoHeader }: { item: IPlayerElement,
                     <div className="flex-1">
                         <div className="text-4xl">{item.title}</div>
                         <div className="text-xl py-4">{item.status} • Released at {new Date(item.release_date_time).toLocaleTimeString()}</div>
-                        <div className="text-2xl">{item.synopses.medium}</div>
+                        <div className="text-2xl">{item.synopses.medium !== undefined ? item.synopses.medium : item.synopses.small}</div>
                     </div>
                     {/* <img src={image} className="h-full w-auto object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} /> */}
                 </div>
