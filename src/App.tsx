@@ -117,6 +117,7 @@ export default function StbApp() {
                 <SectionTitle Icon={MedalIcon} title="Sports" subtitle="Watch Sports" />
                 <AppsByTagRow tag="sport" />
                 <IplayerCollectionRow id="m0015hl0" />
+                <div className="h-0 bg-[#2d1341]" />
             </FocusNode>
             <FocusNode orientation="vertical" onFocused={() => setBgColor("[#660909]")} className={"bg-" + bgColor}>
                 <SectionTitle Icon={NewspaperIcon} title="News" subtitle="Watch News" />

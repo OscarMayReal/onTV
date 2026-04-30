@@ -91,7 +91,7 @@ export default function StbApp() {
         setJellyfinClient(api);
     }, [jellyfinClient, currentUser]);
     // if (!config) return <SetupUI />
-    if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
+    // if (!currentUser) return <UserPicker api={jellyfinClient!} setCurrentUser={setCurrentUser} currentUser={currentUser} />
     return (
         <ModernRootLayout onBack={() => setView("home")}>
             <RowLayout className="p-10 pb-0 flex flex-row items-center gap-3 sticky top-0 z-50 bg-neutral-900 z-60">

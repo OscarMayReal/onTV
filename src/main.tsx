@@ -128,7 +128,8 @@ function AppWrapper() {
       {view.split("?")[0].split("/")[0] === "home" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbApp /> : <App />)}
       {view.split("?")[0].split("/")[0] === "livetv" && (OnTVConfig.serviceInfo.mode == "stb" ? <LiveTV /> : <StreamTV />)}
       {view.split("?")[0].split("/")[0] === "keyboarddemo" && <KeyboardDemo />}
-      {view.split("?")[0].split("/")[0] === "settings" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbSettings /> : <Settings />)}
+      {/* {view.split("?")[0].split("/")[0] === "settings" && (OnTVConfig.serviceInfo.mode == "stb" ? <StbSettings /> : <Settings />)} */}
+      {view.split("?")[0].split("/")[0] === "settings" && <StbSettings />}
       {view.split("?")[0].split("/")[0] === "hdmi" && <HDMIViewer />}
       {view.split("?")[0].split("/")[0] === "recordings" && <Recordings />}
       {view.split("?")[0].split("/")[0] === "setup" && <Setup />}
