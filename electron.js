@@ -1,5 +1,6 @@
 import { app, BrowserWindow, globalShortcut, screen, ipcMain } from 'electron';
 import { fork, spawn } from 'child_process';
+import fs from 'fs';
 import path from 'path';
 import JustWatch from 'justwatch-api-client'
 
@@ -7,9 +8,20 @@ var appwindow;
 var mainWindow;
 var goingToUrl;
 var jw = new JustWatch(5000)
+const DESIGN_WIDTH = 1280;
+
+const databasePath = app.isPackaged
+    ? path.join(app.getPath('userData'), 'ontv.db')
+    : path.join(import.meta.dirname, 'prisma', 'dev.db');
+
+fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+process.env.DATABASE_URL = `file:${databasePath}`;
 
 // var server = fork('server.js');
-var server = spawn('npm', ['run', 'dev']);
+var server = app.isPackaged ? null : spawn('npm', ['run', 'dev'], {
+    shell: process.platform === 'win32',
+    stdio: 'inherit',
+});
 
 // server.on('message', (message) => {
 //     var json = JSON.parse(message);
@@ -129,8 +141,7 @@ function launchApp(json) {
     mainWindow.hide();
     appwindow.webContents.setUserAgent(json.userAgent);
     appwindow.loadURL(json.url);
-    var localscaleFactor = 1 / ((json.width || 1280) / appwindow.getSize()[0]);
-    appwindow.webContents.setZoomFactor(localscaleFactor);
+    applyWindowScale(appwindow, json.width || DESIGN_WIDTH);
     appwindow.on('close', () => {
         mainWindow.show();
     });
@@ -138,11 +149,21 @@ function launchApp(json) {
         mainWindow.show();
     })
     appwindow.webContents.on('did-start-navigation', (event, url) => {
-        var localscaleFactor = 1 / ((json.width || 1280) / appwindow.getSize()[0]);
         setTimeout(() => {
-            appwindow.webContents.setZoomFactor(localscaleFactor);
+            applyWindowScale(appwindow, json.width || DESIGN_WIDTH);
         }, 100);
     })
+}
+
+function applyWindowScale(window, designWidth = DESIGN_WIDTH) {
+    if (!window || window.isDestroyed()) return;
+
+    const [width] = window.getContentSize();
+    const scaleFactor = width / designWidth;
+    window.webContents.setZoomFactor(scaleFactor || 1);
+    window.webContents.executeJavaScript(
+        `console.info("[OnTV] window scale", ${JSON.stringify({ width, designWidth, scaleFactor })})`
+    ).catch(() => { });
 }
 
 function createWindow() {
@@ -157,6 +178,7 @@ function createWindow() {
             sandbox: false
         }
     });
+    mainWindow.setFullScreen(true);
     mainWindow.setMenuBarVisibility(false);
     // mainWindow.webContents.setWindowOpenHandler((details) => {
     //     mainWindow.hide();
@@ -202,17 +224,22 @@ function createWindow() {
     let width = screenDimention.width
     let height = screenDimention.height
 
-    mainWindow.loadURL('http://localhost:5173/');
-    setTimeout(() => {
-        let scaleFactor = 1 / (1280 / mainWindow.getSize()[0]);
-        mainWindow.webContents.setZoomFactor(scaleFactor);
-    }, 100);
+    if (app.isPackaged) {
+        mainWindow.loadFile(path.join(import.meta.dirname, 'dist', 'index.html'));
+    } else {
+        mainWindow.loadURL('http://localhost:5173/');
+    }
+    mainWindow.webContents.once('did-finish-load', () => {
+        setTimeout(() => applyWindowScale(mainWindow), 100);
+        setTimeout(() => applyWindowScale(mainWindow), 500);
+    });
+    mainWindow.once("enter-full-screen", () => applyWindowScale(mainWindow));
+    mainWindow.once("ready-to-show", () => applyWindowScale(mainWindow));
     mainWindow.addListener("resize", () => {
-        let width = mainWindow.getSize()[0]
-        let height = mainWindow.getSize()[1]
-
-        let scaleFactor = 1 / (1280 / width);
-        mainWindow.webContents.setZoomFactor(scaleFactor);
+        applyWindowScale(mainWindow);
+    })
+    screen.on("display-metrics-changed", () => {
+        applyWindowScale(mainWindow);
     })
     // mainWindow.webContents.openDevTools();
     // mainWindow.webContents.executeJavaScript('localStorage.clear()');
@@ -250,6 +277,9 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
+    if (server) {
+        server.kill();
+    }
     if (process.platform !== 'darwin') {
         app.quit();
     }

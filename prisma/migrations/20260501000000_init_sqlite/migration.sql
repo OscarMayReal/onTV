@@ -1,16 +1,15 @@
 -- CreateTable
 CREATE TABLE "Bookmark" (
-    "bookmarkId" TEXT NOT NULL,
+    "bookmarkId" TEXT NOT NULL PRIMARY KEY,
     "programId" TEXT NOT NULL,
-    "availabilityStart" TIMESTAMP(3) NOT NULL,
-    "availabilityEnd" TIMESTAMP(3) NOT NULL,
-    "imageUrl" TEXT NOT NULL,
+    "availabilityStart" DATETIME NOT NULL,
+    "availabilityEnd" DATETIME NOT NULL,
+    "imageUrl" TEXT,
     "mainTitle" TEXT NOT NULL,
     "secondaryTitle" TEXT,
     "eventUUID" TEXT,
     "originalEventLocator" TEXT,
-
-    CONSTRAINT "Bookmark_pkey" PRIMARY KEY ("bookmarkId")
+    "onDemand" JSONB NOT NULL
 );
 
 -- CreateIndex

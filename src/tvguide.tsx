@@ -18,6 +18,7 @@ import { useClock } from "./lib/useclock";
 import { Prisma, type Bookmark } from "./generated/prisma/browser";
 const MAX_EVENTS = 999;
 const PX_PER_MIN = 4;
+const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
 // const MIN_EVENT_W = 180;
 // const MAX_EVENT_W = 560;
 
@@ -45,7 +46,7 @@ function TVGuide() {
     // navigation lands on the event with the most overlap in the new row.
     const focusedWindowRef = useRef<{ start: number; end: number }>({ start: Date.now(), end: Date.now() });
     useEffect(() => {
-        fetch('/stream.m3u.txt').then(res => res.text()).then((data) => {
+        fetch(publicAsset('stream.m3u.txt')).then(res => res.text()).then((data) => {
             const parser = new M3uParser()
             console.log(data)
             const playlist = parser.parse(data)

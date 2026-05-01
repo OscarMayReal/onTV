@@ -14,6 +14,8 @@ import { M3uMedia, M3uParser } from 'm3u-parser-generator';
 import { getCurrentEvent, getFreeviewTvGuide, type FreeviewServiceProgram } from "./lib/freeview";
 import { ArrowLeftIcon, BookmarkIcon, TvIcon } from "lucide-react";
 
+const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+
 export default function LiveTV() {
     const { jellyfinClient, setView } = useContext(GlobalContext);
     const [liveTvApi, setLiveTvApi] = useState<LiveTvApi | null>(null);
@@ -33,7 +35,7 @@ export default function LiveTV() {
         });
     }, []);
     useEffect(() => {
-        fetch('/stream.m3u.txt').then(res => res.text()).then((data) => {
+        fetch(publicAsset('stream.m3u.txt')).then(res => res.text()).then((data) => {
             const parser = new M3uParser()
             console.log(data)
             const playlist = parser.parse(data)
@@ -106,8 +108,8 @@ export default function LiveTV() {
             }}>
                 {mediaInfo && <>
                     {/* <ReactPlayer src={jellyfinClient?.basePath + mediaInfo.MediaSources?.[0].TranscodingUrl!} autoPlay controls /> */}
-                    <ReactPlayer style={{ width: "100vw", height: "100vh" }} src={mediaInfo.m3uItem.location} onError={(e) => {
-                        e.currentTarget.src = "/unavailable-regular.mp4"
+                    <ReactPlayer style={{ width: "1280px", height: "720px" }} width="1280px" height="720px" src={mediaInfo.m3uItem.location} onError={(e) => {
+                        e.currentTarget.src = publicAsset("unavailable-regular.mp4")
                         e.currentTarget.play()
                     }} playing={true} />
                     {showChannelNumber && tempChannelNumber == "" && <div style={{ position: "fixed" }} className="px-5 py-3 top-10 left-10 bg-black text-white flex items-center justify-center z-10">{channelNumber}: {mediaInfo.m3uItem.name}</div>}

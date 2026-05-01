@@ -4,14 +4,44 @@ import { createBluetooth } from 'node-ble'
 import { ipcRenderer } from 'electron'
 import wifi from 'node-wifi'
 import { exec } from 'child_process'
+import fs from 'fs'
+import path from 'path'
+import Database from 'better-sqlite3'
 import { PrismaClient } from "./src/generated/prisma/client.ts";
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'
 import { create } from "domain"
 import { Core, EmittedEvent } from "mdns-listener-advanced"
 import { StreamClient } from "./streamClient.ts"
 
-const adapter = new PrismaPg({
-    connectionString: process.env.DATABASE_URL,
+const databaseUrl = process.env.DATABASE_URL || "file:./prisma/dev.db";
+
+if (databaseUrl.startsWith("file:")) {
+    const databasePath = databaseUrl.slice("file:".length);
+    fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+
+    const sqlite = new Database(databasePath);
+    sqlite.exec(`
+        CREATE TABLE IF NOT EXISTS "Bookmark" (
+            "bookmarkId" TEXT NOT NULL PRIMARY KEY,
+            "programId" TEXT NOT NULL,
+            "availabilityStart" DATETIME NOT NULL,
+            "availabilityEnd" DATETIME NOT NULL,
+            "imageUrl" TEXT,
+            "mainTitle" TEXT NOT NULL,
+            "secondaryTitle" TEXT,
+            "eventUUID" TEXT,
+            "originalEventLocator" TEXT,
+            "onDemand" JSONB NOT NULL
+        );
+
+        CREATE UNIQUE INDEX IF NOT EXISTS "Bookmark_bookmarkId_key" ON "Bookmark"("bookmarkId");
+        CREATE UNIQUE INDEX IF NOT EXISTS "Bookmark_programId_key" ON "Bookmark"("programId");
+    `);
+    sqlite.close();
+}
+
+const adapter = new PrismaBetterSqlite3({
+    url: databaseUrl,
 })
 
 const prisma = new PrismaClient({ adapter })
