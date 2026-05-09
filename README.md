@@ -9,7 +9,7 @@ A TV system, allwoing you to watch live TV (UK ONLY), use TV Apps, HDMI capture 
 
 ## How to use
 ```
-npm isntall --legacy-peer-deps
+npm install --legacy-peer-deps
 ```
 ```
 npm run dev
